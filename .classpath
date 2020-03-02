@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-assimp.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-assimp-javadoc.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-assimp-natives-linux.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-assimp-sources.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-glfw.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-glfw-javadoc.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-glfw-natives-linux.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-glfw-sources.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-natives-linux.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-openal.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-openal-javadoc.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-openal-natives-linux.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-openal-sources.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-opengl.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-opengl-javadoc.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-opengl-natives-linux.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-opengl-sources.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-stb.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-stb-javadoc.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-stb-natives-linux.jar"/>
+	<classpathentry kind="lib" path="/home/artur/Downloads/lwjgl/lwjgl-stb-sources.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
