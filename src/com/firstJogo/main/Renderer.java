@@ -22,29 +22,9 @@ public class Renderer implements Runnable{
 		window=new Janela("MicroCraft!",true);
 		Janela.setPrincipal(window);
 		window.contextualize();
-		//Centralizando janela
-		//try ( MemoryStack stack = MemoryStack.stackPush() ) {
-		//	IntBuffer pWidth = stack.mallocInt(1); 
-		//	IntBuffer pHeight = stack.mallocInt(1); 
-		//	GLFW.glfwGetWindowSize(window.getId(), pWidth, pHeight);
-		//	GLFWVidMode vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-        //
-		//	GLFW.glfwSetWindowPos(
-		//		window.getId(),
-		//		(vidmode.width() - pWidth.get(0)) / 2,
-		//		(vidmode.height() - pHeight.get(0)) / 2
-		//	);
-		//} 
-		//aparentemnte faz um contexto de gráficos...
-		
-		//window.setSize(480, 480);
-		//window.setFullscr(true);
-		//window.setSize(720, 480);
 		
 		window.setWindowPos(0.5f, 0.5f);
 		
-		//GLFW.glfwMakeContextCurrent(window.getId());
-		//GLFW.glfwSwapInterval(1);//Vsync
 		Janela.Vsync(true);
 		
 		System.out.println("Iniciando Loop visual!");
@@ -52,7 +32,6 @@ public class Renderer implements Runnable{
 	}
 	
 	private void loop() {
-		//CRIA UM CONTEXTO aparentemnete e já coloca na janela!
 		GL.createCapabilities();
 		GL11.glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 		
@@ -75,10 +54,7 @@ public class Renderer implements Runnable{
 				0,1,//Mas isso da origem não pode ser...
 				1,0,
 				1,1,
-				
-//				0,0,
 				0,0,//Dá pra fazer MUITA maluquice com esses números aqui...
-//				1,1
 		};
 		
 		int[] indices=new int[] {//Pra só declarar os pontos uma vez!
@@ -91,39 +67,25 @@ public class Renderer implements Runnable{
 		
 		Shaders shad=new Shaders("./shaders/sombra");
 		
-		/*
-		Matrix4f mat=new Matrix4f()
-				.ortho2D(-240, 240, -240, 240)
-				.scale(240);
-		//Aparentemente seta pra janela inteira...
-		*/
-		
 		
 		Camera camera=new Camera(window.getWidth(),window.getHeight());
-		//TAMANHO DA JANELA!!!
-		
-		//System.out.println(camera.getProjec());
+
 		Matrix4f mat=new Matrix4f()
 		.scale(GlobalVariables.tam*window.getWidth()/2)
 		.setTranslation(GlobalVariables.tam*window.getWidth()/2, GlobalVariables.tam*window.getWidth()/2, 0)
 		;
 		
-		//primeira.bind(0);//Usamos o sampler número 0!
-		//shad.bindar();
 		window.show();
 		long begtime=TempoAtual.getsec();
 		int amt=0;
-		//long realbegtime=TempoAtual.getsec();
 		
 		long begnano=System.nanoTime();
 		
 		while(!window.ShouldClose() ) {
-			//double beg=(double)System.nanoTime();
 			primeira.bind(0);//Usamos o sampler número 0!
 			shad.bindar();
 			mat=new Matrix4f()
 					.scale(GlobalVariables.tam*window.getWidth()/2)
-					//.setTranslation(GlobalVariables.tam, GlobalVariables.tam, 0)
 					;
 			
 			
@@ -134,52 +96,32 @@ public class Renderer implements Runnable{
 					Thread.sleep(1000/Janela.getFPS()-(System.nanoTime()-begnano)/(long)1000000);
 					begnano=System.nanoTime();
 				} catch (InterruptedException e) {
-					// Auto-generated catch block
 					e.printStackTrace();
 				}
 				
 				if(amt==Janela.getFPS())continue;
 			}else {
-				//window.setSize(window.getHeight()+10, window.getWidth()+10);
-				//if((realbegtime-TempoAtual.getsec())%2==0) {
-					//window.setSize(window.getWidth()+10, window.getHeight()+10);
-					//Camera.getMain().setSize(window.getWidth(), window.getHeight());
-					//window.setFullscr(!window.getFullscr());
-				//}
 				begtime=TempoAtual.getsec();
 				System.out.println("FPS: "+Integer.toString(amt));
 				amt=0;
 				continue;
 			}
-			//System.out.println(amt);
-			
-			/*Matrix4f mat=new Matrix4f()
-					.scale(GlobalVariables.tam)
-					.setTranslation(GlobalVariables.tam, GlobalVariables.tam, 0)
-					;*/
-			// Poll for window events.
 			Janela.PollEvents();
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); // Limpa o framebuffer
 			shad.setUniforme("localizacao_da_textura_tambem_chamada_de_sampler", 0);//Setamos o sampler para 0, onde está a nossa textura!
 			shad.setUniforme("projecao", camera.getProjec().mul(mat));//camera.getProjec().mul(finala)
 			mod.renderizar();
 			
 			//TROCA O DO BACK-END COM O DO FRONT-END, pq o do back end tava sendo desenhado ainda!
-			//GLFW.glfwSwapBuffers(window.getId()); // swap the color buffers
 			window.apresente();
-			//System.out.println(GlobalVariables.tam);
 			
 			amt++;
-			//System.out.println(((double)System.nanoTime()-beg)/(double)1000000000);
 		}
 		
-		//window.Hide();
-		// Free the window callbacks and destroy the window
+		// Destruir janela 
 		window.Destroy();
 
 		Janela.terminate();
-		
-		//GLFW.glfwSetErrorCallback(null).free();
 	}
 	
 }

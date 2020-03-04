@@ -32,22 +32,15 @@ public int getHeight() {
 }
 
 private void recreate() {
-	//Iniciar();
-	//setGeneralCallbacks();
 	long idtemp=GLFW.glfwCreateWindow(width, height, titulo,fullscr, id);
 	Destroy();
 	id=idtemp;
-	//id=GLFW.glfwCreateWindow(width, height, titulo,fullscr, id);
 	if ( id == 0 )
 		throw new IllegalStateException("Failed to create the GLFW window");
-	//GLFW.glfwSetKeyCallback(id, GlobalVariables.gkc);
 	GLFW.glfwMakeContextCurrent(id);
 	setWindowCallbacks();
-	//setGeneralCallbacks();
-	
-	//GL.createCapabilities();
+
 	GL11.glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
-	//GL11.glEnable(GL11.GL_TEXTURE_2D);
 }
 public void setSize(int w,int h) {
 	width=w;
@@ -55,7 +48,6 @@ public void setSize(int w,int h) {
 	this.recreate();
 	this.setWindowPos(posx, posy);
 	show();
-	//GLFW.glfwSetWindowSize(id, width, height);
 	
 }
 public boolean getFullscr() {
@@ -84,18 +76,13 @@ public void Hide() {
 public Janela(String titulo,boolean Hide) {
 	this.titulo=titulo;
 	if(Hide)GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
-	//System.out.println(Toolkit.getDefaultToolkit().getScreenInsets((new Frame()).getGraphicsConfiguration()).right);
-	//System.out.println(Toolkit.getDefaultToolkit().getScreenInsets((new Frame()).getGraphicsConfiguration()).left);
-	//System.out.println(Toolkit.getDefaultToolkit().getScreenInsets((new Frame()).getGraphicsConfiguration()).top);
-	//System.out.println(Toolkit.getDefaultToolkit().getScreenInsets((new Frame()).getGraphicsConfiguration()).bottom);
 		
-			
 	id=GLFW.glfwCreateWindow(width, height, titulo, 0, 0);
 	Janela.getScreen_width();
 	Janela.getScreen_height();
 	if ( id == 0 )
 		throw new IllegalStateException("Failed to create the GLFW window");
-	//setSize(480,480);
+	setWindowCallbacks();
 	GLFW.glfwMakeContextCurrent(id);
 }
 

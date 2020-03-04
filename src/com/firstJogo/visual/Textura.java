@@ -24,7 +24,6 @@ public Textura(String fileNome) {
 		ByteBuffer pixels=BufferUtils.createByteBuffer(width*height*4);
 		for(int c=0;c<width;c++) {
 			for(int a=0;a<height;a++) {
-				//System.out.println((prgba[c*width+a]&0x0000FF00)>>8);
 				//RED,GREEN,BLUE,ALPHA!
 				pixels.put((byte) ((prgba[c*width+a]&0x00FF0000)>>16));
 				pixels.put((byte) ((prgba[c*width+a]&0x0000FF00)>>8));
@@ -66,13 +65,13 @@ public Textura(String fileNome) {
  *Aparentemente é a mesma coisa do "MIN", só que pra quando a
  *imagem tiver que ser ampliada, "magnificação". 
  */
-				GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0,  GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
+				GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 1,  GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
 
-				/*
- * TODO mudar "level" pra outro valor e ver se fica borrado,//Só some
- * TODO tentar mudar "border" pra ver no que dá.
- * TODO tentar mudar o internal_format pra ver se é escolhível.//Só o 1 é escolhível
- * TODO tentar mudar de byte pra unsigned byte.//é unsigned
+/*
+ * Mudar "level" (o primeiro 0) pra outro valor faz sumir...
+ * Tentar mudar "border" (o segundo 0) faz ela desaparecer em valores fora de 0 e 1
+ * Só o 1 valor de formato (RGBA,RGB e etc) é escolhível.
+ * Se trocar de Unsigned_Byte pra Byte as cores trocam todas
  */
 				GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 	}catch(IOException i) {

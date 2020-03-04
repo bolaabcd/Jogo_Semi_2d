@@ -39,12 +39,8 @@ public class Shaders {
 		GL20.glAttachShader(programa, vertex_shader);
 		GL20.glAttachShader(programa, fragment_shader);
 		
-		//GL20.glBindAttribLocation(programa, 0, "verticesar");//Bindou ao 0!!!
 		GL30.glGetAttribLocation(programa, "verticesar");
 		
-		//Pra textura tem umas coisas diferentes, o 0 vira 1 e etc
-		
-		//GL20.glBindAttribLocation(programa, 1, "texturalura");
 		GL30.glGetAttribLocation(programa, "texturalura");
 		
 		GL20.glLinkProgram(programa);
@@ -87,7 +83,7 @@ public class Shaders {
 		FloatBuffer buf=BufferUtils.createFloatBuffer(4*4);
 		valor.get(buf);
 		if(local!=-1) GL20.glUniformMatrix4fv(local, false, buf);
-		//TODO setar esse transpose de false pra true e ver se ela gira!
+		//Setar esse transpose de false pra true não mudou absolutamente nada...
 		else {
 			System.out.println("ERRO INESPERADO! 3");
 			System.err.println(GL20.glGetProgramInfoLog(programa));

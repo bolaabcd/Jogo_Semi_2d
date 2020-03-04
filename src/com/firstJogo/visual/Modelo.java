@@ -34,7 +34,6 @@ public class Modelo {
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	public void renderizar() {
-		//TODO tentar trocar o 0 e o 1 e ver se é uma coisa escolhível!
 		GL20.glEnableVertexAttribArray(0);//Pq o shader foi bindado ao 0!!!
 		GL20.glEnableVertexAttribArray(1);
 		
@@ -42,11 +41,10 @@ public class Modelo {
 		//GL15.glVertexPointer(3, GL15.GL_FLOAT, 0, 0);
 		GL20.glVertexAttribPointer(0, 3, GL20.GL_FLOAT, false, 0, 0);
 		//Local 0, tamanho 3(XYZ), tipo float, normalizar false, passo/stride 0,
-		//pointer (????) 0.
+		//pointer 0
 		
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, id_texturas);
-		//GL15.glTexCoordPointer(2, GL15.GL_FLOAT, 0, 0);
 		GL20.glVertexAttribPointer(1, 2, GL20.GL_FLOAT, false, 0, 0);
 		//Aparentemnete esse camarada é o apontador de atributos usado pra textura...
 		
