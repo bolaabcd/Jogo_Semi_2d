@@ -58,12 +58,13 @@ public class Modelo {
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);//DESATIVANDO ARRAY DE TEXTURAS!!!
 	}
-	public void addtex(float[] pontos) {
+	public Modelo addtex(float[] pontos) {
 		id_texturas=GL15.glGenBuffers();
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, id_texturas);
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buf(pontos), GL15.GL_STATIC_DRAW);
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		return this;
 		
 	}
 	private FloatBuffer buf(float[] valores) {

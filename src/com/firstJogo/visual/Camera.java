@@ -26,7 +26,9 @@ public class Camera {
 		return this.pos;
 	}
 	public Matrix4f getProjec() {
-		return new Matrix4f().mul(projec.mul(new Matrix4f().setTranslation(pos)));
+		Matrix4f mat=new Matrix4f();
+		projec.mul(new Matrix4f().setTranslation(pos),mat);
+		return mat;
 		//Multiplica pela posição antes de retornar!!!
 	}
 	public void setSize(int width, int height) {

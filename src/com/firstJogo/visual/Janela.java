@@ -4,11 +4,11 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.nio.IntBuffer;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
@@ -19,8 +19,6 @@ private static Janela principal;
 private long id;
 private int width=480,height=480;
 private long fullscr=0;
-private String titulo;
-private float posx=0.5f,posy=0.5f;
 private static int screen_width;
 private static int screen_height;
 private static int FPS=60;
@@ -31,50 +29,48 @@ public int getHeight() {
 	return height;
 }
 
-private void recreate() {
-	long idtemp=GLFW.glfwCreateWindow(width, height, titulo,fullscr, id);
-	Destroy();
-	id=idtemp;
-	if ( id == 0 )
-		throw new IllegalStateException("Failed to create the GLFW window");
-	GLFW.glfwMakeContextCurrent(id);
-	setWindowCallbacks();
-
-	GL11.glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
-}
-public void setSize(int w,int h) {
-	width=w;
-	height=h;
-	this.recreate();
-	this.setWindowPos(posx, posy);
-	show();
-	
-}
+//private void recreate() {
+//	long idtemp=GLFW.glfwCreateWindow(width, height, titulo,fullscr, id);
+//	Destroy();
+//	id=idtemp;
+//	if ( id == 0 )
+//		throw new IllegalStateException("Failed to create the GLFW window");
+//	GLFW.glfwMakeContextCurrent(id);
+//	setWindowCallbacks();
+//
+////	GL11.glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+//}
+//public void setSize(int w,int h) {
+//	width=w;
+//	height=h;
+//	this.recreate();
+//	this.setWindowPos(posx, posy);
+//	show();
+//	
+//}
 public boolean getFullscr() {
 	if(fullscr==0)return false;
 	return true;
 }
-public void setFullscr(boolean b) {
-	if(b) {
-		width=Janela.screen_width;
-		height=Janela.screen_height;
-		fullscr=GLFW.glfwGetPrimaryMonitor();
-		this.recreate();
-	}else {
-		width=480;
-		height=480;
-		fullscr=0;
-		this.recreate();
-		this.setWindowPos(posx, posy);
-		this.show();
-	}
-	
-}
+//public void setFullscr(boolean b) {
+//	if(b) {
+//		
+//	}else {
+//		width=480;
+//		height=480;
+//		fullscr=0;
+//		//GLFW.glfwSetWindowSize(id, screen_width, height);
+//		this.recreate();
+//		this.setWindowPos(posx, posy);
+//		this.show();
+//	}
+//	
+//}
 public void Hide() {
 	GLFW.glfwHideWindow(id);
 }
 public Janela(String titulo,boolean Hide) {
-	this.titulo=titulo;
+//	this.titulo=titulo;
 	if(Hide)GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
 		
 	id=GLFW.glfwCreateWindow(width, height, titulo, 0, 0);
@@ -101,8 +97,8 @@ public void Destroy() {
 public void setWindowPos(float x,float y) {
 	if(!getFullscr())
 	try ( MemoryStack stack = MemoryStack.stackPush() ) {
-		posx=x;
-		posy=y;
+//		posx=x;
+//		posy=y;
 		IntBuffer pWidth = stack.mallocInt(1); 
 		IntBuffer pHeight = stack.mallocInt(1); 
 		GLFW.glfwGetWindowSize(id, pWidth, pHeight);
@@ -134,7 +130,43 @@ public void setWindowCallbacks() {
 			if(GlobalVariables.tam==0)return;
 			GlobalVariables.tam=((float)Math.round((GlobalVariables.tam-0.01f)*100))/100;
 			}
+		if(key==GLFW.GLFW_KEY_W&&action!=GLFW.GLFW_RELEASE) {
+			Camera.getMain().setPos(Camera.getMain().getPos().add(0,-1,0));
+		}
+		if(key==GLFW.GLFW_KEY_S&&action!=GLFW.GLFW_RELEASE) {
+			Camera.getMain().setPos(Camera.getMain().getPos().add(0,1,0));
+		}
+		if(key==GLFW.GLFW_KEY_D&&action!=GLFW.GLFW_RELEASE) {
+			Camera.getMain().setPos(Camera.getMain().getPos().add(-1,0,0));
+		}
+		if(key==GLFW.GLFW_KEY_A&&action!=GLFW.GLFW_RELEASE) {
+			Camera.getMain().setPos(Camera.getMain().getPos().add(1,0,0));
+		}
 	});
+	GLFW.glfwSetWindowMaximizeCallback(id, (window,maximizado) -> {
+			resize();
+	});
+	GLFW.glfwSetWindowSizeCallback(id, (window,wi,hei)->{
+		resize();
+	});
+}
+
+private void resize() {
+	IntBuffer wi=BufferUtils.createIntBuffer(1);
+	IntBuffer hei=BufferUtils.createIntBuffer(1);
+	GLFW.glfwGetWindowSize(id, wi, hei);
+	int actwidth=width;
+	int actheight=height;
+	width=wi.get();
+	height=hei.get();
+	if(width>=height) {
+		GL11.glViewport(width/2-actwidth/2, 0, height, height);
+		width=height;
+	}
+	else {
+		GL11.glViewport(0, height/2-actheight/2, width, width);
+		height=width;
+	}
 }
 
 public void finalizarCallbacks() {

@@ -65,11 +65,11 @@ public Textura(String fileNome) {
  *Aparentemente é a mesma coisa do "MIN", só que pra quando a
  *imagem tiver que ser ampliada, "magnificação". 
  */
-				GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 1,  GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
+				GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0,  GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, pixels);
 
 /*
  * Mudar "level" (o primeiro 0) pra outro valor faz sumir...
- * Tentar mudar "border" (o segundo 0) faz ela desaparecer em valores fora de 0 e 1
+ * Tentar mudar "border" (o segundo 0) faz ela desaparecer em valores fora de 0 e 1, e 1 tira um pixel da borda ¯\_(ツ)_/¯
  * Só o 1 valor de formato (RGBA,RGB e etc) é escolhível.
  * Se trocar de Unsigned_Byte pra Byte as cores trocam todas
  */
