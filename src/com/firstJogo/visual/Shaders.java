@@ -68,6 +68,7 @@ public class Shaders {
 		int local=GL20.glGetUniformLocation(programa, qual);
 		if(local!=-1) GL20.glUniform1i(local, valor);
 		else {
+			System.out.println("ERRO INESPERADO! 1");
 			System.err.println(GL20.glGetProgramInfoLog(programa));
 			System.exit(1);
 		}
@@ -76,6 +77,7 @@ public class Shaders {
 		int local=GL20.glGetUniformLocation(programa, qual);
 		if(local!=-1) GL20.glUniform1f(local, valor);
 		else {
+			System.out.println("ERRO INESPERADO! 2");
 			System.err.println(GL20.glGetProgramInfoLog(programa));
 			System.exit(1);
 		}
@@ -87,6 +89,7 @@ public class Shaders {
 		if(local!=-1) GL20.glUniformMatrix4fv(local, false, buf);
 		//TODO setar esse transpose de false pra true e ver se ela gira!
 		else {
+			System.out.println("ERRO INESPERADO! 3");
 			System.err.println(GL20.glGetProgramInfoLog(programa));
 			System.exit(1);
 		}

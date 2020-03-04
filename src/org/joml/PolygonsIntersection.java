@@ -19,9 +19,10 @@ import java.util.List;
  * 
  * @author Kai Burjack
  */
+@SuppressWarnings(value = { "all" })
 public class PolygonsIntersection {
 
-    static class ByStartComparator implements Comparator {
+	static class ByStartComparator implements Comparator {
         public int compare(Object o1, Object o2) {
             Interval i1 = (Interval) o1;
             Interval i2 = (Interval) o2;

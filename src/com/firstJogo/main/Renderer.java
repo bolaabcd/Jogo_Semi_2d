@@ -1,49 +1,56 @@
 package com.firstJogo.main;
 
-import java.nio.IntBuffer;
-
 import org.joml.Matrix4f;
-import org.lwjgl.glfw.Callbacks;
-import org.lwjgl.glfw.GLFW;
-import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.system.MemoryStack;
 
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoAtual;
 import com.firstJogo.visual.Camera;
+import com.firstJogo.visual.Janela;
 import com.firstJogo.visual.Modelo;
 import com.firstJogo.visual.Shaders;
 import com.firstJogo.visual.Textura;
 
 public class Renderer implements Runnable{
-	private long window;
-	public Renderer(long window) {
-		this.window=window;
-	}
+	private Janela window;
+	
 	@Override
 	public void run() {
+		Janela.setGeneralCallbacks();
+		Janela.Iniciar();
+		window=new Janela("MicroCraft!",true);
+		Janela.setPrincipal(window);
+		window.contextualize();
 		//Centralizando janela
-		try ( MemoryStack stack = MemoryStack.stackPush() ) {
-			IntBuffer pWidth = stack.mallocInt(1); 
-			IntBuffer pHeight = stack.mallocInt(1); 
-			GLFW.glfwGetWindowSize(window, pWidth, pHeight);
-			GLFWVidMode vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
-
-			GLFW.glfwSetWindowPos(
-				window,
-				(vidmode.width() - pWidth.get(0)) / 2,
-				(vidmode.height() - pHeight.get(0)) / 2
-			);
-		} 
+		//try ( MemoryStack stack = MemoryStack.stackPush() ) {
+		//	IntBuffer pWidth = stack.mallocInt(1); 
+		//	IntBuffer pHeight = stack.mallocInt(1); 
+		//	GLFW.glfwGetWindowSize(window.getId(), pWidth, pHeight);
+		//	GLFWVidMode vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+        //
+		//	GLFW.glfwSetWindowPos(
+		//		window.getId(),
+		//		(vidmode.width() - pWidth.get(0)) / 2,
+		//		(vidmode.height() - pHeight.get(0)) / 2
+		//	);
+		//} 
 		//aparentemnte faz um contexto de gráficos...
-		GLFW.glfwMakeContextCurrent(window);
-		GLFW.glfwSwapInterval(1);
-
+		
+		//window.setSize(480, 480);
+		//window.setFullscr(true);
+		//window.setSize(720, 480);
+		
+		window.setWindowPos(0.5f, 0.5f);
+		
+		//GLFW.glfwMakeContextCurrent(window.getId());
+		//GLFW.glfwSwapInterval(1);//Vsync
+		Janela.Vsync(true);
+		
 		System.out.println("Iniciando Loop visual!");
 		loop();
 	}
+	
 	private void loop() {
 		//CRIA UM CONTEXTO aparentemnete e já coloca na janela!
 		GL.createCapabilities();
@@ -51,6 +58,7 @@ public class Renderer implements Runnable{
 		
 		Textura primeira=new Textura("./imgs/Grama.png");
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		
 		
 		float[] vertices=new float[] {
 		                  -1,-1,0,//índice 0
@@ -91,31 +99,53 @@ public class Renderer implements Runnable{
 		*/
 		
 		
-		Camera camera=new Camera(480,480);
+		Camera camera=new Camera(window.getWidth(),window.getHeight());
 		//TAMANHO DA JANELA!!!
 		
 		//System.out.println(camera.getProjec());
+		Matrix4f mat=new Matrix4f()
+		.scale(GlobalVariables.tam*window.getWidth()/2)
+		.setTranslation(GlobalVariables.tam*window.getWidth()/2, GlobalVariables.tam*window.getWidth()/2, 0)
+		;
 		
-		primeira.bind(0);//Usamos o sampler número 0!
-		shad.bindar();
-		GLFW.glfwShowWindow(window);
+		//primeira.bind(0);//Usamos o sampler número 0!
+		//shad.bindar();
+		window.show();
 		long begtime=TempoAtual.getsec();
 		int amt=0;
-		while(!GLFW.glfwWindowShouldClose(window) ) {
+		//long realbegtime=TempoAtual.getsec();
+		
+		long begnano=System.nanoTime();
+		
+		while(!window.ShouldClose() ) {
 			//double beg=(double)System.nanoTime();
+			primeira.bind(0);//Usamos o sampler número 0!
+			shad.bindar();
+			mat=new Matrix4f()
+					.scale(GlobalVariables.tam*window.getWidth()/2)
+					//.setTranslation(GlobalVariables.tam, GlobalVariables.tam, 0)
+					;
 			
 			
 			if(begtime==TempoAtual.getsec()) {
 				
 				try {
-					Thread.sleep(1000/GlobalVariables.FPS);
+					if((1000/Janela.getFPS()-(System.nanoTime()-begnano)/(long)1000000)>=0)
+					Thread.sleep(1000/Janela.getFPS()-(System.nanoTime()-begnano)/(long)1000000);
+					begnano=System.nanoTime();
 				} catch (InterruptedException e) {
 					// Auto-generated catch block
 					e.printStackTrace();
 				}
 				
-				if(amt==GlobalVariables.FPS)continue;
+				if(amt==Janela.getFPS())continue;
 			}else {
+				//window.setSize(window.getHeight()+10, window.getWidth()+10);
+				//if((realbegtime-TempoAtual.getsec())%2==0) {
+					//window.setSize(window.getWidth()+10, window.getHeight()+10);
+					//Camera.getMain().setSize(window.getWidth(), window.getHeight());
+					//window.setFullscr(!window.getFullscr());
+				//}
 				begtime=TempoAtual.getsec();
 				System.out.println("FPS: "+Integer.toString(amt));
 				amt=0;
@@ -123,31 +153,33 @@ public class Renderer implements Runnable{
 			}
 			//System.out.println(amt);
 			
-			Matrix4f mat=new Matrix4f()
+			/*Matrix4f mat=new Matrix4f()
 					.scale(GlobalVariables.tam)
-					.setTranslation(GlobalVariables.tam, GlobalVariables.tam, 0);
+					.setTranslation(GlobalVariables.tam, GlobalVariables.tam, 0)
+					;*/
 			// Poll for window events.
-			GLFW.glfwPollEvents();
+			Janela.PollEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); // clear the framebuffer
-			
 			shad.setUniforme("localizacao_da_textura_tambem_chamada_de_sampler", 0);//Setamos o sampler para 0, onde está a nossa textura!
 			shad.setUniforme("projecao", camera.getProjec().mul(mat));//camera.getProjec().mul(finala)
 			mod.renderizar();
 			
-			
 			//TROCA O DO BACK-END COM O DO FRONT-END, pq o do back end tava sendo desenhado ainda!
-			GLFW.glfwSwapBuffers(window); // swap the color buffers
+			//GLFW.glfwSwapBuffers(window.getId()); // swap the color buffers
+			window.apresente();
+			//System.out.println(GlobalVariables.tam);
 			
 			amt++;
 			//System.out.println(((double)System.nanoTime()-beg)/(double)1000000000);
 		}
+		
+		//window.Hide();
 		// Free the window callbacks and destroy the window
-		Callbacks.glfwFreeCallbacks(window);
-		GLFW.glfwDestroyWindow(window);
+		window.Destroy();
 
-		// Terminate GLFW and free the error callback
-		GLFW.glfwTerminate();
-		GLFW.glfwSetErrorCallback(null).free();
+		Janela.terminate();
+		
+		//GLFW.glfwSetErrorCallback(null).free();
 	}
-
+	
 }
