@@ -11,6 +11,7 @@ import com.firstJogo.visual.Shaders;
 import com.firstJogo.visual.Textura;
 
 public class AzRenderer {
+//public static AzRenderer main;
 private HashMap<String,Textura> texturas;
 private static final Modelo quadrado=new Modelo(
 		new float[] {
@@ -34,6 +35,7 @@ private static final Modelo quadrado=new Modelo(
 				);
 	
 public AzRenderer() {
+//	main=this;
 	texturas=new HashMap<String,Textura>();
 	for(Azulejo az:Azulejo.azulejos) {
 //		System.out.println(GlobalVariables.imagem_path+az.getTextura()+GlobalVariables.imagem_formato);
@@ -43,7 +45,7 @@ public AzRenderer() {
 	}
 }
 
-public void Renderizar(byte id,int x,int y, Shaders shad, Matrix4f mundo,Camera cam) {
+public void Renderizar(char id,char x,char y, Shaders shad, Matrix4f mundo,Camera cam) {
 	shad.bindar();
 	if(texturas.containsKey(Azulejo.azulejos[id].getTextura())) 
 		texturas.get(Azulejo.azulejos[id].getTextura()).bind(0);//Bindou ao sampler número 0 ¯\_(ツ)_/¯

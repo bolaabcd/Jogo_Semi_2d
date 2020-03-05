@@ -1,0 +1,13 @@
+Pasta-mundi:
+./mundos/
+Mundos:
+Default
+Pasta de imagens:
+./imgs/
+Cor de fundo (RGBA):
+255
+0
+0
+0
+Formato das imagens:
+.png

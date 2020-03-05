@@ -7,15 +7,15 @@ import com.firstJogo.visual.Janela;
 import com.firstJogo.visual.Shaders;
 
 public class World {
-	private byte[][] azulejos;
-	private int width;
-	private int height;
+	private char[][] azulejos;//Azulejos efetivos no mundo!
+	private short width;
+	private short height;
 	private Matrix4f mundo;
 	
 	public World() {
-		height=32;
-		width=32;
-		azulejos=new byte[32][32];
+		height=18;//32*3 -> NÃO DÁ PRA RENDERIZAR ISSO TUDO! ESSE MUNDO DEVE SER O RENDERIZADO APENAS!
+		width=18;
+		azulejos=new char[18][18];
 		
 		mundo=new Matrix4f().setTranslation(0,0,0);//BOTTON-RIGHT do mundo no centro da tela é o 0,0,0!
 		mundo.setTranslation(-Janela.getPrincipal().getWidth()/2+15, -Janela.getPrincipal().getHeight()/2+15, 0);
@@ -23,9 +23,17 @@ public class World {
 		mundo.scale(Janela.getPrincipal().getHeight()/32)
 		;
 	}
+//	public World(short height, short width) {
+//		azulejos=new int[width][height];
+//		
+//		mundo=new Matrix4f().setTranslation(0,0,0);//BOTTON-RIGHT do mundo no centro da tela é o 0,0,0!
+//		mundo.setTranslation(-Janela.getPrincipal().getWidth()/2+15, -Janela.getPrincipal().getHeight()/2+15, 0);
+//		mundo.scale(Janela.getPrincipal().getHeight()/32)
+//		;
+//	}
 	public void renderizar(AzRenderer rend,Shaders shad,Camera cam) {
-		for(int i=0;i<height;i++)
-			for(int j=0;j<width;j++){
+		for(char i=0;i<height;i++)
+			for(char j=0;j<width;j++){
 				rend.Renderizar(azulejos[j][i], j, i, shad, mundo, cam);
 			}
 	}

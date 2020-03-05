@@ -131,16 +131,16 @@ public void setWindowCallbacks() {
 			GlobalVariables.tam=((float)Math.round((GlobalVariables.tam-0.01f)*100))/100;
 			}
 		if(key==GLFW.GLFW_KEY_W&&action!=GLFW.GLFW_RELEASE) {
-			Camera.getMain().setPos(Camera.getMain().getPos().add(0,-1,0));
+			Camera.getMain().setPos(Camera.getMain().getPos().add(0,-2,0));
 		}
 		if(key==GLFW.GLFW_KEY_S&&action!=GLFW.GLFW_RELEASE) {
-			Camera.getMain().setPos(Camera.getMain().getPos().add(0,1,0));
+			Camera.getMain().setPos(Camera.getMain().getPos().add(0,2,0));
 		}
 		if(key==GLFW.GLFW_KEY_D&&action!=GLFW.GLFW_RELEASE) {
-			Camera.getMain().setPos(Camera.getMain().getPos().add(-1,0,0));
+			Camera.getMain().setPos(Camera.getMain().getPos().add(-2,0,0));
 		}
 		if(key==GLFW.GLFW_KEY_A&&action!=GLFW.GLFW_RELEASE) {
-			Camera.getMain().setPos(Camera.getMain().getPos().add(1,0,0));
+			Camera.getMain().setPos(Camera.getMain().getPos().add(2,0,0));
 		}
 	});
 	GLFW.glfwSetWindowMaximizeCallback(id, (window,maximizado) -> {

@@ -1,12 +1,11 @@
 package com.firstJogo.main;
 
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 import com.firstJogo.Mundos.AzRenderer;
 import com.firstJogo.Mundos.World;
+import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoAtual;
 import com.firstJogo.visual.Camera;
 import com.firstJogo.visual.Janela;
@@ -17,6 +16,8 @@ public class Renderer implements Runnable{
 	
 	@Override
 	public void run() {
+		
+
 		Janela.setGeneralCallbacks();
 		Janela.Iniciar();
 		window=new Janela("MicroCraft!",true);
@@ -36,7 +37,7 @@ public class Renderer implements Runnable{
 	
 	private void loop() {
 		GL.createCapabilities();
-		GL11.glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+		GL11.glClearColor(GlobalVariables.ClearColor[0], GlobalVariables.ClearColor[1], GlobalVariables.ClearColor[2], GlobalVariables.ClearColor[3]);
 		
 //		Textura primeira=new Textura("./imgs/Grama.png");
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
