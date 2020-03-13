@@ -6,10 +6,13 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.apache.commons.io.IOUtils;
 
 import com.firstJogo.utils.ArquivosGerais;
 import com.firstJogo.utils.GlobalVariables;
@@ -45,7 +48,9 @@ public class Prepare implements Runnable{
 			if(!shaders.exists())fshader(shaders);
 			shaders=null;
 			
-			File defaultimage=new File(GlobalVariables.imagem_path+"Default"+GlobalVariables.imagem_formato);
+			File defaultimage=new File(GlobalVariables.imagem_path);
+			if(!defaultimage.exists())defaultimage.mkdir();
+			defaultimage=new File(GlobalVariables.imagem_path+"Default"+GlobalVariables.imagem_formato);
 			if(!defaultimage.exists())defimagem(defaultimage);
 			defaultimage=null;
 			
@@ -211,10 +216,22 @@ public class Prepare implements Runnable{
 		File def=new File("com/firstJogo/main/Default.png");
 		arq.createNewFile();
 		//FileReader read=new FileReader(def);
-		System.out.println(def.getPath());
-		InputStream read=this.getClass().getClassLoader().getResourceAsStream(def.getPath());
-		FileOutputStream wri=new FileOutputStream(arq);
-		read.transferTo(wri);
+		InputStream read=this.getClass().getClassLoader().getResourceAsStream("com/firstJogo/main/Default.png");
+//		System.out.println("CAMINHO ABSOLUTO:");
+//		System.out.println(def.getAbsolutePath());
+//		System.out.println("CAMINHO RELATIVO:");
+//		System.out.println(def.getPath());
+//		System.out.println("URL CLASS:");
+//		System.out.println(this.getClass().getResource(def.getPath()));
+//		System.out.println("URL CLASS_LOADER:");
+//		System.out.println(this.getClass().getClassLoader().getResource("com/firstJogo/main/Default.png"));
+//		System.out.println("INPUTSTREAM CLASS_LOADER:");
+//		System.out.println(read);
+		//InputStream read=this.getClass().getResourceAsStream("/"+def.getPath());
+		//FileOutputStream wri=new FileOutputStream(arq);
+		OutputStream wri=new FileOutputStream(arq);
+		//read.transferTo(wri);
+		IOUtils.copy(read, wri);
 		read.close();
 		wri.close();
 	}

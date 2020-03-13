@@ -100,7 +100,10 @@ public class Renderer implements Runnable{
 		
 		long begnano=System.nanoTime();
 		
+
+		
 		while(!window.ShouldClose() ) {
+
 //			primeira.bind(0);//Usamos o sampler número 0!
 //			shad.bindar();
 //			mat=new Matrix4f()
@@ -110,8 +113,9 @@ public class Renderer implements Runnable{
 			if(begtime==TempoAtual.getsec()) {
 				
 				try {
-					if((1000/Janela.getFPS()-(System.nanoTime()-begnano)/(long)1000000)>=0)
-					Thread.sleep(1000/Janela.getFPS()-(System.nanoTime()-begnano)/(long)1000000);
+					long temp=System.nanoTime();
+					if((1000/Janela.getFPS()-(temp-begnano)/(long)1000000)>=0)
+					Thread.sleep(1000/Janela.getFPS()-(temp-begnano)/(long)1000000);
 					begnano=System.nanoTime();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -139,7 +143,6 @@ public class Renderer implements Runnable{
 			
 			//TROCA O DO BACK-END COM O DO FRONT-END, pq o do back end tava sendo desenhado ainda!
 			window.apresente();
-			
 			amt++;
 		}
 		
