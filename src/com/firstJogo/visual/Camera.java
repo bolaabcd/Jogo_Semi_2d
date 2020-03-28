@@ -31,6 +31,9 @@ public class Camera {
 		return mat;
 		//Multiplica pela posição antes de retornar!!!
 	}
+	public Matrix4f getRawProjec() {
+		return projec;
+	}
 	public void setSize(int width, int height) {
 		this.width=width;
 		this.height=height;

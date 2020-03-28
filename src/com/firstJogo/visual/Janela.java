@@ -3,6 +3,7 @@ package com.firstJogo.visual;
 import java.awt.Frame;
 import java.awt.Toolkit;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.Callbacks;
@@ -12,16 +13,18 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
-import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.padrao.CallbacksExternas;
+import com.firstJogo.regras.ExternalCallback;
 
 public class Janela {
 private static Janela principal;
 private long id;
 private int width=480,height=480;
 private long fullscr=0;
+private ArrayList<ExternalCallback> callbacks=new ArrayList<ExternalCallback>();
 private static int screen_width;
 private static int screen_height;
-private static int FPS=60;
+private int FPS=60;
 public int getWidth() {
 	return width;
 }
@@ -78,6 +81,9 @@ public Janela(String titulo,boolean Hide) {
 	Janela.getScreen_height();
 	if ( id == 0 )
 		throw new IllegalStateException("Failed to create the GLFW window");
+	
+	callbacks.add(new CallbacksExternas());
+	
 	setWindowCallbacks();
 	GLFW.glfwMakeContextCurrent(id);
 }
@@ -120,29 +126,34 @@ public void apresente() {
 }
 public void setWindowCallbacks() {
 	GLFW.glfwSetKeyCallback(id, (window, key, scancode, action, mods) -> {
-		if ( key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE )
-			GLFW.glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
-		else if(key==GLFW.GLFW_KEY_ENTER) {
-			if(GlobalVariables.tam==1)return;
-			GlobalVariables.tam=((float)Math.round((GlobalVariables.tam+0.01f)*100))/100;
-			}
-		else if(key==GLFW.GLFW_KEY_BACKSPACE) {
-			if(GlobalVariables.tam==0)return;
-			GlobalVariables.tam=((float)Math.round((GlobalVariables.tam-0.01f)*100))/100;
-			}
-		if(key==GLFW.GLFW_KEY_W&&action!=GLFW.GLFW_RELEASE) {
-			Camera.getMain().setPos(Camera.getMain().getPos().add(0,-2,0));
+		for(ExternalCallback cback:callbacks) {
+			cback.KeyCallback(window, key, scancode, action, mods);
 		}
-		if(key==GLFW.GLFW_KEY_S&&action!=GLFW.GLFW_RELEASE) {
-			Camera.getMain().setPos(Camera.getMain().getPos().add(0,2,0));
-		}
-		if(key==GLFW.GLFW_KEY_D&&action!=GLFW.GLFW_RELEASE) {
-			Camera.getMain().setPos(Camera.getMain().getPos().add(-2,0,0));
-		}
-		if(key==GLFW.GLFW_KEY_A&&action!=GLFW.GLFW_RELEASE) {
-			Camera.getMain().setPos(Camera.getMain().getPos().add(2,0,0));
-		}
-	});
+	} );
+//	GLFW.glfwSetKeyCallback(id, (window, key, scancode, action, mods) -> {
+//		if ( key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE )
+//			GLFW.glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
+//		else if(key==GLFW.GLFW_KEY_ENTER) {
+//			if(GlobalVariables.tam==1)return;
+//			GlobalVariables.tam=((float)Math.round((GlobalVariables.tam+0.01f)*100))/100;
+//			}
+//		else if(key==GLFW.GLFW_KEY_BACKSPACE) {
+//			if(GlobalVariables.tam==0)return;
+//			GlobalVariables.tam=((float)Math.round((GlobalVariables.tam-0.01f)*100))/100;
+//			}
+//		if(key==GLFW.GLFW_KEY_W&&action!=GLFW.GLFW_RELEASE) {
+//			Camera.getMain().setPos(Camera.getMain().getPos().add(0,-2,0));
+//		}
+//		if(key==GLFW.GLFW_KEY_S&&action!=GLFW.GLFW_RELEASE) {
+//			Camera.getMain().setPos(Camera.getMain().getPos().add(0,2,0));
+//		}
+//		if(key==GLFW.GLFW_KEY_D&&action!=GLFW.GLFW_RELEASE) {
+//			Camera.getMain().setPos(Camera.getMain().getPos().add(-2,0,0));
+//		}
+//		if(key==GLFW.GLFW_KEY_A&&action!=GLFW.GLFW_RELEASE) {
+//			Camera.getMain().setPos(Camera.getMain().getPos().add(2,0,0));
+//		}
+//	});
 	GLFW.glfwSetWindowMaximizeCallback(id, (window,maximizado) -> {
 			resize();
 	});
@@ -202,7 +213,8 @@ public static void setGeneralCallbacks() {
 public static void setPrincipal(Janela j) {
 	Janela.principal=j;
 }
-public static Janela getPrincipal() {
+public static synchronized Janela getPrincipal() {
+//public static Janela getPrincipal() {
 	return Janela.principal;
 }
 public static int getScreen_width() {
@@ -213,10 +225,10 @@ public static int getScreen_height() {
 	screen_height=GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).height()-(int)Toolkit.getDefaultToolkit().getScreenInsets((new Frame()).getGraphicsConfiguration()).top;
 	return screen_height;
 }
-public static int getFPS() {
+public int getFPS() {
 	return FPS;
 }
-public static void setFPS(int fPS) {
+public void setFPS(int fPS) {
 	FPS = fPS;
 }
 }

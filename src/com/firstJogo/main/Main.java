@@ -5,13 +5,17 @@ public class Main {
 	public static void main(String[] args) {
 		Thread prep=new Thread(new Prepare());
 		Thread rend=new Thread(new Renderer());
+		Thread ev=new Thread(new GeradorEventos());
+		prep.start();
 		try {
 			prep.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+			System.exit(1);
 		}
-		prep.start();
 		rend.start();
+		ev.start();
+//		System.out.println("Prioridade ev:"+ev.getPriority());
 		
 	}
 	

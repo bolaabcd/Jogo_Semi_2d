@@ -15,9 +15,8 @@ public class Modelo {
 	
 	public Modelo(float[] vertices,int[] indices) {
 		contagem=indices.length;
+		
 		id_vertices=GL15.glGenBuffers();
-		id_indices=GL15.glGenBuffers();
-	
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, id_vertices);
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER,buf(vertices), GL15.GL_STATIC_DRAW);
 /*
@@ -29,13 +28,17 @@ public class Modelo {
  */
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);//Unbinding
 		
+		id_indices=GL15.glGenBuffers();
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, id_indices);
 		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER,buf(indices),GL15.GL_STATIC_DRAW);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	public void renderizar() {
+		GL20.glEnable(GL20.GL_BLEND);
+		GL20.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		
 		GL20.glEnableVertexAttribArray(0);//Pq o shader foi bindado ao 0!!!
-		GL20.glEnableVertexAttribArray(1);
+		GL20.glEnableVertexAttribArray(1);//Aparentemente os valores da textura foram bindados aqui!
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, id_vertices);
 		//GL15.glVertexPointer(3, GL15.GL_FLOAT, 0, 0);

@@ -4,7 +4,8 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 import com.firstJogo.Mundos.AzRenderer;
-import com.firstJogo.Mundos.World;
+import com.firstJogo.Mundos.CrRenderer;
+import com.firstJogo.Mundos.WorldRenderer;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoAtual;
 import com.firstJogo.visual.Camera;
@@ -12,24 +13,33 @@ import com.firstJogo.visual.Janela;
 import com.firstJogo.visual.Shaders;
 
 public class Renderer implements Runnable{
-	private Janela window;
 	
 	@Override
 	public void run() {
 		
 
-		Janela.setGeneralCallbacks();
-		Janela.Iniciar();
-		window=new Janela("MicroCraft!",true);
-		Janela.setPrincipal(window);
-		//window.setFullscr(true);
-		//window.setSize(1366, 768);
-		//window.setSize(720, 720);
-		window.contextualize();
+//		Janela.setGeneralCallbacks();
+//		Janela.Iniciar();
+//		window=new Janela("MicroCraft!",true);
+//		Janela.setPrincipal(window);
+//		//window.setFullscr(true);
+//		//window.setSize(1366, 768);
+//		//window.setSize(720, 720);
+//		window.contextualize();
+//		
+//		window.setWindowPos(0.5f, 0.5f);
+//		
+//		Janela.Vsync(true);
+//		
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Janela.getPrincipal().contextualize();
 		
-		window.setWindowPos(0.5f, 0.5f);
 		
-		Janela.Vsync(true);
 		
 		System.out.println("Iniciando Loop visual!");
 		loop();
@@ -79,11 +89,12 @@ public class Renderer implements Runnable{
 //		int intperpixel=experiencia/8;
 //		int pixelsperbloco=16;
 		AzRenderer renderizator=new AzRenderer();
-		World mundo=new World();
+		CrRenderer crenderizator=new CrRenderer();
+		WorldRenderer mundo=new WorldRenderer();
 //		System.out.println(intperpixel*pixelsperbloco);
 //		
 //		
-		Camera camera=new Camera(window.getWidth(),window.getHeight());
+		Camera camera=new Camera(Janela.getPrincipal().getWidth(),Janela.getPrincipal().getHeight());
 //		Camera camera=new Camera(intperpixel*quantosblocos*pixelsperbloco,intperpixel*quantosblocos*pixelsperbloco);
 	//	camera.setPos(new Vector3f(-4f*intperpixel*pixelsperbloco,0*intperpixel*pixelsperbloco,0));
 
@@ -94,7 +105,7 @@ public class Renderer implements Runnable{
 //		.setTranslation(GlobalVariables.tam*window.getWidth()/2, GlobalVariables.tam*window.getWidth()/2, 0)
 //		;
 		
-		window.show();
+		Janela.getPrincipal().show();
 		long begtime=TempoAtual.getsec();
 		int amt=0;
 		
@@ -102,7 +113,7 @@ public class Renderer implements Runnable{
 		
 
 		
-		while(!window.ShouldClose() ) {
+		while(!Janela.getPrincipal().ShouldClose() ) {
 
 //			primeira.bind(0);//Usamos o sampler número 0!
 //			shad.bindar();
@@ -114,17 +125,17 @@ public class Renderer implements Runnable{
 				
 				try {
 					long temp=System.nanoTime();
-					if((1000/Janela.getFPS()-(temp-begnano)/(long)1000000)>=0)
-					Thread.sleep(1000/Janela.getFPS()-(temp-begnano)/(long)1000000);
+					if((1000/Janela.getPrincipal().getFPS()-(temp-begnano)/(long)1000000)>=0)
+					Thread.sleep(1000/Janela.getPrincipal().getFPS()-(temp-begnano)/(long)1000000);
 					begnano=System.nanoTime();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				
-				if(amt==Janela.getFPS())continue;
+				if(amt==Janela.getPrincipal().getFPS())continue;
 			}else {
+//				System.out.println(Camera.getMain().getPos());
 //				camera.setPos(camera.getPos().add(0.01f, 0.01f, 0));
-
 				begtime=TempoAtual.getsec();
 				System.out.println("FPS: "+Integer.toString(amt));
 				amt=0;
@@ -136,18 +147,19 @@ public class Renderer implements Runnable{
 //			shad.setUniforme("projecao", camera.getProjec().mul(mat));//camera.getProjec().mul(finala)
 //			mod.renderizar();
 			
-			mundo.renderizar(renderizator, shad, camera);
+			mundo.renderizar(crenderizator,renderizator, shad, camera);
 //			for(int i=0;i<16;i++)
 //				for(int j=0;j<16;j++)
 //					renderizator.Renderizar((byte)0, j, i, shad, escala, camera);
 			
 			//TROCA O DO BACK-END COM O DO FRONT-END, pq o do back end tava sendo desenhado ainda!
-			window.apresente();
+			Janela.getPrincipal().apresente();
 			amt++;
+			
 		}
 		
 		// Destruir janela 
-		window.Destroy();
+		Janela.getPrincipal().Destroy();
 
 		Janela.terminate();
 	}

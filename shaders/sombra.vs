@@ -14,6 +14,6 @@ uniform mat4 projecao;
 
 void main(){
 	coordenadas_da_difamada_e_famosa_textura=texturalura;
-	gl_Position=projecao*vec4(verticesar,1);
+	gl_Position=projecao*vec4(verticesar,0.5);
 	
 }

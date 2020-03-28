@@ -13,9 +13,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.lwjgl.glfw.GLFW;
 
 import com.firstJogo.utils.ArquivosGerais;
 import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.visual.Camera;
+import com.firstJogo.visual.Janela;
 
 public class Prepare implements Runnable{
 	private static final Set<String> configs=new HashSet<String>(Arrays.asList(
@@ -51,7 +54,9 @@ public class Prepare implements Runnable{
 			File defaultimage=new File(GlobalVariables.imagem_path);
 			if(!defaultimage.exists())defaultimage.mkdir();
 			defaultimage=new File(GlobalVariables.imagem_path+"Default"+GlobalVariables.imagem_formato);
-			if(!defaultimage.exists())defimagem(defaultimage);
+			if(!defaultimage.exists())defimagem(defaultimage,"Default");
+			defaultimage=new File(GlobalVariables.imagem_path+"Humano"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"Humano");
 			defaultimage=null;
 			
 			File blocktypes=new File(GlobalVariables.mundos_pasta+"descricao_dos_blocos"+".txt");
@@ -65,9 +70,34 @@ public class Prepare implements Runnable{
 			erroconfig("Erro ao ler valor de cor no arquivo de configurações!");
 		}
 		
-		
+		prepararJanela();
 
+		prepararBotoes();
 		
+	}
+	private void prepararBotoes() {
+		GeradorEventos.eventosbotao.put(GLFW.GLFW_KEY_W, ()->{
+			Camera.getMain().setPos(Camera.getMain().getPos().add(0,-2,0));
+		});
+		GeradorEventos.eventosbotao.put(GLFW.GLFW_KEY_A, ()->{
+			Camera.getMain().setPos(Camera.getMain().getPos().add(0,2,0));
+		});
+		GeradorEventos.eventosbotao.put(GLFW.GLFW_KEY_S, ()->{
+			Camera.getMain().setPos(Camera.getMain().getPos().add(0,2,0));
+		});
+		GeradorEventos.eventosbotao.put(GLFW.GLFW_KEY_D, ()->{
+			Camera.getMain().setPos(Camera.getMain().getPos().add(0,-2,0));
+		});
+		
+	}
+	private void prepararJanela() {
+		Janela.setGeneralCallbacks();
+		Janela.Iniciar();
+		Janela.setPrincipal(new Janela("MicroCraft!",true));
+		Janela.getPrincipal().contextualize();
+		Janela.getPrincipal().setWindowPos(0.5f, 0.5f);
+		
+		Janela.Vsync(true);
 	}
 	private void config_padrao(File config)throws IOException{
 		config.createNewFile();
@@ -198,7 +228,7 @@ public class Prepare implements Runnable{
 				"uniform mat4 projecao;\n" + 
 				"void main(){\n" + 
 				"	coordenadas_da_difamada_e_famosa_textura=texturalura;\n" + 
-				"	gl_Position=projecao*vec4(verticesar,1);\n" + 
+				"	gl_Position=projecao*vec4(verticesar,0.5);\n" + 
 				"}");
 		bw.close();
 	}
@@ -212,11 +242,11 @@ public class Prepare implements Runnable{
 				"}");
 		bw.close();
 	}
-	private void defimagem(File arq) throws IOException {
-		File def=new File("com/firstJogo/main/Default.png");
+	private void defimagem(File arq,String nome) throws IOException {
+//		File def=new File("com/firstJogo/main/Default.png");
 		arq.createNewFile();
 		//FileReader read=new FileReader(def);
-		InputStream read=this.getClass().getClassLoader().getResourceAsStream("com/firstJogo/main/Default.png");
+		InputStream read=this.getClass().getClassLoader().getResourceAsStream("com/firstJogo/main/"+nome+GlobalVariables.imagem_formato);
 //		System.out.println("CAMINHO ABSOLUTO:");
 //		System.out.println(def.getAbsolutePath());
 //		System.out.println("CAMINHO RELATIVO:");
