@@ -31,12 +31,6 @@ public class Renderer implements Runnable{
 //		
 //		Janela.Vsync(true);
 //		
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		Janela.getPrincipal().contextualize();
 		
 		
@@ -94,7 +88,7 @@ public class Renderer implements Runnable{
 //		System.out.println(intperpixel*pixelsperbloco);
 //		
 //		
-		Camera camera=new Camera(Janela.getPrincipal().getWidth(),Janela.getPrincipal().getHeight());
+//		Camera camera=new Camera(Janela.getPrincipal().getWidth(),Janela.getPrincipal().getHeight());
 //		Camera camera=new Camera(intperpixel*quantosblocos*pixelsperbloco,intperpixel*quantosblocos*pixelsperbloco);
 	//	camera.setPos(new Vector3f(-4f*intperpixel*pixelsperbloco,0*intperpixel*pixelsperbloco,0));
 
@@ -147,7 +141,7 @@ public class Renderer implements Runnable{
 //			shad.setUniforme("projecao", camera.getProjec().mul(mat));//camera.getProjec().mul(finala)
 //			mod.renderizar();
 			
-			mundo.renderizar(crenderizator,renderizator, shad, camera);
+			mundo.renderizar(crenderizator,renderizator, shad, Camera.getMain());
 //			for(int i=0;i<16;i++)
 //				for(int j=0;j<16;j++)
 //					renderizator.Renderizar((byte)0, j, i, shad, escala, camera);

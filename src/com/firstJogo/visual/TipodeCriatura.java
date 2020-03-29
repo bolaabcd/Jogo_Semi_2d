@@ -5,7 +5,7 @@ public class TipodeCriatura {
 	private String textura;
 	public static TipodeCriatura[] criaturas=new TipodeCriatura[256*256];
 	private static char nextid=0;
-	public static final TipodeCriatura player=new TipodeCriatura("Humano");
+	public static final TipodeCriatura Humano=new TipodeCriatura("Humano");
 //public TipodeCriatura(char id,String textura) {
 //	this.id=id;
 //	this.textura=textura;

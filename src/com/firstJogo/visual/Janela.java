@@ -72,6 +72,7 @@ public boolean getFullscr() {
 public void Hide() {
 	GLFW.glfwHideWindow(id);
 }
+
 public Janela(String titulo,boolean Hide) {
 //	this.titulo=titulo;
 	if(Hide)GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);

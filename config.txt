@@ -1,5 +1,9 @@
+Pasta de plugins:
+./plugins/
 Pasta-mundi:
 ./mundos/
+Plugins:
+Default
 Mundos:
 Default
 Pasta de imagens:

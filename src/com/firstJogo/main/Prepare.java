@@ -13,12 +13,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
-import org.lwjgl.glfw.GLFW;
 
+import com.firstJogo.Mundos.Entidade;
+import com.firstJogo.Mundos.Humano;
+import com.firstJogo.padrao.CallbacksExternas;
 import com.firstJogo.utils.ArquivosGerais;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.visual.Camera;
 import com.firstJogo.visual.Janela;
+import com.firstJogo.visual.TipodeCriatura;
 
 public class Prepare implements Runnable{
 	private static final Set<String> configs=new HashSet<String>(Arrays.asList(
@@ -26,7 +29,9 @@ public class Prepare implements Runnable{
 			"Formato das imagens:",
 			"Pasta-mundi:",
 			"Cor de fundo (RGBA):",
-			"Mundos:"
+			"Mundos:",
+			"Pasta de plugins:",
+			"Plugins:"
 			));
 	@Override
 	public void run() {
@@ -59,6 +64,8 @@ public class Prepare implements Runnable{
 			if(!defaultimage.exists())defimagem(defaultimage,"Humano");
 			defaultimage=null;
 			
+			
+			
 			File blocktypes=new File(GlobalVariables.mundos_pasta+"descricao_dos_blocos"+".txt");
 			if(!blocktypes.exists())tipospadrao(blocktypes);
 			blocktypes=null;
@@ -72,24 +79,23 @@ public class Prepare implements Runnable{
 		
 		prepararJanela();
 
-		prepararBotoes();
+		CallbacksExternas.prepararBotoes();//EXTERNALIZAR!
+		
+		prepararPlayer();
+		
+		prepararCamera();
 		
 	}
-	private void prepararBotoes() {
-		GeradorEventos.eventosbotao.put(GLFW.GLFW_KEY_W, ()->{
-			Camera.getMain().setPos(Camera.getMain().getPos().add(0,-2,0));
-		});
-		GeradorEventos.eventosbotao.put(GLFW.GLFW_KEY_A, ()->{
-			Camera.getMain().setPos(Camera.getMain().getPos().add(0,2,0));
-		});
-		GeradorEventos.eventosbotao.put(GLFW.GLFW_KEY_S, ()->{
-			Camera.getMain().setPos(Camera.getMain().getPos().add(0,2,0));
-		});
-		GeradorEventos.eventosbotao.put(GLFW.GLFW_KEY_D, ()->{
-			Camera.getMain().setPos(Camera.getMain().getPos().add(0,-2,0));
-		});
-		
+	private void prepararCamera() {
+		Camera camera=new Camera(Janela.getPrincipal().getWidth(),Janela.getPrincipal().getHeight());
+		Camera.setMain(camera);
 	}
+	private void prepararPlayer() {
+		Humano player=new Humano(TipodeCriatura.criaturas[0]);
+		Entidade.player=player;
+		player.IsPlayer=true;
+	}
+	
 	private void prepararJanela() {
 		Janela.setGeneralCallbacks();
 		Janela.Iniciar();
@@ -107,49 +113,29 @@ public class Prepare implements Runnable{
 		 args.put("Pasta-mundi:", new String[] {"./mundos/"});
 		 args.put("Cor de fundo (RGBA):", new String[] {"0","0","0","0"});
 		 args.put("Mundos:",new String[] {"Default"});
+		 args.put("Pasta de plugins:", new String[] {"./plugins/"});
+		 args.put("Plugins:", new String[] {"Default"});
+			 
 		ArquivosGerais.setArgs(config, args);
 		if(!new File("./imgs/").exists())new File("./imgs/").mkdir();
 		if(!new File("./mundos/").exists())new File("./mundos/").mkdir();
+		if(!new File("./plugins/").exists())new File("./plugins/").mkdir();
 		if(!new File("./mundos/Default.world").exists())new File("./mundos/Default.world").createNewFile();
+		if(!new File("./plugins/Default.jar").exists())new File("./plugins/Default.jar").createNewFile();
 	}
-//	private void config_padrao(File config) throws IOException {
-//		config.createNewFile();
-//		BufferedWriter escritor=new BufferedWriter(new FileWriter(config));
-//		escritor.append("./imgs/\n");
-//		escritor.append(".png\n");
-//		escritor.append("./mundos/\n");
-//		escritor.append("0\n");
-//		escritor.append("0\n");
-//		escritor.append("0\n");
-//		escritor.append("0\n");
-//		escritor.append("M\n");
-//		escritor.append("Default");
-//		escritor.close();
-//		if(!new File("./imgs/").exists())new File("./imgs/").mkdir();
-//		if(!new File("./mundos/").exists())new File("./mundos/").mkdir();
-//		if(!new File("./mundos/Default.world").exists())new File("./mundos/Default.world").createNewFile();
-//	}
+	
 	private void load_config(File config) throws IOException {
 		HashMap<String, String[]> args=ArquivosGerais.getArgs(config, configs);
 		GlobalVariables.imagem_path=args.get("Pasta de imagens:")[0];
 		GlobalVariables.imagem_formato=args.get("Formato das imagens:")[0];
 		GlobalVariables.mundos_pasta=args.get("Pasta-mundi:")[0];
+		GlobalVariables.plugins_pasta=args.get("Pasta de plugins:")[0];
 		String[] cores=args.get("Cor de fundo (RGBA):");
 		GlobalVariables.ClearColor=new float[] {Integer.valueOf(cores[0])/255,Integer.valueOf(cores[1])/255,Integer.valueOf(cores[2])/255,Integer.valueOf(cores[3])/255};
 		GlobalVariables.mundos=args.get("Mundos:");
+		GlobalVariables.plugins=args.get("Plugins:");
 	}
-//	private void load_config(File config) throws IOException {
-//		BufferedReader br=new BufferedReader(new FileReader(config));
-//		GlobalVariables.imagem_path=br.readLine();
-//		GlobalVariables.imagem_formato=br.readLine();
-//		GlobalVariables.mundos_pasta=br.readLine();
-//		int r=Integer.valueOf(br.readLine());
-//		int g=Integer.valueOf(br.readLine());
-//		int b=Integer.valueOf(br.readLine());
-//		int a=Integer.valueOf(br.readLine());
-//		GlobalVariables.ClearColor=new float[] {r/255,g/255,b/255,a/255};
-//		br.close();
-//	}
+
 	private void valid_config(File config)throws IOException,NumberFormatException {
 		HashMap<String, String[]> args=ArquivosGerais.getArgs(config, configs);
 		
@@ -171,6 +157,14 @@ public class Prepare implements Runnable{
 			erroconfig("O local de mundos registrado no argumento 'Pasta-mundi' do arquivo das configurações não existe!");
 		String mundopath=argatual[0];
 		
+		argatual=args.get("Pasta de plugins:");
+		if(argatual==null)erroconfig("Argumento 'Pasta de plugins' indisponível!");
+		if(argatual.length!=1)erroconfig("Só é possível ter uma pasta de plugins! (erro no arugumento 'Pasta de plugins')");
+		if(!new File(argatual[0]).exists())
+			erroconfig("O local de plugins registrado no argumento 'Pasta de plugins' do arquivo das configurações não existe!");
+		String plugpath=argatual[0];
+			
+		
 		argatual=args.get("Cor de fundo (RGBA):");
 		if(argatual==null)erroconfig("Argumento 'Cor de fundo (RGBA):' indisponível!");
 		if(argatual.length!=4)erroconfig("RGBA são 4 valores entre 0 e 255! (erro no argumento 'Cor de fundo (RGBA)')");
@@ -181,39 +175,17 @@ public class Prepare implements Runnable{
 		if(argatual==null)erroconfig("Argumento 'Mundos:' indisponível!");
 		if(argatual.length<1)erroconfig("É preciso ter pelo menos um arquivo de mundo! (erro no argumento 'Mundos')");
 		for(String arg:argatual)
-			if(!(new File(mundopath+arg+".world")).exists());
+			if(!(new File(mundopath+arg+".world")).exists())erroconfig("Um mundo registrado no argumento 'Mundos' do arquivo de configurações não existe!");
+		
+		argatual=args.get("Plugins:");
+		if(argatual==null)erroconfig("Argumento 'Plugins:' indisponível!");
+		if(argatual.length<1)erroconfig("É preciso ter pelo menos um arquivo de plugin! (erro no argumento 'Plugins')");
+		for(String arg:argatual)
+			if(!(new File(plugpath+arg+".jar")).exists())erroconfig("Um plugin registrado no argumento 'Plugins' do arquivo de configurações não existe!");
 		
 		
 	}
-//	private String[] valid_config(File config) throws IOException,NumberFormatException {
-//		BufferedReader br=new BufferedReader(new FileReader(config));
-//		int quantas=0;
-//		String mundopath="";
-//		String linha;
-//		boolean hasmundos=false;
-//		ArrayList<String> mundos=new ArrayList<String>();
-//		while((linha=br.readLine())!=null) {
-//			if(linha.equals("\n"))continue;
-//			quantas++;
-//			if(quantas==1&&!(new File(linha)).exists()) erroconfig("O local de imagens registrado na linha 1 do arquivo das configurações não existe!");
-//			else if(quantas==2&&!linha.equals(".png")) erroconfig("Apenas o formato .png é suportado no momento! Linha 2 do arquivo de configurações!");
-//			else if(quantas==3&&!(new File(linha)).exists())erroconfig("O local de mundos registrado na linha 3 do arquivo das configurações não existe!");
-//			else if(quantas==4&&Integer.valueOf(linha)<0)erroconfig("Valor de cor R em RGBA inválido na linha 4!");
-//			else if(quantas==5&&Integer.valueOf(linha)<0)erroconfig("Valor de cor G em RGBA inválido na linha 5!");
-//			else if(quantas==6&&Integer.valueOf(linha)<0)erroconfig("Valor de cor B em RGBA inválido na linha 6!");
-//			else if(quantas==7&&Integer.valueOf(linha)<0)erroconfig("Valor de cor A em RGBA inválido na linha 7!");
-//			
-//			else if(quantas>GlobalVariables.minimo_linhas_config-2&&linha.equals("M"))hasmundos=true;
-//			else if(hasmundos&&!(new File(mundopath+linha+".world")).exists())erroconfig("O arquivo de mundo registrado na linha "+quantas+" do arquivo de configurações não existe!");
-//			else if (hasmundos)mundos.add(linha);
-//			if(quantas==3)mundopath=linha;
-//		}
-//		br.close();
-//		
-//		
-//		if(quantas<GlobalVariables.minimo_linhas_config)erroconfig("O arquivo de configurações tem menos linhas que o mínimo necessário!");
-//		return mundos.toArray(new String[0]);
-//	}
+
 	private void erroconfig(String mess) {
 		System.out.println(mess);
 		System.out.println("Conserte esse erro ou delete o config.txt para restaurar o padrão!");
@@ -243,24 +215,9 @@ public class Prepare implements Runnable{
 		bw.close();
 	}
 	private void defimagem(File arq,String nome) throws IOException {
-//		File def=new File("com/firstJogo/main/Default.png");
 		arq.createNewFile();
-		//FileReader read=new FileReader(def);
 		InputStream read=this.getClass().getClassLoader().getResourceAsStream("com/firstJogo/main/"+nome+GlobalVariables.imagem_formato);
-//		System.out.println("CAMINHO ABSOLUTO:");
-//		System.out.println(def.getAbsolutePath());
-//		System.out.println("CAMINHO RELATIVO:");
-//		System.out.println(def.getPath());
-//		System.out.println("URL CLASS:");
-//		System.out.println(this.getClass().getResource(def.getPath()));
-//		System.out.println("URL CLASS_LOADER:");
-//		System.out.println(this.getClass().getClassLoader().getResource("com/firstJogo/main/Default.png"));
-//		System.out.println("INPUTSTREAM CLASS_LOADER:");
-//		System.out.println(read);
-		//InputStream read=this.getClass().getResourceAsStream("/"+def.getPath());
-		//FileOutputStream wri=new FileOutputStream(arq);
 		OutputStream wri=new FileOutputStream(arq);
-		//read.transferTo(wri);
 		IOUtils.copy(read, wri);
 		read.close();
 		wri.close();

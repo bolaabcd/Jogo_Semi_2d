@@ -1,5 +1,7 @@
 package com.firstJogo.Mundos;
 
+import java.util.ArrayList;
+
 import org.joml.Matrix4f;
 
 import com.firstJogo.utils.GlobalVariables;
@@ -9,6 +11,7 @@ import com.firstJogo.visual.Shaders;
 
 public class WorldRenderer {
 	private char[][] azulejos;//Azulejos efetivos no mundo!
+	private ArrayList<Entidade> criaturas;
 	private short width;
 	private short height;
 	private Matrix4f mundo;
@@ -21,6 +24,8 @@ public class WorldRenderer {
 		escala=15;//15
 		azulejos=new char[18][18];
 		
+		criaturas=new ArrayList<Entidade>();
+		criaturas.add(Entidade.player);
 		
 		mundo=new Matrix4f().setTranslation(0,0,0);//BOTTON-RIGHT do mundo no centro da tela é o 0,0,0!
 //		mundo.setTranslation(-Janela.getPrincipal().getWidth()/2+15, -Janela.getPrincipal().getHeight()/2+15, 0);
@@ -48,7 +53,7 @@ public class WorldRenderer {
 				rend.Renderizar(azulejos[j][i], j, i, shad, mundo, cam);
 				GlobalVariables.debugue=false;
 			}
-		crend.Renderizar((char)0, 8.5f, 8.5f, (char)0, shad, mundo,cam);//Esse 8.5f é a posição no mundo que aparece.
+		crend.Renderizar(Entidade.player.getTipo_visual().getId(), 8.5f, 8.5f, (char)0, shad, mundo,cam);//Esse 8.5f é a posição no mundo que aparece.
 	}
 //	public void setblocos(char[][] blocos) {
 //		
