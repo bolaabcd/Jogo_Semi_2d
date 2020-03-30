@@ -130,21 +130,30 @@ public class CallbacksExternas implements ExternalCallback {
 
 		});
 		
-		TempoMarker cameraMarker=new TempoMarker("Camera",()->{//Move o Player
-			TempoMarker camera_Marker=GeradorEventos.tempopassado.get("Camera");
-//			System.out.println(camera_Marker.getTemporegistrado());
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//TODO: CRIAR CLASSE PARA OS EVENTOS INTERNOS:
+		TempoMarker cameraMarker=new TempoMarker(1000000,(cameramMarker)->{//Move o Player, e cada milisegundo vai executar!
+//			TempoMarker camera_Marker=GeradorEventos.tempopassado.get("Camera");
+//			System.out.println(cameramMarker.getTemporegistrado());
 			Camera.getMain().setPos(Camera.getMain().getPos().add(
 //					(float)(Entidade.player.getDirecModifiers()[0]*Entidade.player.getVelocModifier()*-Entidade.player.getMoverxy()[0]*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
 //					(float)(Entidade.player.getDirecModifiers()[1]*Entidade.player.getVelocModifier()*-Entidade.player.getMoverxy()[1]*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
-					(float)(-Entidade.player.getDirecModifiers()[0]*Entidade.player.getVelocModifier()*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
-					(float)(-Entidade.player.getDirecModifiers()[1]*Entidade.player.getVelocModifier()*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
+					(float)(-Entidade.player.getDirecModifiers()[0]*Entidade.player.getVelocModifier()*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-cameramMarker.getTemporegistrado())/1000000000),
+					(float)(-Entidade.player.getDirecModifiers()[1]*Entidade.player.getVelocModifier()*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-cameramMarker.getTemporegistrado())/1000000000),
 
 					0));
-			camera_Marker.resetTemporegistrado();
+			cameramMarker.resetTemporegistrado();
 		});
-		cameraMarker.setTempolimite(1000000);//A cada milisegundo vai executar!
 		cameraMarker.resetTemporegistrado();
-		GeradorEventos.tempopassado.put("Camera",cameraMarker);
+		GeradorEventos.tempopassado.add(cameraMarker);
 		cameraMarker=null;
 		
 		
