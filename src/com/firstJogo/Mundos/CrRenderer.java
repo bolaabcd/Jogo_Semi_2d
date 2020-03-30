@@ -40,17 +40,21 @@ public class CrRenderer {
 	}
 	public void Renderizar(char id,float x,float y,char z, Shaders shad, Matrix4f mundo, Camera cam) {
 		shad.bindar();
-		objeto_a_renderizar ob=visual_das_criaturas.get(TipodeCriatura.criaturas[id].getTextura());
-		if(visual_das_criaturas.containsKey(TipodeCriatura.criaturas[id].getTextura())) 
-			ob.tex.bind(0);//Bindou ao sampler número 0 ¯\_(ツ)_/¯
-		Matrix4f pos=new Matrix4f().translate(2*x,2*y,z);//O modelo tem a origem no centro, e ele escala pros dois lados!
-		Matrix4f mat=new Matrix4f();
-		cam.getRawProjec().mul(mundo, mat);
-		mat.mul(pos);
-				
-		shad.setUniforme("localizacao_da_textura_tambem_chamada_de_sampler", 0);//Setamos o sampler para 0, onde está a nossa textura!
-		shad.setUniforme("projecao", mat);
+//		objeto_a_renderizar ob=visual_das_criaturas.get(TipodeCriatura.criaturas[id].getTextura());
+//		objeto_a_renderizar ob=new objeto_a_renderizar();;
+		if(visual_das_criaturas.containsKey(TipodeCriatura.criaturas[id].getTextura())) {
+			objeto_a_renderizar ob=visual_das_criaturas.get(TipodeCriatura.criaturas[id].getTextura());
+			ob.tex.bind(1);//Bindou ao sampler número 1 ¯\_(ツ)_/¯
+			Matrix4f pos=new Matrix4f().translate(2*x,2*y,z);//O modelo tem a origem no centro, e ele escala pros dois lados!
+			Matrix4f mat=new Matrix4f();
+			cam.getRawProjec().mul(mundo, mat);
+			mat.mul(pos);
+					
+			shad.setUniforme("localizacao_da_textura_tambem_chamada_de_sampler", 1);//Setamos o sampler para 0, onde está a nossa textura!
+			shad.setUniforme("projecao", mat);
+			
+			ob.mod.renderizar();
+		}
 		
-		ob.mod.renderizar();
 	}
 }

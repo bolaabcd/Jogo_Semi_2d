@@ -7,6 +7,8 @@ import com.firstJogo.Mundos.Humano;
 import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.regras.ExternalCallback;
 import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.utils.TempoMarker;
+import com.firstJogo.visual.Camera;
 
 public class CallbacksExternas implements ExternalCallback {
 	public static void prepararBotoes() {
@@ -65,6 +67,8 @@ public class CallbacksExternas implements ExternalCallback {
 		});
 		
 		
+		
+		
 		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_LEFT_CONTROL, ()->{
 			try {
 				Humano player=(Humano) Entidade.player;
@@ -114,6 +118,18 @@ public class CallbacksExternas implements ExternalCallback {
 				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_A)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_A).run();
 
 		});
+		
+		TempoMarker cameraMarker=new TempoMarker("Camera");
+		cameraMarker.resetTemporegistrado();
+		GeradorEventos.milisegundoPassado.add(()->{//Move o Player
+			TempoMarker camera_Marker=TempoMarker.temporizadores.get("Camera");
+			Camera.getMain().setPos(Camera.getMain().getPos().add(
+					(float)(Entidade.player.getDirecModifier()*Entidade.player.getVelocModifier()*-Entidade.player.getMoverxy()[0]*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
+					(float)(Entidade.player.getDirecModifier()*Entidade.player.getVelocModifier()*-Entidade.player.getMoverxy()[1]*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
+					0));
+			camera_Marker.resetTemporegistrado();
+		});
+		
 		
 	}
 	@Override

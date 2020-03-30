@@ -1,15 +1,19 @@
 package com.firstJogo.Mundos;
 
+import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.visual.TipodeCriatura;
 
 public class Entidade {
+	
 	public static Entidade player;
 	
 	private byte direc;//2 bits pra direção de olhar, 4 bits pra direção de movimento!
 	private TipodeCriatura tipo_visual;
 	private char veloc=5;
+	private double direcModifier=1;
 	
 	protected float velocModifier;//60% pra corrida maratonada, 100% na corrida rápida, se ficar em linha reta 2 segundos muda pra 120%, 10% pra agachado.
+
 	
 	public boolean IsPlayer;
 	
@@ -40,10 +44,29 @@ public class Entidade {
 		//UP=xx 10 1x xx,DOWN=xx 10 0x xx,LEFT=xx 01 x0 xx,RIGHT=xx 01 x1 xx
 		//UP RIGHT=xx 11 11 xx, UP LEFT=xx 11 10 xx, DOWN RIGHT= xx 11 01 xx, DOWN LEFT= xx 11 00 xx
 		//NADA=xx 00 xx xx (2 bits falando qual tá ligado e 2 falando qual tipo seria se tivesse ligado)
-		if(mover.equals("up"))direc=(byte) (direc|0x28);//Ativando Y e colocando como up
-		else if(mover.equals("down"))direc=(byte) ((direc|0x20)&0xF7);//Ativando Y e colocando como down
-		else if(mover.equals("left"))direc=(byte) ((direc|0x10)&0xFB);//Ativando X e colocando como left
-		else if(mover.equals("right"))direc=(byte) (direc|0x14);//Ativando X e colocando como right
+		boolean X=false;
+		boolean Y=false;
+		if(IsPlayer) {
+			short[] mov=getMoverxy();
+			if(mov[0]!=0)X=true;
+			if(mov[1]!=0)Y=true;
+		}
+		if(mover.equals("up")) {
+			direc=(byte) (direc|0x28);//Ativando Y e colocando como up
+			if(X)direcModifier=GlobalVariables.raizde2inv;
+		}
+		else if(mover.equals("down")) {
+			direc=(byte) ((direc|0x20)&0xF7);//Ativando Y e colocando como down
+			if(X)direcModifier=GlobalVariables.raizde2inv;
+		}
+		else if(mover.equals("left")) {
+			direc=(byte) ((direc|0x10)&0xFB);//Ativando X e colocando como left
+			if(Y)direcModifier=GlobalVariables.raizde2inv;
+		}
+		else if(mover.equals("right")) {
+			direc=(byte) (direc|0x14);//Ativando X e colocando como right
+			if(Y)direcModifier=GlobalVariables.raizde2inv;
+		}
 		
 //		else if(mover.equals("ur"))direc=(byte) ((direc&0xE3)|0x10);
 //		else if(mover.equals("ul"))direc=(byte) ((direc&0xE3)|0x14);
@@ -96,8 +119,14 @@ public class Entidade {
 		//NADA=xx 00 xx xx (2 bits falando qual tá ligado e 2 falando qual tipo seria se tivesse ligado)
 		
 		short[] mov=getMoverxy();
-		if((mover.equals("up")&&mov[1]!=-1)||(mover.equals("down")&&mov[1]!=1))direc=(byte) (direc&0xDF);//Desativando Y se não tiver na direção oposta
-		else if((mover.equals("left")&&mov[0]!=1)||(mover.equals("right")&&mov[0]!=-1))direc=(byte) (direc&0xEF);//Desativando X se não tiver na direção oposta.
+		if((mover.equals("up")&&mov[1]!=-1)||(mover.equals("down")&&mov[1]!=1)) {//se não tiver indo na direção oposta em Y
+			direc=(byte) (direc&0xDF);//Desativando Y 
+			if(IsPlayer)direcModifier=1f;//Alterando para movimento linear se for player.
+		}
+		else if((mover.equals("left")&&mov[0]!=1)||(mover.equals("right")&&mov[0]!=-1)) {//se não tiver na direção oposta em X
+			direc=(byte) (direc&0xEF);//Desativando X 
+			if(IsPlayer)direcModifier=1f;//Alterando para movimento linear se for player.
+		}
 		
 		else if((mover.equals("up")&&mov[1]==-1)||(mover.equals("down")&&mov[1]==1)||(mover.equals("left")&&mov[0]==1)||(mover.equals("right")&&mov[0]==-1));//Ignorando se tiver numa direção oposta.
 		
@@ -177,6 +206,10 @@ public class Entidade {
 
 	public float getVelocModifier() {
 		return velocModifier;
+	}
+
+	public double getDirecModifier() {
+		return direcModifier;
 	}
 	
 	

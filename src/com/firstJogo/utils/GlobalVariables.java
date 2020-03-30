@@ -16,5 +16,8 @@ public static boolean debugue=false;
 
 public static CopyOnWriteArraySet<Integer> Keys=new CopyOnWriteArraySet<Integer>();
 
+public static final double raizde2inv=1/Math.sqrt(2);
+public static final short intperbloco=32;
+
 
 }

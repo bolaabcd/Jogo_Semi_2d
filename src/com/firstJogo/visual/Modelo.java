@@ -58,6 +58,7 @@ public class Modelo {
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
 		
+		GL20.glDisable(GL20.GL_BLEND);
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);//DESATIVANDO ARRAY DE TEXTURAS!!!
 	}
