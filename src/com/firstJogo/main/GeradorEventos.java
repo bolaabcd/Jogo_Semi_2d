@@ -6,7 +6,6 @@ import java.util.HashMap;
 import com.firstJogo.utils.Funcao;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
-import com.firstJogo.visual.Janela;
 
 public class GeradorEventos implements Runnable{
 	public static HashMap<Integer,Funcao> botaomantido=new HashMap<Integer,Funcao>();//Eventos externos!
@@ -20,6 +19,8 @@ public class GeradorEventos implements Runnable{
 		
 		System.out.println("Iniciando Loop de eventos");
 		while(!Janela.getPrincipal().ShouldClose()) {
+			Janela.PollEvents();//Recolhendo eventos de botao!
+			
 			for(int k:GlobalVariables.Keys)
 				
 				if(botaomantido.containsKey(k))botaomantido.get(k).run();

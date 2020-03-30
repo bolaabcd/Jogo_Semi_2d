@@ -9,7 +9,6 @@ import com.firstJogo.Mundos.WorldRenderer;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoAtual;
 import com.firstJogo.visual.Camera;
-import com.firstJogo.visual.Janela;
 import com.firstJogo.visual.Shaders;
 
 public class Renderer implements Runnable{
@@ -135,7 +134,6 @@ public class Renderer implements Runnable{
 				amt=0;
 				continue;
 			}
-			Janela.PollEvents();
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT); // Limpa o framebuffer
 //			shad.setUniforme("localizacao_da_textura_tambem_chamada_de_sampler", 0);//Setamos o sampler para 0, onde está a nossa textura!
 //			shad.setUniforme("projecao", camera.getProjec().mul(mat));//camera.getProjec().mul(finala)

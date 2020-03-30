@@ -1,4 +1,4 @@
-package com.firstJogo.visual;
+package com.firstJogo.main;
 
 import java.awt.Frame;
 import java.awt.Toolkit;

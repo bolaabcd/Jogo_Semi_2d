@@ -20,7 +20,6 @@ import com.firstJogo.padrao.CallbacksExternas;
 import com.firstJogo.utils.ArquivosGerais;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.visual.Camera;
-import com.firstJogo.visual.Janela;
 import com.firstJogo.visual.TipodeCriatura;
 
 public class Prepare implements Runnable{
