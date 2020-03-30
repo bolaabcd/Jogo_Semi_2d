@@ -130,10 +130,9 @@ public class CallbacksExternas implements ExternalCallback {
 
 		});
 		
-		TempoMarker cameraMarker=new TempoMarker("Camera");
-		cameraMarker.resetTemporegistrado();
-		GeradorEventos.milisegundoPassado.add(()->{//Move o Player
-			TempoMarker camera_Marker=TempoMarker.temporizadores.get("Camera");
+		TempoMarker cameraMarker=new TempoMarker("Camera",()->{//Move o Player
+			TempoMarker camera_Marker=GeradorEventos.tempopassado.get("Camera");
+//			System.out.println(camera_Marker.getTemporegistrado());
 			Camera.getMain().setPos(Camera.getMain().getPos().add(
 //					(float)(Entidade.player.getDirecModifiers()[0]*Entidade.player.getVelocModifier()*-Entidade.player.getMoverxy()[0]*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
 //					(float)(Entidade.player.getDirecModifiers()[1]*Entidade.player.getVelocModifier()*-Entidade.player.getMoverxy()[1]*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
@@ -143,6 +142,10 @@ public class CallbacksExternas implements ExternalCallback {
 					0));
 			camera_Marker.resetTemporegistrado();
 		});
+		cameraMarker.setTempolimite(1000000);//A cada milisegundo vai executar!
+		cameraMarker.resetTemporegistrado();
+		GeradorEventos.tempopassado.put("Camera",cameraMarker);
+		cameraMarker=null;
 		
 		
 	}
