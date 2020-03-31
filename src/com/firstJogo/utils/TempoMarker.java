@@ -1,18 +1,18 @@
 package com.firstJogo.utils;
 
-import com.firstJogo.regras.FuncaoTemporal;
+import com.firstJogo.utils.Funcao;
 
 public class TempoMarker {
 //	public static HashMap<String,TempoMarker> temporizadores=new HashMap<String,TempoMarker>();
 	
-	private FuncaoTemporal funcao;
+	
 	private long tempolimite;
 	private long temporegistrado;
 	
-	public TempoMarker(long tempolimite,FuncaoTemporal funcao) {
+	public TempoMarker(long tempolimite) {
 //		temporizadores.put(chave, this);
-		this.funcao=funcao;
 		this.tempolimite=tempolimite;
+		this.resetTemporegistrado();
 	}
 	
 	public long getTemporegistrado() {
@@ -21,7 +21,7 @@ public class TempoMarker {
 	public void resetTemporegistrado() {
 		temporegistrado=System.nanoTime();
 	}
-	public void checkTempo() {
+	public void checkTempo(Funcao<TempoMarker> funcao) {
 		if(passouTempolimite())funcao.run(this);
 	}
 	public void setTempolimite(long tempolimite) {

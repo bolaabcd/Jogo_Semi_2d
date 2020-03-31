@@ -1,5 +1,5 @@
 package com.firstJogo.utils;
 
-public interface Funcao {
-public void run();
+public interface Funcao <Classe>{
+public void run(Classe objeto);
 }
