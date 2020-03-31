@@ -19,7 +19,8 @@ public class CallbacksExternas implements ExternalCallback {
 			Entidade.player.iniciarMovimento(1f);//TODO trocar esse 1f (futuramente) pelos mofificadores cabíveis de velocidade
 			try {
 				Humano player=(Humano) Entidade.player;
-				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
+				player.resetMovModo();
+//				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
 				
 			}
@@ -30,7 +31,8 @@ public class CallbacksExternas implements ExternalCallback {
 			Entidade.player.iniciarMovimento(1f);
 			try {
 				Humano player=(Humano) Entidade.player;
-				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
+				player.resetMovModo();
+//				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
 				
 			}
@@ -41,7 +43,8 @@ public class CallbacksExternas implements ExternalCallback {
 			Entidade.player.iniciarMovimento(1f);
 			try {
 				Humano player=(Humano) Entidade.player;
-				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
+				player.resetMovModo();
+//				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
 				
 			}
@@ -52,7 +55,8 @@ public class CallbacksExternas implements ExternalCallback {
 			Entidade.player.iniciarMovimento(1f);
 			try {
 				Humano player=(Humano) Entidade.player;
-				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
+				player.resetMovModo();
+//				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
 				
 			}
@@ -61,7 +65,7 @@ public class CallbacksExternas implements ExternalCallback {
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_LEFT_CONTROL, (nada)->{
 			try {
 				Humano player=(Humano) Entidade.player;
-				player.setMovModo(Humano.modos.CORRENDO);
+				player.correr();
 			}catch(ClassCastException c) {
 				
 			}
@@ -69,7 +73,7 @@ public class CallbacksExternas implements ExternalCallback {
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_LEFT_SHIFT, (nada)->{
 			try {
 				Humano player=(Humano) Entidade.player;
-				player.setMovModo(Humano.modos.AGACHADO);
+				player.agachar();
 			}catch(ClassCastException c) {
 				
 			}
@@ -81,24 +85,26 @@ public class CallbacksExternas implements ExternalCallback {
 		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_LEFT_CONTROL, (nada)->{
 			try {
 				Humano player=(Humano) Entidade.player;
-				if(player.getMovModo()==Humano.modos.CORRENDO)
-				player.setMovModo(Humano.modos.ANDANDO);
-				
-				if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.AGACHADO);
+//				if(player.getMovModo()==Humano.modos.CORRENDO)
+//				player.setMovModo(Humano.modos.ANDANDO);
+				player.resetMovModo();
+//				if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.AGACHADO);
 			}catch(ClassCastException c) {
-				
+				c.printStackTrace();
+				System.exit(1);
 			}
 		});
 		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_LEFT_SHIFT, (nada)->{
 			try {
 				Humano player=(Humano) Entidade.player;
-				if(player.getMovModo()==Humano.modos.AGACHADO)
-				player.setMovModo(Humano.modos.ANDANDO);
-				
-				if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL))player.setMovModo(Humano.modos.CORRENDO);
+//				if(player.getMovModo()==Humano.modos.AGACHADO)
+//				player.setMovModo(Humano.modos.ANDANDO);
+				player.resetMovModo();
+//				if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL))player.setMovModo(Humano.modos.CORRENDO);
 
 			}catch(ClassCastException c) {
-				
+				c.printStackTrace();
+				System.exit(1);
 			}
 		});
 		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_W,(nada)->{
@@ -140,23 +146,21 @@ public class CallbacksExternas implements ExternalCallback {
 		
 		
 		//TODO: CRIAR CLASSE PARA OS EVENTOS INTERNOS:
-		GeradorEventos.tempopassado.put(new TempoMarker(1000000), (camera_Marker)->{//Move o Player, e cada milisegundo vai executar!
-//			TempoMarker camera_Marker=GeradorEventos.tempopassado.get("Camera");
-//			System.out.println(cameramMarker.getTemporegistrado());
+		new TempoMarker(1000000, (camera_Marker)->{//Move o Player, e cada milisegundo vai executar!
 			Camera.getMain().setPos(Camera.getMain().getPos().add(
-//					(float)(Entidade.player.getDirecModifiers()[0]*Entidade.player.getVelocModifier()*-Entidade.player.getMoverxy()[0]*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
-//					(float)(Entidade.player.getDirecModifiers()[1]*Entidade.player.getVelocModifier()*-Entidade.player.getMoverxy()[1]*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
-					(float)(-Entidade.player.getDirecModifiers()[0]*Entidade.player.getVelocModifier()*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
-					(float)(-Entidade.player.getDirecModifiers()[1]*Entidade.player.getVelocModifier()*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-camera_Marker.getTemporegistrado())/1000000000),
+					(float)(-Entidade.player.getDirecModifiers()[0]*Entidade.player.getVelocModifier()*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-((TempoMarker)camera_Marker).getTemporegistrado())/1000000000),
+					(float)(-Entidade.player.getDirecModifiers()[1]*Entidade.player.getVelocModifier()*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-((TempoMarker)camera_Marker).getTemporegistrado())/1000000000),
 
 					0));
-			camera_Marker.resetTemporegistrado();
-		});
-		GeradorEventos.tempopassado.put(new TempoMarker(1000000000), (camera_Marker)-> {
+//			((TempoMarker)camera_Marker).resetTemporegistrado();
+		},null).ativar();;
+//		Camera_Marker.ativar();
+		
+		
+		new TempoMarker(1000000000, (nada)-> {
 			System.out.println("TPS: "+GlobalVariables.TicksPorSegundo);
-			camera_Marker.resetTemporegistrado();
 			GlobalVariables.TicksPorSegundo=0;
-		});
+		},null).ativar();;
 		
 		
 	}

@@ -1,18 +1,31 @@
 package com.firstJogo.utils;
 
+import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.utils.Funcao;
 
-public class TempoMarker {
-//	public static HashMap<String,TempoMarker> temporizadores=new HashMap<String,TempoMarker>();
-	
+public class TempoMarker {//Guarda a função e o objeto-argumento da função pra quando o tempo passar.
+	private final Object argumento;
+	private final Funcao<Object> funcao;
 	
 	private long tempolimite;
 	private long temporegistrado;
 	
-	public TempoMarker(long tempolimite) {
+	public TempoMarker(long tempolimite,Funcao<Object> funcao,Object argumento) {//Nulo indica o prório objeto
 //		temporizadores.put(chave, this);
 		this.tempolimite=tempolimite;
+//		this.resetTemporegistrado();
+		this.funcao=funcao;
+		if(argumento==null)this.argumento=this;
+		else this.argumento=argumento;
+	}
+	
+	public void ativar() {
 		this.resetTemporegistrado();
+		GeradorEventos.tempopassado.add(this);
+	}
+	
+	public void desativar() {
+		GeradorEventos.tempopassado.remove(this);
 	}
 	
 	public long getTemporegistrado() {
@@ -21,8 +34,11 @@ public class TempoMarker {
 	public void resetTemporegistrado() {
 		temporegistrado=System.nanoTime();
 	}
-	public void checkTempo(Funcao<TempoMarker> funcao) {
-		if(passouTempolimite())funcao.run(this);
+	public void checkTempo() {
+		if(passouTempolimite()) {
+			funcao.run(argumento);
+			this.resetTemporegistrado();
+		}
 	}
 	public void setTempolimite(long tempolimite) {
 		this.tempolimite = tempolimite;
@@ -30,6 +46,7 @@ public class TempoMarker {
 	
 	
 	private boolean passouTempolimite() {
+//		System.out.println(temporegistrado);
 		if(System.nanoTime()-temporegistrado>tempolimite)return true;
 		return false;
 	}

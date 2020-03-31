@@ -9,14 +9,15 @@ public class Entidade {
 	
 //	private byte direc;//2 bits pra direção de olhar, 4 bits pra direção de movimento!
 	private TipodeCriatura tipo_visual;
-	private double angulo=0;
 	private DirecoesPadrao olharDir;
+	private double angulo=0;
 //	private boolean parado;
 	
 	protected float velocModifier=0f;//60% pra corrida maratonada, 100% na corrida rápida, se ficar em linha reta 2 segundos muda pra 120%, 10% pra agachado.
 	protected char veloc=0;
 	
 	public boolean IsPlayer;
+	
 	
 	public Entidade(TipodeCriatura tipo) {
 		tipo_visual=tipo;
@@ -216,7 +217,6 @@ public class Entidade {
 		if(this.velocModifier==0)return new double[] {0,0};
 		return new double[] {(double)Math.round(Math.cos(angulo)*100000d)/100000d,(double)Math.round(Math.sin(angulo)*100000d)/100000d};
 	}
-	
 	
 
 	

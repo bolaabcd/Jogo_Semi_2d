@@ -1,5 +1,6 @@
 package com.firstJogo.main;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.firstJogo.utils.Funcao;
@@ -12,7 +13,7 @@ public class GeradorEventos implements Runnable{
 	public static HashMap<Integer,Funcao<?>> botaopressionado=new HashMap<Integer,Funcao<?>>();
 	//Gatilho, o que fazer
 	
-	public static HashMap<TempoMarker,Funcao<TempoMarker>> tempopassado=new HashMap<TempoMarker,Funcao<TempoMarker>>();//EVENTO INTERNO!!!
+	public static ArrayList<TempoMarker> tempopassado=new ArrayList<TempoMarker>();//EVENTO INTERNO!!!
 	
 	@Override
 	public void run() {
@@ -26,8 +27,8 @@ public class GeradorEventos implements Runnable{
 				if(botaomantido.containsKey(k))botaomantido.get(k).run(null);
 			//Ativando eventos de botão mantido!
 			
-			for(TempoMarker marker:tempopassado.keySet()) 
-				marker.checkTempo(tempopassado.get(marker));
+			for(TempoMarker marker:tempopassado) 
+				marker.checkTempo();
 			//Ativando eventos de tempo passado!
 
 			
