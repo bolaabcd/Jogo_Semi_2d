@@ -1,14 +1,13 @@
 package com.firstJogo.Mundos;
 
-import org.lwjgl.glfw.GLFW;
-
-import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.padrao.PlayerRegras;
 import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.TipodeCriatura;
 
 public class Humano extends Entidade{
 	private modos movModo;
 	private int milisImpulso;
+	private float sprintModifier;
 	
 	private TempoMarker impulso;//Pode alterar os milisImpulso, então pode alterar o TempoMarker!
 	
@@ -24,24 +23,29 @@ public class Humano extends Entidade{
 		this.veloc=5;
 		milisImpulso=2000;
 		movModo=modos.ANDANDO;
+		sprintModifier=1.4f;//Seria 1.2 (quando tiver a animação!)
 		impulso=new TempoMarker(milisImpulso*1000000,(pessoa)->{
 			((Humano) pessoa).setMovModo(modos.SPRINT);
 		},this);
 	}
 	
-	public void agachar() {
+	public void modo_agachar() {
 		setMovModo(Humano.modos.AGACHADO);
 	}
 	
-	public void correr() {
+	public void modo_correr() {
 		setMovModo(Humano.modos.CORRENDO);
 	}
 	
-	public void resetMovModo() {
-		if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL))setMovModo(modos.CORRENDO);//Prioridade é correr, afinal ele tava sprintando.
-		else if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT)) setMovModo(modos.AGACHADO);
-		else setMovModo(Humano.modos.ANDANDO);
+	public void modo_andar() {
+		setMovModo(Humano.modos.ANDANDO);
 	}
+	
+//	public void resetMovModo() {
+//		if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL))setMovModo(modos.CORRENDO);//Prioridade é correr, afinal ele tava sprintando.
+//		else if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT)) setMovModo(modos.AGACHADO);
+//		else setMovModo(Humano.modos.ANDANDO);
+//	}
 	
 	public modos getMovModo() {
 		return movModo;
@@ -54,13 +58,13 @@ public class Humano extends Entidade{
 	public void pararMovimento() {
 		super.pararMovimento();
 		impulso.desativar();
-		resetMovModo();
+		if(IsPlayer)PlayerRegras.resetMovModo(this);;
 	}
 	@Override
 	public void setAngulo(double angulo) {
 		if(this.getAngulo()!=angulo) {
 			impulso.resetTemporegistrado();
-			resetMovModo();
+			if(IsPlayer)PlayerRegras.resetMovModo(this);;
 		}
 		super.setAngulo(angulo);
 	}
@@ -72,7 +76,7 @@ public class Humano extends Entidade{
 		case AGACHADO:
 			return 0.2f;
 		case SPRINT:
-			return 1.2f;
+			return sprintModifier;
 		case ANDANDO:
 			return 0.6f;
 		default:

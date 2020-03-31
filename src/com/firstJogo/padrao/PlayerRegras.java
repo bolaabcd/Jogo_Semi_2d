@@ -1,7 +1,11 @@
 package com.firstJogo.padrao;
 
+import org.lwjgl.glfw.GLFW;
+
 import com.firstJogo.Mundos.Entidade;
+import com.firstJogo.Mundos.Humano;
 import com.firstJogo.regras.DirecoesPadrao;
+import com.firstJogo.utils.GlobalVariables;
 
 public class PlayerRegras {
 	private static DirecoesPadrao[] getMoveDirection(Entidade e) {
@@ -23,7 +27,11 @@ public class PlayerRegras {
 		
 		return res;
 	}
-
+	public static void resetMovModo(Humano e) {
+		if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();//Prioridade é correr, afinal ele tava sprintando.
+		else if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
+		else e.modo_andar();
+	}
 	public static void setMoveDirection(Entidade e, DirecoesPadrao dir) {
 		DirecoesPadrao[] dirs = getMoveDirection(e);
 

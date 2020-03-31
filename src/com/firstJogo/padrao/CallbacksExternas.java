@@ -19,7 +19,7 @@ public class CallbacksExternas implements ExternalCallback {
 			Entidade.player.iniciarMovimento(1f);//TODO trocar esse 1f (futuramente) pelos mofificadores cabíveis de velocidade
 			try {
 				Humano player=(Humano) Entidade.player;
-				player.resetMovModo();
+				PlayerRegras.resetMovModo(player);
 //				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
 				
@@ -31,7 +31,7 @@ public class CallbacksExternas implements ExternalCallback {
 			Entidade.player.iniciarMovimento(1f);
 			try {
 				Humano player=(Humano) Entidade.player;
-				player.resetMovModo();
+				PlayerRegras.resetMovModo(player);
 //				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
 				
@@ -43,7 +43,7 @@ public class CallbacksExternas implements ExternalCallback {
 			Entidade.player.iniciarMovimento(1f);
 			try {
 				Humano player=(Humano) Entidade.player;
-				player.resetMovModo();
+				PlayerRegras.resetMovModo(player);
 //				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
 				
@@ -55,7 +55,7 @@ public class CallbacksExternas implements ExternalCallback {
 			Entidade.player.iniciarMovimento(1f);
 			try {
 				Humano player=(Humano) Entidade.player;
-				player.resetMovModo();
+				PlayerRegras.resetMovModo(player);
 //				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
 				
@@ -65,7 +65,7 @@ public class CallbacksExternas implements ExternalCallback {
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_LEFT_CONTROL, (nada)->{
 			try {
 				Humano player=(Humano) Entidade.player;
-				player.correr();
+				player.modo_correr();
 			}catch(ClassCastException c) {
 				
 			}
@@ -73,7 +73,7 @@ public class CallbacksExternas implements ExternalCallback {
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_LEFT_SHIFT, (nada)->{
 			try {
 				Humano player=(Humano) Entidade.player;
-				player.agachar();
+				player.modo_agachar();
 			}catch(ClassCastException c) {
 				
 			}
@@ -87,7 +87,7 @@ public class CallbacksExternas implements ExternalCallback {
 				Humano player=(Humano) Entidade.player;
 //				if(player.getMovModo()==Humano.modos.CORRENDO)
 //				player.setMovModo(Humano.modos.ANDANDO);
-				player.resetMovModo();
+				PlayerRegras.resetMovModo(player);
 //				if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.AGACHADO);
 			}catch(ClassCastException c) {
 				c.printStackTrace();
@@ -99,7 +99,7 @@ public class CallbacksExternas implements ExternalCallback {
 				Humano player=(Humano) Entidade.player;
 //				if(player.getMovModo()==Humano.modos.AGACHADO)
 //				player.setMovModo(Humano.modos.ANDANDO);
-				player.resetMovModo();
+				PlayerRegras.resetMovModo(player);
 //				if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL))player.setMovModo(Humano.modos.CORRENDO);
 
 			}catch(ClassCastException c) {
