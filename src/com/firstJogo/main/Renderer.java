@@ -1,6 +1,5 @@
 package com.firstJogo.main;
 
-import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
 import com.firstJogo.Mundos.AzRenderer;
@@ -39,7 +38,7 @@ public class Renderer implements Runnable{
 	}
 	
 	private void loop() {
-		GL.createCapabilities();
+//		GL.createCapabilities();
 		GL11.glClearColor(GlobalVariables.ClearColor[0], GlobalVariables.ClearColor[1], GlobalVariables.ClearColor[2], GlobalVariables.ClearColor[3]);
 		
 //		Textura primeira=new Textura("./imgs/Grama.png");

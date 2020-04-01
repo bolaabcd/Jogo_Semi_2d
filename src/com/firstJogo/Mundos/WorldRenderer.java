@@ -29,7 +29,9 @@ public class WorldRenderer {
 		
 		mundo=new Matrix4f().setTranslation(0,0,0);//BOTTON-RIGHT do mundo no centro da tela é o 0,0,0!
 //		mundo.setTranslation(-Janela.getPrincipal().getWidth()/2+15, -Janela.getPrincipal().getHeight()/2+15, 0);
-		mundo.setTranslation(-Janela.getPrincipal().getWidth()/2-escala, -Janela.getPrincipal().getHeight()/2-escala, 0);
+//		mundo.setTranslation(-Janela.getPrincipal().getWidth()/2-escala, -Janela.getPrincipal().getHeight()/2-escala, 0);
+		mundo.setTranslation(-Janela.getPrincipal().getWidth()/2-2*escala, -Janela.getPrincipal().getHeight()/2-2*escala, 0);
+
 		//mundo.scale(16)//Faz um AZULEJO 32x32 (!!) -> O modelo tem a origem no centro, e ele escala pros dois lados!
 		mundo.scale(escala)
 		;

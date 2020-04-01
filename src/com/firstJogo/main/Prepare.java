@@ -101,7 +101,6 @@ public class Prepare implements Runnable{
 		Janela.setPrincipal(new Janela("MicroCraft!",true));
 		Janela.getPrincipal().contextualize();
 		Janela.getPrincipal().setWindowPos(0.5f, 0.5f);
-		
 		Janela.Vsync(true);
 	}
 	private void config_padrao(File config)throws IOException{

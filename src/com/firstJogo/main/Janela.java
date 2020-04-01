@@ -10,6 +10,7 @@ import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
@@ -121,6 +122,7 @@ public void setWindowPos(float x,float y) {
 }
 public void contextualize() {
 	GLFW.glfwMakeContextCurrent(id);
+	GL.createCapabilities();
 }
 public void apresente() {
 	GLFW.glfwSwapBuffers(id);

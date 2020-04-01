@@ -168,10 +168,14 @@ public Textura(String fileNome,int filtromin,int filtromag) {
 	}
 	public Modelo genModelo() {
 		return new Modelo(new float[] {
-                -0.5f,-0.5f,0,//índice 0
-                0.5f, 0.5f,0,//índice 1
-                0.5f,-0.5f,0,//índice 2
-                -0.5f, 0.5f,0,//índice 3
+//                -0.5f,-0.5f,0,//índice 0
+//                0.5f, 0.5f,0,//índice 1
+//                0.5f,-0.5f,0,//índice 2
+//                -0.5f, 0.5f,0,//índice 3
+				0,0,0,//índice 0
+                1,1,0,//índice 1
+                1,0,0,//índice 2
+                0, 1,0,//índice 3
                 
 		},
 		new int[] {//Pra só declarar os pontos uma vez!
