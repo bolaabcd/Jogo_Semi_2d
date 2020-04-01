@@ -14,13 +14,12 @@ import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 
-import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.Humano;
 import com.firstJogo.padrao.CallbacksExternas;
 import com.firstJogo.utils.ArquivosGerais;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.visual.Camera;
-import com.firstJogo.visual.TipodeCriatura;
+import com.firstJogo.visual.Textura;
 
 public class Prepare implements Runnable{
 	private static final Set<String> configs=new HashSet<String>(Arrays.asList(
@@ -90,9 +89,9 @@ public class Prepare implements Runnable{
 		Camera.setMain(camera);
 	}
 	private void prepararPlayer() {
-		Humano player=new Humano(TipodeCriatura.criaturas[0]);
-		Entidade.player=player;
-		player.IsPlayer=true;
+//		Humano player=new Humano(TipodeCriatura.criaturas[0]);
+		Humano player=new Humano(new Textura(GlobalVariables.imagem_path+"Humano"+GlobalVariables.imagem_formato));
+		player.setPlayer(true);
 	}
 	
 	private void prepararJanela() {

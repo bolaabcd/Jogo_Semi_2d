@@ -25,7 +25,7 @@ public class WorldRenderer {
 		azulejos=new char[18][18];
 		
 		criaturas=new ArrayList<Entidade>();
-		criaturas.add(Entidade.player);
+		criaturas.add(Entidade.getPlayer());
 		
 		mundo=new Matrix4f().setTranslation(0,0,0);//BOTTON-RIGHT do mundo no centro da tela é o 0,0,0!
 //		mundo.setTranslation(-Janela.getPrincipal().getWidth()/2+15, -Janela.getPrincipal().getHeight()/2+15, 0);
@@ -48,14 +48,17 @@ public class WorldRenderer {
 //		mundo.scale(Janela.getPrincipal().getHeight()/32)
 //		;
 //	}
-	public void renderizar(CrRenderer crend,AzRenderer rend,Shaders shad,Camera cam) {
+	public void renderizar(AzRenderer rend,Shaders shad,Camera cam) {
 		for(char i=0;i<height;i++)
 			for(char j=0;j<width;j++){
 				if(GlobalVariables.debugue==true)System.out.println("RENDERIZANDO QUADRADO EM X= "+j+", Y= "+i);
 				rend.Renderizar(azulejos[j][i], j, i, shad, mundo, cam);
 				GlobalVariables.debugue=false;
 			}
-		crend.Renderizar(Entidade.player.getTipo_visual().getId(), 8.5f, 8.5f, (char)0, shad, mundo,cam);//Esse 8.5f é a posição no mundo que aparece.
+		for(Entidade cr:criaturas)
+			RenderizarEntidade(cr, shad, mundo,cam);//Esse 8.5f é a posição no mundo que aparece.
+
+//		crend.Renderizar(cr.getTextura(), 8.5f, 8.5f, (char)0, shad, mundo,cam);//Esse 8.5f é a posição no mundo que aparece.
 	}
 //	public void setblocos(char[][] blocos) {
 //		
@@ -63,5 +66,21 @@ public class WorldRenderer {
 //	}
 	public void setbloco(short x, short y, char tipo) {
 		this.azulejos[x][y]=tipo;
+	}
+	private void RenderizarEntidade(Entidade ent, Shaders shad, Matrix4f mundo, Camera cam) {
+		shad.bindar();
+		ent.getTextura().bind(1);//Bindou ao sampler número 1 ¯\_(ツ)_/¯
+		Matrix4f pos=new Matrix4f().translate(2*ent.rendpos[0],2*ent.rendpos[1],0);//O modelo tem a origem no centro, e ele escala pros dois lados!
+		Matrix4f mat=new Matrix4f();
+		cam.getRawProjec().mul(mundo, mat);
+		mat.mul(pos);
+					
+		shad.setUniforme("localizacao_da_textura_tambem_chamada_de_sampler", 1);//Setamos o sampler para 0, onde está a nossa textura!
+		shad.setUniforme("projecao", mat);
+			
+		ent.getModelo().renderizar();
+
+		
+		
 	}
 }

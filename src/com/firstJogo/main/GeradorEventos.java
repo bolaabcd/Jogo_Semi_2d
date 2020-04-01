@@ -1,7 +1,7 @@
 package com.firstJogo.main;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.firstJogo.utils.Funcao;
 import com.firstJogo.utils.GlobalVariables;
@@ -13,7 +13,8 @@ public class GeradorEventos implements Runnable{
 	public static HashMap<Integer,Funcao<?>> botaopressionado=new HashMap<Integer,Funcao<?>>();
 	//Gatilho, o que fazer
 	
-	public static ArrayList<TempoMarker> tempopassado=new ArrayList<TempoMarker>();//EVENTO INTERNO!!!
+	//Temq ser copyonwrite pq ele pode ser deletado enquanto estiver iterando!
+	public static CopyOnWriteArrayList<TempoMarker> tempopassado=new  CopyOnWriteArrayList<TempoMarker>();//EVENTO INTERNO!!!
 	
 	@Override
 	public void run() {
@@ -29,6 +30,9 @@ public class GeradorEventos implements Runnable{
 			
 			for(TempoMarker marker:tempopassado) 
 				marker.checkTempo();
+//			for(Iterator<TempoMarker> iter=tempopassado.iterator();iter.hasNext();) 
+//				iter.next().checkTempo();
+//			tempopassado.forEach(o->o.checkTempo());
 			//Ativando eventos de tempo passado!
 
 			

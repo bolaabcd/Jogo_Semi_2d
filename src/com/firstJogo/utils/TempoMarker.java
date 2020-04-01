@@ -10,13 +10,13 @@ public class TempoMarker {//Guarda a função e o objeto-argumento da função p
 	private long tempolimite;
 	private long temporegistrado;
 	
-	public TempoMarker(long tempolimite,Funcao<Object> funcao,Object argumento) {//Nulo indica o prório objeto
+	public TempoMarker(long tempolimite,Funcao<Object> funcao,Object endereco_argumento) {//Nulo indica o prório objeto
 //		temporizadores.put(chave, this);
 		this.tempolimite=tempolimite;
 //		this.resetTemporegistrado();
 		this.funcao=funcao;
-		if(argumento==null)this.argumento=this;
-		else this.argumento=argumento;
+		if(endereco_argumento==null)this.argumento=this;
+		else this.argumento=endereco_argumento;
 	}
 	
 	public void ativar() {

@@ -1,14 +1,17 @@
 package com.firstJogo.Mundos;
 
 import com.firstJogo.regras.DirecoesPadrao;
-import com.firstJogo.visual.TipodeCriatura;
+import com.firstJogo.visual.Modelo;
+import com.firstJogo.visual.Textura;
 
 public class Entidade {
-	
-	public static Entidade player;
-	
+	private static Entidade player;
+	private boolean isPlayer;
 //	private byte direc;//2 bits pra direção de olhar, 4 bits pra direção de movimento!
-	private TipodeCriatura tipo_visual;
+//	private TipodeCriatura tipo_visual;
+	private Textura visual;
+	private Modelo modelo;
+	
 	private DirecoesPadrao olharDir;
 	private double angulo=0;
 //	private boolean parado;
@@ -16,11 +19,15 @@ public class Entidade {
 	protected float velocModifier=0f;//60% pra corrida maratonada, 100% na corrida rápida, se ficar em linha reta 2 segundos muda pra 120%, 10% pra agachado.
 	protected char veloc=0;
 	
-	public boolean IsPlayer;
+	public float[] rendpos;
 	
 	
-	public Entidade(TipodeCriatura tipo) {
-		tipo_visual=tipo;
+//	public Entidade(TipodeCriatura tipo) {
+//		tipo_visual=tipo;
+//	}
+	public Entidade(Textura visu) {
+		visual=visu;
+		modelo=visu.genModelo();
 	}
 	
 	public void pararMovimento() {
@@ -194,11 +201,11 @@ public class Entidade {
 //		
 //		return saida;
 //	}
-	public TipodeCriatura getTipo_visual() {
-		return tipo_visual;
+	public Textura getTextura() {
+		return visual;
 	}
-	public void setTipo_visual(TipodeCriatura tipo_visual) {
-		this.tipo_visual = tipo_visual;
+	public void setTextura(Textura visual) {
+		this.visual = visual;
 	}
 
 	public char getVeloc() {
@@ -216,6 +223,35 @@ public class Entidade {
 	public double[] getDirecModifiers() {
 		if(this.velocModifier==0)return new double[] {0,0};
 		return new double[] {(double)Math.round(Math.cos(angulo)*100000d)/100000d,(double)Math.round(Math.sin(angulo)*100000d)/100000d};
+	}
+
+	public Modelo getModelo() {
+		return modelo;
+	}
+
+	public void setModelo(Modelo modelo) {
+		this.modelo = modelo;
+	}
+
+	public boolean isPlayer() {
+		return isPlayer;
+	}
+
+	public void setPlayer(boolean isPlayer) {
+		if(isPlayer=true) {
+			Entidade.player=this;
+			this.isPlayer = isPlayer;
+			this.rendpos=new float[] {8.5f,8.5f};
+			}
+		else {
+			Entidade.player=null;
+			this.isPlayer=false;
+		}
+		
+	}
+
+	public static Entidade getPlayer() {
+		return player;
 	}
 	
 

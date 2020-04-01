@@ -25,6 +25,9 @@ public class TipodeAzulejo {
 	public String getTextura() {
 		return textura;
 	}
+	public void setTextura(String textura) {
+		this.textura=textura;
+	}
 
 	public char getId() {
 		return id;

@@ -1,13 +1,22 @@
 package com.firstJogo.Mundos;
 
 import com.firstJogo.padrao.PlayerRegras;
+import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
-import com.firstJogo.visual.TipodeCriatura;
+import com.firstJogo.visual.Textura;
+import com.firstJogo.visual.TexturaAnimador;
+//import com.firstJogo.visual.TipodeCriatura;
 
 public class Humano extends Entidade{
 	private modos movModo;
 	private int milisImpulso;
 	private float sprintModifier;
+	
+	private final TexturaAnimador andando=new TexturaAnimador(
+			new long[] {1000000000,2000000000},
+			new Textura[] {this.getTextura(),new Textura(GlobalVariables.imagem_path+"Default"+GlobalVariables.imagem_formato)},
+			this.getTextura()
+			);
 	
 	private TempoMarker impulso;//Pode alterar os milisImpulso, então pode alterar o TempoMarker!
 	
@@ -17,16 +26,17 @@ public class Humano extends Entidade{
 		AGACHADO,
 		SPRINT
 	}
-	public Humano(TipodeCriatura tipo) {
-		super(tipo);
+	public Humano(Textura visual) {
+		super(visual);
 //		this.velocModifier=0.6f;
 		this.veloc=5;
 		milisImpulso=2000;
 		movModo=modos.ANDANDO;
-		sprintModifier=1.4f;//Seria 1.2 (quando tiver a animação!)
+		sprintModifier=2.4f;//Seria 1.2 (quando tiver a animação!)
 		impulso=new TempoMarker(milisImpulso*1000000,(pessoa)->{
 			((Humano) pessoa).setMovModo(modos.SPRINT);
 		},this);
+		andando.ativar();
 	}
 	
 	public void modo_agachar() {
@@ -38,6 +48,7 @@ public class Humano extends Entidade{
 	}
 	
 	public void modo_andar() {
+		
 		setMovModo(Humano.modos.ANDANDO);
 	}
 	
@@ -58,13 +69,14 @@ public class Humano extends Entidade{
 	public void pararMovimento() {
 		super.pararMovimento();
 		impulso.desativar();
-		if(IsPlayer)PlayerRegras.resetMovModo(this);;
+//		andando.desativar();
+		if(this.isPlayer())PlayerRegras.resetMovModo(this);;
 	}
 	@Override
 	public void setAngulo(double angulo) {
 		if(this.getAngulo()!=angulo) {
 			impulso.resetTemporegistrado();
-			if(IsPlayer)PlayerRegras.resetMovModo(this);;
+			if(this.isPlayer())PlayerRegras.resetMovModo(this);;
 		}
 		super.setAngulo(angulo);
 	}
@@ -88,6 +100,7 @@ public class Humano extends Entidade{
 	}
 	private void setMovModo(modos modo) {
 		if(movModo!=modo&&modo==modos.CORRENDO)impulso.ativar();
+		else if(movModo!=modo)impulso.desativar();
 		movModo=modo;
 //		if(modo.equals(modos.CORRENDO))this.velocModifier=1f;
 //		else if(modo.equals(modos.ANDANDO))this.velocModifier=0.6f;

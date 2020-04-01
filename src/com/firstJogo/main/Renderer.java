@@ -3,7 +3,6 @@ package com.firstJogo.main;
 import org.lwjgl.opengl.GL11;
 
 import com.firstJogo.Mundos.AzRenderer;
-import com.firstJogo.Mundos.CrRenderer;
 import com.firstJogo.Mundos.WorldRenderer;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoAtual;
@@ -81,7 +80,7 @@ public class Renderer implements Runnable{
 //		int intperpixel=experiencia/8;
 //		int pixelsperbloco=16;
 		AzRenderer renderizator=new AzRenderer();
-		CrRenderer crenderizator=new CrRenderer();
+//		CrRenderer crenderizator=new CrRenderer();
 		WorldRenderer mundo=new WorldRenderer();
 //		System.out.println(intperpixel*pixelsperbloco);
 //		
@@ -138,7 +137,7 @@ public class Renderer implements Runnable{
 //			shad.setUniforme("projecao", camera.getProjec().mul(mat));//camera.getProjec().mul(finala)
 //			mod.renderizar();
 			
-			mundo.renderizar(crenderizator,renderizator, shad, Camera.getMain());
+			mundo.renderizar(renderizator, shad, Camera.getMain());
 //			for(int i=0;i<16;i++)
 //				for(int j=0;j<16;j++)
 //					renderizator.Renderizar((byte)0, j, i, shad, escala, camera);

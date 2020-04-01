@@ -68,6 +68,9 @@ public void Renderizar(char id,char x,char y, Shaders shad, Matrix4f mundo,Camer
 	shad.bindar();
 	if(texturas.containsKey(TipodeAzulejo.azulejos[id].getTextura())) 
 		texturas.get(TipodeAzulejo.azulejos[id].getTextura()).bind(0);//Bindou ao sampler número 0 ¯\_(ツ)_/¯
+	else 
+		throw new IllegalStateException("Textura de criatura inválida!");
+	
 	//Se trocar para 1 vira o humano !!?????!!
 	//Matrix4f pos=new Matrix4f().translate(new Vector3f(x*2,y*2,0)); TODO ORIGINAL
 	Matrix4f pos=new Matrix4f().translate(2*x,2*y,0);//O modelo tem a origem no centro, e ele escala pros dois lados!

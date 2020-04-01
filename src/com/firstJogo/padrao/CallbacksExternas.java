@@ -15,10 +15,10 @@ public class CallbacksExternas implements ExternalCallback {
 	public static void prepararBotoes() {
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_W, (nada)->{
 //			Entidade.player.setMover("up");
-			PlayerRegras.setMoveDirection(Entidade.player, DirecoesPadrao.CIMA);
-			Entidade.player.iniciarMovimento(1f);//TODO trocar esse 1f (futuramente) pelos mofificadores cabíveis de velocidade
+			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.CIMA);
+			Entidade.getPlayer().iniciarMovimento(1f);//TODO trocar esse 1f (futuramente) pelos mofificadores cabíveis de velocidade
 			try {
-				Humano player=(Humano) Entidade.player;
+				Humano player=(Humano) Entidade.getPlayer();
 				PlayerRegras.resetMovModo(player);
 //				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
@@ -27,10 +27,10 @@ public class CallbacksExternas implements ExternalCallback {
 		});
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_A, (nada)->{
 //			Entidade.player.setMover("left");
-			PlayerRegras.setMoveDirection(Entidade.player, DirecoesPadrao.ESQUERDA);
-			Entidade.player.iniciarMovimento(1f);
+			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.ESQUERDA);
+			Entidade.getPlayer().iniciarMovimento(1f);
 			try {
-				Humano player=(Humano) Entidade.player;
+				Humano player=(Humano) Entidade.getPlayer();
 				PlayerRegras.resetMovModo(player);
 //				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
@@ -39,10 +39,10 @@ public class CallbacksExternas implements ExternalCallback {
 		});
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_S, (nada)->{
 //			Entidade.player.setMover("down");
-			PlayerRegras.setMoveDirection(Entidade.player, DirecoesPadrao.BAIXO);
-			Entidade.player.iniciarMovimento(1f);
+			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.BAIXO);
+			Entidade.getPlayer().iniciarMovimento(1f);
 			try {
-				Humano player=(Humano) Entidade.player;
+				Humano player=(Humano) Entidade.getPlayer();
 				PlayerRegras.resetMovModo(player);
 //				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
@@ -51,10 +51,10 @@ public class CallbacksExternas implements ExternalCallback {
 		});
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_D, (nada)->{
 //			Entidade.player.setMover("right");
-			PlayerRegras.setMoveDirection(Entidade.player, DirecoesPadrao.DIREITA);
-			Entidade.player.iniciarMovimento(1f);
+			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.DIREITA);
+			Entidade.getPlayer().iniciarMovimento(1f);
 			try {
-				Humano player=(Humano) Entidade.player;
+				Humano player=(Humano) Entidade.getPlayer();
 				PlayerRegras.resetMovModo(player);
 //				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
 			}catch(ClassCastException c) {
@@ -64,7 +64,7 @@ public class CallbacksExternas implements ExternalCallback {
 		
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_LEFT_CONTROL, (nada)->{
 			try {
-				Humano player=(Humano) Entidade.player;
+				Humano player=(Humano) Entidade.getPlayer();
 				player.modo_correr();
 			}catch(ClassCastException c) {
 				
@@ -72,7 +72,7 @@ public class CallbacksExternas implements ExternalCallback {
 		});
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_LEFT_SHIFT, (nada)->{
 			try {
-				Humano player=(Humano) Entidade.player;
+				Humano player=(Humano) Entidade.getPlayer();
 				player.modo_agachar();
 			}catch(ClassCastException c) {
 				
@@ -84,7 +84,7 @@ public class CallbacksExternas implements ExternalCallback {
 		
 		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_LEFT_CONTROL, (nada)->{
 			try {
-				Humano player=(Humano) Entidade.player;
+				Humano player=(Humano) Entidade.getPlayer();
 //				if(player.getMovModo()==Humano.modos.CORRENDO)
 //				player.setMovModo(Humano.modos.ANDANDO);
 				PlayerRegras.resetMovModo(player);
@@ -96,7 +96,7 @@ public class CallbacksExternas implements ExternalCallback {
 		});
 		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_LEFT_SHIFT, (nada)->{
 			try {
-				Humano player=(Humano) Entidade.player;
+				Humano player=(Humano) Entidade.getPlayer();
 //				if(player.getMovModo()==Humano.modos.AGACHADO)
 //				player.setMovModo(Humano.modos.ANDANDO);
 				PlayerRegras.resetMovModo(player);
@@ -109,28 +109,28 @@ public class CallbacksExternas implements ExternalCallback {
 		});
 		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_W,(nada)->{
 //			Entidade.player.remMover("up");
-			PlayerRegras.remMoveDirection(Entidade.player, DirecoesPadrao.CIMA);
+			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.CIMA);
 			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_S))
 				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_S)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_S).run(null);
 			//Se a pessoa apertar direções contrárias e soltar uma, essa linha lida com isso.
 		});
 		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_A,(nada)->{
 //			Entidade.player.remMover("left");
-			PlayerRegras.remMoveDirection(Entidade.player, DirecoesPadrao.ESQUERDA);
+			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.ESQUERDA);
 			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_D))
 				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_D)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_D).run(null);
 
 		});
 		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_S,(nada)->{
 //			Entidade.player.remMover("down");
-			PlayerRegras.remMoveDirection(Entidade.player, DirecoesPadrao.BAIXO);
+			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.BAIXO);
 			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_W))
 				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_W)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_W).run(null);
 
 		});
 		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_D,(nada)->{
 //			Entidade.player.remMover("right");
-			PlayerRegras.remMoveDirection(Entidade.player, DirecoesPadrao.DIREITA);
+			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.DIREITA);
 			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_A))
 				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_A)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_A).run(null);
 
@@ -144,12 +144,11 @@ public class CallbacksExternas implements ExternalCallback {
 		
 		
 		
-		
 		//TODO: CRIAR CLASSE PARA OS EVENTOS INTERNOS:
 		new TempoMarker(1000000, (camera_Marker)->{//Move o Player, e cada milisegundo vai executar!
 			Camera.getMain().setPos(Camera.getMain().getPos().add(
-					(float)(-Entidade.player.getDirecModifiers()[0]*Entidade.player.getVelocModifier()*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-((TempoMarker)camera_Marker).getTemporegistrado())/1000000000),
-					(float)(-Entidade.player.getDirecModifiers()[1]*Entidade.player.getVelocModifier()*((int)Entidade.player.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-((TempoMarker)camera_Marker).getTemporegistrado())/1000000000),
+					(float)(-Entidade.getPlayer().getDirecModifiers()[0]*Entidade.getPlayer().getVelocModifier()*((int)Entidade.getPlayer().getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-((TempoMarker)camera_Marker).getTemporegistrado())/1000000000),
+					(float)(-Entidade.getPlayer().getDirecModifiers()[1]*Entidade.getPlayer().getVelocModifier()*((int)Entidade.getPlayer().getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-((TempoMarker)camera_Marker).getTemporegistrado())/1000000000),
 
 					0));
 //			((TempoMarker)camera_Marker).resetTemporegistrado();
