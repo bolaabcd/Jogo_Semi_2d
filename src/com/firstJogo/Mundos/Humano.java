@@ -13,36 +13,36 @@ public class Humano extends Entidade{
 	private int milisImpulso;
 	private float sprintModifier;
 	
-	private final long mediandando=450000000;
-	private final Textura[][] udlrTextura=new Textura[][] {
+	private final static long mediandando=450000000;
+	private final static Textura[][] udlrTextura=new Textura[][] {
 		new Textura[] {
-				new Textura(GlobalVariables.imagem_path+"HumanoUp3"+GlobalVariables.imagem_formato),
-				new Textura(GlobalVariables.imagem_path+"HumanoUp2"+GlobalVariables.imagem_formato),
 				new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),
+				new Textura(GlobalVariables.imagem_path+"HumanoUp2"+GlobalVariables.imagem_formato),
+				new Textura(GlobalVariables.imagem_path+"HumanoUp3"+GlobalVariables.imagem_formato),
 		},
 		new Textura[] {
-				new Textura(GlobalVariables.imagem_path+"HumanoDown3"+GlobalVariables.imagem_formato),
-				new Textura(GlobalVariables.imagem_path+"HumanoDown2"+GlobalVariables.imagem_formato),
 				new Textura(GlobalVariables.imagem_path+"HumanoDown1"+GlobalVariables.imagem_formato),
+				new Textura(GlobalVariables.imagem_path+"HumanoDown2"+GlobalVariables.imagem_formato),
+				new Textura(GlobalVariables.imagem_path+"HumanoDown3"+GlobalVariables.imagem_formato),
 		},
 		new Textura[] {
-				new Textura(GlobalVariables.imagem_path+"HumanoLeft3"+GlobalVariables.imagem_formato),
-				new Textura(GlobalVariables.imagem_path+"HumanoLeft2"+GlobalVariables.imagem_formato),
 				new Textura(GlobalVariables.imagem_path+"HumanoLeft1"+GlobalVariables.imagem_formato),
+				new Textura(GlobalVariables.imagem_path+"HumanoLeft2"+GlobalVariables.imagem_formato),
+				new Textura(GlobalVariables.imagem_path+"HumanoLeft3"+GlobalVariables.imagem_formato),
 		},
 		new Textura[] {
-				new Textura(GlobalVariables.imagem_path+"HumanoRight3"+GlobalVariables.imagem_formato),
-				new Textura(GlobalVariables.imagem_path+"HumanoRight2"+GlobalVariables.imagem_formato),
 				new Textura(GlobalVariables.imagem_path+"HumanoRight1"+GlobalVariables.imagem_formato),
+				new Textura(GlobalVariables.imagem_path+"HumanoRight2"+GlobalVariables.imagem_formato),
+				new Textura(GlobalVariables.imagem_path+"HumanoRight3"+GlobalVariables.imagem_formato),
 
 		}
 	};
 	
-	private final long[][] aacsTempo=new long[][] {
+	private final static long[][] aacsTempo=new long[][] {
 				new long[] {
 						0,
-						mediandando*7/5,
-						mediandando*7/5
+						mediandando*3,
+						mediandando*3
 				},
 				new long[] {
 						0,
@@ -56,8 +56,8 @@ public class Humano extends Entidade{
 				},
 				new long[] {
 						0,
-						mediandando/2,
-						mediandando/2
+						(long) (mediandando/2.4f),
+						(long) (mediandando/2.4f)
 				}
 	};
 	//Agachado, andando, correndo, sprint
@@ -82,7 +82,8 @@ public class Humano extends Entidade{
 		SPRINT
 	}
 	public Humano() {
-		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato));
+//		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato));
+		super(udlrTextura[0][0]);
 //		this.velocModifier=0.6f;
 		this.veloc=5;
 		milisImpulso=2000;
@@ -126,7 +127,7 @@ public class Humano extends Entidade{
 		super.pararMovimento();
 		impulso.desativar();
 		
-//		andando.desativar();
+		animado.desativar();
 		if(this.isPlayer())PlayerRegras.resetMovModo(this);;
 	}
 	@Override
@@ -168,6 +169,8 @@ public class Humano extends Entidade{
 			impulso.desativar();
 			}
 		movModo=modo;
+		
+		if(velocModifier!=0)updateAnimacao();
 //		if(modo.equals(modos.CORRENDO))this.velocModifier=1f;
 //		else if(modo.equals(modos.ANDANDO))this.velocModifier=0.6f;
 //		else if(modo.equals(modos.AGACHADO))this.velocModifier=0.2f;

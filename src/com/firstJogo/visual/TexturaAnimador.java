@@ -9,15 +9,16 @@ public class TexturaAnimador {
 	private int[] texturas_alternativas;
 	private int texatual;
 	
-	private final Funcao<Object> funcao=((objeto)->{
+	private static final Funcao<Object> funcao=((objeto)->{
 		
 		TexturaAnimador t=(TexturaAnimador) objeto;
 //		t.textura_referencial=t.texturas_alternativas[t.texatual];
-		t.textura_referencial.setId(t.texturas_alternativas[t.texatual]);
+//		t.textura_referencial.setId(t.texturas_alternativas[t.texatual]);
 		t.marcadores[t.texatual].desativar();
 //		System.out.println("Referencial: "+t.textura_referencial);
 		t.texatual+=1;
 		if(t.texatual==t.texturas_alternativas.length)t.texatual=0;
+		t.textura_referencial.setId(t.texturas_alternativas[t.texatual]);
 		t.marcadores[t.texatual].ativar();
 		
 	});
