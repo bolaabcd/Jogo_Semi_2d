@@ -19,6 +19,15 @@ public class GeradorEventos implements Runnable{
 	@Override
 	public void run() {
 		//CÓDIGO PARA PEGAR EVENTOS ADICIONAIS!
+		while(Janela.getPrincipal()==null){
+			try {
+				Janela.getPrincipal().wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+			}
+		
 		
 		System.out.println("Iniciando Loop de eventos");
 		while(!Janela.getPrincipal().ShouldClose()) {

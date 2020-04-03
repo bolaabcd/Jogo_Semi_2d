@@ -19,7 +19,6 @@ import com.firstJogo.padrao.CallbacksExternas;
 import com.firstJogo.utils.ArquivosGerais;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.visual.Camera;
-import com.firstJogo.visual.Textura;
 
 public class Prepare implements Runnable{
 	private static final Set<String> configs=new HashSet<String>(Arrays.asList(
@@ -56,10 +55,35 @@ public class Prepare implements Runnable{
 			
 			File defaultimage=new File(GlobalVariables.imagem_path);
 			if(!defaultimage.exists())defaultimage.mkdir();
-			defaultimage=new File(GlobalVariables.imagem_path+"Default"+GlobalVariables.imagem_formato);
-			if(!defaultimage.exists())defimagem(defaultimage,"Default");
-			defaultimage=new File(GlobalVariables.imagem_path+"Humano"+GlobalVariables.imagem_formato);
-			if(!defaultimage.exists())defimagem(defaultimage,"Humano");
+			defaultimage=new File(GlobalVariables.imagem_path+"Grama"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"Grama");
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoUp1");
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoUp2"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoUp2");
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoUp3"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoUp3");
+			
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoDown1"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoDown1");
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoDown2"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoDown2");
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoDown3"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoDown3");
+			
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoLeft1"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoLeft1");
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoLeft2"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoLeft2");
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoLeft3"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoLeft3");
+			
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoRight1"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoRight1");
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoRight2"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoRight2");
+			defaultimage=new File(GlobalVariables.imagem_path+"HumanoRight3"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"HumanoRight3");
 			defaultimage=null;
 			
 			
@@ -90,7 +114,7 @@ public class Prepare implements Runnable{
 	}
 	private void prepararPlayer() {
 //		Humano player=new Humano(TipodeCriatura.criaturas[0]);
-		Humano player=new Humano(new Textura(GlobalVariables.imagem_path+"Humano"+GlobalVariables.imagem_formato));
+		Humano player=new Humano();
 		player.setPlayer(true);
 	}
 	
@@ -213,7 +237,7 @@ public class Prepare implements Runnable{
 	}
 	private void defimagem(File arq,String nome) throws IOException {
 		arq.createNewFile();
-		InputStream read=this.getClass().getClassLoader().getResourceAsStream("com/firstJogo/main/"+nome+GlobalVariables.imagem_formato);
+		InputStream read=this.getClass().getClassLoader().getResourceAsStream("com/firstJogo/imagens/"+nome+GlobalVariables.imagem_formato);
 		OutputStream wri=new FileOutputStream(arq);
 		IOUtils.copy(read, wri);
 		read.close();
@@ -224,10 +248,10 @@ public class Prepare implements Runnable{
 		BufferedWriter bw=new BufferedWriter(new FileWriter(arquivo));
 		bw.append("Mais um:\n");
 		bw.append((short)0+"\n");
-		bw.append("Default\n");
-		bw.append("Mais um:\n");
-		bw.append((short)1+"\n");
 		bw.append("Grama\n");
+//		bw.append("Mais um:\n");
+//		bw.append((short)1+"\n");
+//		bw.append("Grama\n");
 		bw.close();
 	}
 	

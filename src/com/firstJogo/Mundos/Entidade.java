@@ -12,7 +12,7 @@ public class Entidade {
 	private Textura visual;
 	private Modelo modelo;
 	
-	private DirecoesPadrao olharDir;
+	private DirecoesPadrao olharDir=DirecoesPadrao.CIMA;
 	private double angulo=0;
 //	private boolean parado;
 	
@@ -46,6 +46,12 @@ public class Entidade {
 	}
 	
 	public void setAngulo(double angulo) {
+//		System.out.println(angulo/Math.PI);
+		if(angulo<Math.PI/4&&angulo>-Math.PI/4)this.setOlhar(DirecoesPadrao.DIREITA);
+		else if(angulo>3*Math.PI/4||angulo<-3*Math.PI/4)this.setOlhar(DirecoesPadrao.ESQUERDA);
+		else if(angulo>=Math.PI/4&&angulo<=3*Math.PI/4)this.setOlhar(DirecoesPadrao.CIMA);
+		else if(angulo<=-Math.PI/4&&angulo>=-3*Math.PI/4)this.setOlhar(DirecoesPadrao.BAIXO);
+		else System.out.println("ERRADO");
 		this.angulo=angulo;
 	}
 	

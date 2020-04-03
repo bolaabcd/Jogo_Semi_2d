@@ -6,7 +6,7 @@ public class TipodeAzulejo {
 	public static TipodeAzulejo[] azulejos=new TipodeAzulejo[256*256];//Todos os azulejos existentes!
 	private static char nextid=0;
 	
-	public static final TipodeAzulejo grama=new TipodeAzulejo("Default");
+	public static final TipodeAzulejo grama=new TipodeAzulejo("Grama");
 	
 //	public TipodeAzulejo(char id,String textura) {
 //		this.id=id;

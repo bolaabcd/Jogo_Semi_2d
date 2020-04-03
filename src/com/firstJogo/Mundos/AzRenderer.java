@@ -24,11 +24,15 @@ private static final Modelo quadrado=new Modelo(
 //				 0.5f, 0.5f,0,//índice 1
 //                 0.5f,-0.5f,0,//índice 2
 //                -0.5f, 0.5f,0,//índice 3
+//				0,0,0,//índice 0
+//                1,1,0,//índice 1
+//                1,0,0,//índice 2
+//                0,1,0,//índice 3
 				0,0,0,//índice 0
-                1,1,0,//índice 1
-                1,0,0,//índice 2
-                0, 1,0,//índice 3
-                 
+                1.1f,1.1f,0,//índice 1
+                1.1f,0,0,//índice 2
+                0,1.1f,0,//índice 3
+                 //1.1f É MUITO MELHOR PRA EVITAR AS LINHAS VERMELHAS ENTRE QUADRADOS!
 		},
 		new int[] {//Pra só declarar os pontos uma vez!
 				0,1,2,
@@ -40,9 +44,9 @@ private static final Modelo quadrado=new Modelo(
 //						1,0,
 //						1,1,
 //						0,0,//Dá pra fazer MUITA maluquice com esses números aqui...
-						0,1,
-						1,0,
-						1,1,
+						0,1.1f,
+						1.1f,0,
+						1.1f,1.1f,
 						0,0,//Dá pra fazer MUITA maluquice com esses números aqui...
 				}
 //				new float[] {//Se a origem fosse embaixo na direita seria isso daqui...
