@@ -18,6 +18,7 @@ import com.firstJogo.padrao.CallbacksExternas;
 import com.firstJogo.regras.ExternalCallback;
 
 public class Janela {
+	private static Object principalready=new Object();
 private static Janela principal;
 private long id;
 private int width=480,height=480;
@@ -215,9 +216,22 @@ public static void setGeneralCallbacks() {
 }
 public static void setPrincipal(Janela j) {
 	Janela.principal=j;
+	synchronized (principalready) {
+		principalready.notify();
+	}
 }
 public static synchronized Janela getPrincipal() {
 //public static Janela getPrincipal() {
+	while(Janela.principal==null)
+		synchronized (principalready) {
+			try {
+				principalready.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
 	return Janela.principal;
 }
 public static int getScreen_width() {

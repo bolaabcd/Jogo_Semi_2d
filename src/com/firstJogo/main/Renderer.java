@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.firstJogo.Mundos.AzRenderer;
 import com.firstJogo.Mundos.WorldRenderer;
+import com.firstJogo.padrao.CallbacksExternas;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoAtual;
 import com.firstJogo.visual.Camera;
@@ -28,6 +29,16 @@ public class Renderer implements Runnable{
 //		
 //		Janela.Vsync(true);
 //		
+		Prepare.prepararJanela();
+		
+		Prepare.prepararPlayer();
+		
+		Prepare.prepararCamera();
+		
+		CallbacksExternas.prepararBotoes();
+		
+//		Janela.getPrincipal().notify();
+		
 		Janela.getPrincipal().contextualize();
 		
 		

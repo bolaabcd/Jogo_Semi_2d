@@ -15,7 +15,6 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 
 import com.firstJogo.Mundos.Humano;
-import com.firstJogo.padrao.CallbacksExternas;
 import com.firstJogo.utils.ArquivosGerais;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.visual.Camera;
@@ -99,26 +98,27 @@ public class Prepare implements Runnable{
 			erroconfig("Erro ao ler valor de cor no arquivo de configurações!");
 		}
 		
-		prepararJanela();
-
-		CallbacksExternas.prepararBotoes();//EXTERNALIZAR!
-		
-		prepararPlayer();
-		
-		prepararCamera();
+		//TUDO ISSO SERÁ PREPARADO NA THREAD DE RENDERIZAÇÃO!
+//		prepararJanela();
+//
+//		CallbacksExternas.prepararBotoes();//EXTERNALIZAR!
+//		
+//		prepararPlayer();
+//		
+//		prepararCamera();
 		
 	}
-	private void prepararCamera() {
+	public static void prepararCamera() {
 		Camera camera=new Camera(Janela.getPrincipal().getWidth(),Janela.getPrincipal().getHeight());
 		Camera.setMain(camera);
 	}
-	private void prepararPlayer() {
+	public static void prepararPlayer() {
 //		Humano player=new Humano(TipodeCriatura.criaturas[0]);
 		Humano player=new Humano();
 		player.setPlayer(true);
 	}
 	
-	private void prepararJanela() {
+	public static void prepararJanela() {
 		Janela.setGeneralCallbacks();
 		Janela.Iniciar();
 		Janela.setPrincipal(new Janela("MicroCraft!",true));
