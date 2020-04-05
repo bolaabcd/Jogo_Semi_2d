@@ -220,7 +220,7 @@ public static void setPrincipal(Janela j) {
 		principalready.notify();
 	}
 }
-public static Janela getPrincipal() {
+public static synchronized Janela getPrincipal() {
 //public static Janela getPrincipal() {
 	while(Janela.principal==null)
 		synchronized (principalready) {

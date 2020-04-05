@@ -198,8 +198,6 @@ public Textura(String fileNome,int filtromin,int filtromag) {
 
 	public void setId(int id) {
 		this.id = id;
-//		GlobalVariables.contador+=1;
-//		System.out.println(GlobalVariables.contador);
 	}
 
 }
