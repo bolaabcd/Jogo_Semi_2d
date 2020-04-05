@@ -11,6 +11,7 @@ import com.firstJogo.visual.Camera;
 import com.firstJogo.visual.Shaders;
 
 public class Renderer implements Runnable{
+	public static Thread main;
 	private Janela principal;
 	@Override
 	public void run() {

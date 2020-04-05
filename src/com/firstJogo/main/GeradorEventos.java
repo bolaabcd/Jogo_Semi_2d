@@ -8,6 +8,7 @@ import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
 
 public class GeradorEventos implements Runnable{
+	public static Thread main;
 	public static HashMap<Integer,Funcao<?>> botaomantido=new HashMap<Integer,Funcao<?>>();//Eventos externos!
 	public static HashMap<Integer,Funcao<?>> botaoremovido=new HashMap<Integer,Funcao<?>>();
 	public static HashMap<Integer,Funcao<?>> botaopressionado=new HashMap<Integer,Funcao<?>>();

@@ -6,6 +6,8 @@ public class Main {
 		Thread prep=new Thread(new Prepare());
 		Thread rend=new Thread(new Renderer());
 		Thread ev=new Thread(new GeradorEventos());
+		GeradorEventos.main=ev;
+		Renderer.main=rend;
 		prep.start();
 		try {
 			prep.join();

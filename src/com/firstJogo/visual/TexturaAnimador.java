@@ -43,12 +43,13 @@ public class TexturaAnimador {
 	}
 	public void desativar() {
 		synchronized (GeradorEventos.chaveTempo) {
-			try {
-				GeradorEventos.chaveTempo.wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				System.exit(1);
-			}
+			if(!Thread.currentThread().equals(GeradorEventos.main))
+				try {
+					GeradorEventos.chaveTempo.wait();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
 		}
 		for(TempoMarker marc:marcadores) 
 			marc.desativar();
