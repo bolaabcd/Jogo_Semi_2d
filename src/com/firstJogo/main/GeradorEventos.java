@@ -15,7 +15,7 @@ public class GeradorEventos implements Runnable{
 	
 	//Temq ser copyonwrite pq ele pode ser deletado enquanto estiver iterando!
 	public static CopyOnWriteArrayList<TempoMarker> tempopassado=new  CopyOnWriteArrayList<TempoMarker>();//EVENTO INTERNO!!!
-	
+	public static Object chaveTempo=new Object();
 	
 	private Janela principal;
 	@Override
@@ -33,6 +33,10 @@ public class GeradorEventos implements Runnable{
 			
 			for(TempoMarker marker:tempopassado) 
 				marker.checkTempo();
+			synchronized (chaveTempo) {
+				chaveTempo.notify();
+			}
+
 //			for(Iterator<TempoMarker> iter=tempopassado.iterator();iter.hasNext();) 
 //				iter.next().checkTempo();
 //			tempopassado.forEach(o->o.checkTempo());

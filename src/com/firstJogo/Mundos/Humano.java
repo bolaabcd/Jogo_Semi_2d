@@ -144,7 +144,7 @@ public class Humano extends Entidade{
 	@Override
 	public void setOlhar(DirecoesPadrao olhar) {
 		super.setOlhar(olhar);
-//		updateAnimacao();
+		updateAnimacao();
 		
 //		System.out.println("OI\n");
 //		if(olhar!=this.getOlhar()||this.getVelocModifier()==0)updateAnimacao();

@@ -1,5 +1,6 @@
 package com.firstJogo.visual;
 
+import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.utils.Funcao;
 import com.firstJogo.utils.TempoMarker;
 
@@ -41,6 +42,14 @@ public class TexturaAnimador {
 		marcadores[0].ativar();
 	}
 	public void desativar() {
+		synchronized (GeradorEventos.chaveTempo) {
+			try {
+				GeradorEventos.chaveTempo.wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				System.exit(1);
+			}
+		}
 		for(TempoMarker marc:marcadores) 
 			marc.desativar();
 		this.textura_referencial.setId(this.texturas_alternativas[0]);

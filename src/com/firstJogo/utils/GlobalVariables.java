@@ -13,7 +13,7 @@ public static float[] ClearColor=new float[] {1f,0f,0f,0f};
 
 public static int TicksPorSegundo=0;
 
-//public static int contador=0;
+public static int contador=0;
 
 public static boolean debugue=false;
 
