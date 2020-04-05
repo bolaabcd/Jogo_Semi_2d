@@ -16,14 +16,16 @@ public class GeradorEventos implements Runnable{
 	//Temq ser copyonwrite pq ele pode ser deletado enquanto estiver iterando!
 	public static CopyOnWriteArrayList<TempoMarker> tempopassado=new  CopyOnWriteArrayList<TempoMarker>();//EVENTO INTERNO!!!
 	
+	
+	private Janela principal;
 	@Override
 	public void run() {
-		//CÓDIGO PARA PEGAR EVENTOS ADICIONAIS!
-		
+		principal=Janela.getPrincipal();
 		
 		System.out.println("Iniciando Loop de eventos");
-		while(!Janela.getPrincipal().ShouldClose()) {
-			Janela.PollEvents();//Recolhendo eventos de botao!
+		while(!principal.ShouldClose()) {
+//			Janela.PollEvents();//Recolhendo eventos de botao!
+			//Se nao tiver aqui buga...
 			
 			for(int k:GlobalVariables.Keys)
 				if(botaomantido.containsKey(k))botaomantido.get(k).run(null);
@@ -41,7 +43,4 @@ public class GeradorEventos implements Runnable{
 		}
 	}
 	
-//	public void lancarEvento(Evento e) {
-//		
-//	}
 }

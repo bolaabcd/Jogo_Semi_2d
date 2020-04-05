@@ -25,6 +25,7 @@ public class TempoMarker {//Guarda a função e o objeto-argumento da função p
 	}
 	
 	public void desativar() {
+//		if(GlobalVariables.contador==1) System.out.println(argumento);
 		GeradorEventos.tempopassado.remove(this);
 	}
 	
