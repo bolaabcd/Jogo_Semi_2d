@@ -83,7 +83,7 @@ public class Humano extends Entidade{
 	}
 	public Humano() {
 //		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato));
-		super(udlrTextura[0][0]);
+		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato));
 //		this.velocModifier=0.6f;
 		this.veloc=5;
 		milisImpulso=2000;
@@ -126,8 +126,11 @@ public class Humano extends Entidade{
 	public void pararMovimento() {
 		super.pararMovimento();
 		impulso.desativar();
-		
+//		System.out.println("OI");
+//		GlobalVariables.contador=1;
 		animado.desativar();
+//		GlobalVariables.contador=0;
+
 		if(this.isPlayer())PlayerRegras.resetMovModo(this);;
 	}
 	@Override
@@ -142,11 +145,8 @@ public class Humano extends Entidade{
 	public void setOlhar(DirecoesPadrao olhar) {
 		super.setOlhar(olhar);
 		updateAnimacao();
-<<<<<<< HEAD
 		
 //		System.out.println("OI\n");
-=======
->>>>>>> parent of 2b495ee... Corrigido bug de animação das texturas, e bug de 'janela não respondendo' no Windows.
 //		if(olhar!=this.getOlhar()||this.getVelocModifier()==0)updateAnimacao();
 	}
 	
@@ -175,16 +175,20 @@ public class Humano extends Entidade{
 			}
 		movModo=modo;
 		
-		if(velocModifier!=0)updateAnimacao();
+		if(velocModifier!=0) 
+			updateAnimacao();
 //		if(modo.equals(modos.CORRENDO))this.velocModifier=1f;
 //		else if(modo.equals(modos.ANDANDO))this.velocModifier=0.6f;
 //		else if(modo.equals(modos.AGACHADO))this.velocModifier=0.2f;
 //		else if(modo.equals(modos.SPRINT))this.velocModifier=1.2f;
 	}
 	private void updateAnimacao() {
+//		System.out.println("OI\n");
 		if(animado!=null)animado.desativar();
 //		System.out.println(movModo);
 //		System.out.println(getOlhar());
+//		System.out.println("OI");
+//		System.out.println();
 		switch(movModo) {
 		case AGACHADO:
 			switch(this.getOlhar()) {

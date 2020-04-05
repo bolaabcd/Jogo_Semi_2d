@@ -5,14 +5,15 @@ import com.firstJogo.utils.Funcao;
 import com.firstJogo.utils.TempoMarker;
 
 public class TexturaAnimador {
-	private TempoMarker[] marcadores;//Marca o tempo DEPOIS de a textura ser colocada!
+	public TempoMarker[] marcadores;//Marca o tempo DEPOIS de a textura ser colocada!
 	private Textura textura_referencial;
 	private int[] texturas_alternativas;
 	private int texatual;
 	
 	private static final Funcao<Object> funcao=((objeto)->{
-		
 		TexturaAnimador t=(TexturaAnimador) objeto;
+//		System.out.println(objeto);
+//		System.out.println();
 //		t.textura_referencial=t.texturas_alternativas[t.texatual];
 //		t.textura_referencial.setId(t.texturas_alternativas[t.texatual]);
 		t.marcadores[t.texatual].desativar();
@@ -41,7 +42,6 @@ public class TexturaAnimador {
 		marcadores[0].ativar();
 	}
 	public void desativar() {
-<<<<<<< HEAD
 		synchronized (GeradorEventos.chaveTempo) {
 			try {
 				GeradorEventos.chaveTempo.wait();
@@ -51,11 +51,14 @@ public class TexturaAnimador {
 			}
 		}
 		for(TempoMarker marc:marcadores) 
-=======
-		for(TempoMarker marc:marcadores)
->>>>>>> parent of 2b495ee... Corrigido bug de animação das texturas, e bug de 'janela não respondendo' no Windows.
 			marc.desativar();
 		this.textura_referencial.setId(this.texturas_alternativas[0]);
+//		if(GlobalVariables.contador==1) {
+//			 System.out.println(texturas_alternativas.length);
+//			 System.out.println(texturas_alternativas[0]);
+//			 System.out.println(texturas_alternativas[1]);
+//			 System.out.println(texturas_alternativas[2]);
+//		}
 	}
 
 }

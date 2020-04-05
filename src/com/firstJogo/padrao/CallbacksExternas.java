@@ -109,6 +109,7 @@ public class CallbacksExternas implements ExternalCallback {
 		});
 		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_W,(nada)->{
 //			Entidade.player.remMover("up");
+
 			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.CIMA);
 			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_S))
 				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_S)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_S).run(null);

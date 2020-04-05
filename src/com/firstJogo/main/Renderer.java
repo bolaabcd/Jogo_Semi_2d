@@ -11,7 +11,7 @@ import com.firstJogo.visual.Camera;
 import com.firstJogo.visual.Shaders;
 
 public class Renderer implements Runnable{
-	
+	private Janela principal;
 	@Override
 	public void run() {
 		
@@ -39,7 +39,9 @@ public class Renderer implements Runnable{
 		
 //		Janela.getPrincipal().notify();
 		
-		Janela.getPrincipal().contextualize();
+		principal=Janela.getPrincipal();
+		
+		principal.contextualize();
 		
 		
 		
@@ -96,7 +98,7 @@ public class Renderer implements Runnable{
 //		System.out.println(intperpixel*pixelsperbloco);
 //		
 //		
-//		Camera camera=new Camera(Janela.getPrincipal().getWidth(),Janela.getPrincipal().getHeight());
+//		Camera camera=new Camera(principal.getWidth(),principal.getHeight());
 //		Camera camera=new Camera(intperpixel*quantosblocos*pixelsperbloco,intperpixel*quantosblocos*pixelsperbloco);
 	//	camera.setPos(new Vector3f(-4f*intperpixel*pixelsperbloco,0*intperpixel*pixelsperbloco,0));
 
@@ -107,7 +109,7 @@ public class Renderer implements Runnable{
 //		.setTranslation(GlobalVariables.tam*window.getWidth()/2, GlobalVariables.tam*window.getWidth()/2, 0)
 //		;
 		
-		Janela.getPrincipal().show();
+		principal.show();
 		long begtime=TempoAtual.getsec();
 		int amt=0;
 		
@@ -115,7 +117,7 @@ public class Renderer implements Runnable{
 		
 
 		
-		while(!Janela.getPrincipal().ShouldClose() ) {
+		while(!principal.ShouldClose() ) {
 
 //			primeira.bind(0);//Usamos o sampler número 0!
 //			shad.bindar();
@@ -127,14 +129,14 @@ public class Renderer implements Runnable{
 				
 				try {
 					long temp=System.nanoTime();
-					if((1000/Janela.getPrincipal().getFPS()-(temp-begnano)/(long)1000000)>=0)
-					Thread.sleep(1000/Janela.getPrincipal().getFPS()-(temp-begnano)/(long)1000000);
+					if((1000/principal.getFPS()-(temp-begnano)/(long)1000000)>=0)
+					Thread.sleep(1000/principal.getFPS()-(temp-begnano)/(long)1000000);
 					begnano=System.nanoTime();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				
-				if(amt==Janela.getPrincipal().getFPS())continue;
+				if(amt==principal.getFPS())continue;
 			}else {
 //				System.out.println(Camera.getMain().getPos());
 //				camera.setPos(camera.getPos().add(0.01f, 0.01f, 0));
@@ -147,6 +149,8 @@ public class Renderer implements Runnable{
 //			shad.setUniforme("localizacao_da_textura_tambem_chamada_de_sampler", 0);//Setamos o sampler para 0, onde está a nossa textura!
 //			shad.setUniforme("projecao", camera.getProjec().mul(mat));//camera.getProjec().mul(finala)
 //			mod.renderizar();
+			Janela.PollEvents();//Recolhendo eventos de botao!
+			//Se não tiver aqui buga no windows...
 			
 			mundo.renderizar(renderizator, shad, Camera.getMain());
 //			for(int i=0;i<16;i++)
@@ -154,13 +158,13 @@ public class Renderer implements Runnable{
 //					renderizator.Renderizar((byte)0, j, i, shad, escala, camera);
 			
 			//TROCA O DO BACK-END COM O DO FRONT-END, pq o do back end tava sendo desenhado ainda!
-			Janela.getPrincipal().apresente();
+			principal.apresente();
 			amt++;
 			
 		}
 		
 		// Destruir janela 
-		Janela.getPrincipal().Destroy();
+		principal.Destroy();
 
 		Janela.terminate();
 	}
