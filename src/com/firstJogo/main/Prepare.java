@@ -116,6 +116,7 @@ public class Prepare implements Runnable{
 //		Humano player=new Humano(TipodeCriatura.criaturas[0]);
 		Humano player=new Humano();
 		player.setPlayer(true);
+		player.setMundopos(new long[] {0,0});
 	}
 	
 	public static void prepararJanela() {

@@ -10,6 +10,7 @@ import com.firstJogo.visual.Camera;
 import com.firstJogo.visual.Shaders;
 
 public class WorldRenderer {
+	public static WorldRenderer main;
 	private char[][] azulejos;//Azulejos efetivos no mundo!
 	private ArrayList<Entidade> criaturas;
 	private short width;
@@ -19,6 +20,8 @@ public class WorldRenderer {
 	private short escala;
 	
 	public WorldRenderer() {
+		main=this;
+		
 		height=18;//32*3 -> NÃO DÁ PRA RENDERIZAR ISSO TUDO! ESSE MUNDO DEVE SER O RENDERIZADO APENAS!
 		width=18;
 		escala=15;//15
@@ -39,6 +42,10 @@ public class WorldRenderer {
 //		mundo.scale(16)
 		;
 //		mundo.setOrtho2D(-width/2, width/2, -height/2, height/2);
+	}
+	
+	public ArrayList<Entidade> getCriaturas() {
+		return criaturas;
 	}
 //	public World(short height, short width) {
 //		azulejos=new int[width][height];
@@ -70,10 +77,19 @@ public class WorldRenderer {
 	private void RenderizarEntidade(Entidade ent, Shaders shad, Matrix4f mundo, Camera cam) {
 		shad.bindar();
 		ent.getTextura().bind(1);//Bindou ao sampler número 1 ¯\_(ツ)_/¯
-		Matrix4f pos=new Matrix4f().translate(2*ent.rendpos[0],2*ent.rendpos[1],0);//O modelo tem a origem no centro, e ele escala pros dois lados!
 		Matrix4f mat=new Matrix4f();
-		cam.getRawProjec().mul(mundo, mat);
-		mat.mul(pos);
+		if(ent.isPlayer()) {
+			Matrix4f pos=new Matrix4f().translate(2*8.5f,2*8.5f,0);//O modelo tem a origem no centro, e ele escala pros dois lados!
+			cam.getRawProjec().mul(mundo, mat);
+			mat.mul(pos);
+		}else {
+			float[] rendpos=getRendPos(ent);
+			if(rendpos[0]>19||rendpos[0]<-1||rendpos[1]>19||rendpos[1]<-1)return;
+			//Nem renderiza se tiver fora do mapa!
+			Matrix4f pos=new Matrix4f().translate(2*rendpos[0],2*rendpos[1],0);//O modelo tem a origem no centro, e ele escala pros dois lados!
+			cam.getProjec().mul(mundo, mat);
+			mat.mul(pos);
+		}
 					
 		shad.setUniforme("localizacao_da_textura_tambem_chamada_de_sampler", 1);//Setamos o sampler para 0, onde está a nossa textura!
 		shad.setUniforme("projecao", mat);
@@ -82,5 +98,15 @@ public class WorldRenderer {
 
 		
 		
+	}
+	
+	private float[] getRendPos(Entidade ent) {
+		long[] mundopos=ent.getMundopos();
+//		long[] mundopos=new long[] {0,0};
+		return new float[] {
+				8.5f+(float)(mundopos[0])/GlobalVariables.intperbloco,
+				8.5f+(float)(mundopos[1])/GlobalVariables.intperbloco
+		};
+
 	}
 }

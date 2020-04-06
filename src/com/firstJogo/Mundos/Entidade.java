@@ -19,7 +19,7 @@ public class Entidade {
 	protected float velocModifier=0f;//60% pra corrida maratonada, 100% na corrida rápida, se ficar em linha reta 2 segundos muda pra 120%, 10% pra agachado.
 	protected char veloc=0;
 	
-	public float[] rendpos;
+	private long[] mundopos;//Em ints de bloco! (32/bloco no padrão)
 	
 	
 //	public Entidade(TipodeCriatura tipo) {
@@ -247,10 +247,10 @@ public class Entidade {
 		if(isPlayer=true) {
 			Entidade.player=this;
 			this.isPlayer = isPlayer;
-			this.rendpos=new float[] {8.5f,8.5f};
+//			this.rendpos=new float[] {8.5f,8.5f};
 			}
 		else {
-			Entidade.player=null;
+			if(this.isPlayer)Entidade.player=null;
 			this.isPlayer=false;
 		}
 		
@@ -258,6 +258,16 @@ public class Entidade {
 
 	public static Entidade getPlayer() {
 		return player;
+	}
+
+	public long[] getMundopos() {
+		return mundopos;
+	}
+
+	public void setMundopos(long[] mundopos) {
+		this.mundopos = mundopos;
+//		System.out.println("MundoPlayerPos x: "+this.getMundopos()[0]);
+//		System.out.println("MundoPlayerPos y: "+this.getMundopos()[1]);
 	}
 	
 

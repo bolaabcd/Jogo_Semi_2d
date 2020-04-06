@@ -4,6 +4,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.Humano;
+import com.firstJogo.Mundos.WorldRenderer;
 import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.regras.DirecoesPadrao;
 import com.firstJogo.regras.ExternalCallback;
@@ -79,6 +80,12 @@ public class CallbacksExternas implements ExternalCallback {
 			}
 		});
 		
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_P, (nada)->{
+			Humano testado=new Humano();
+			testado.setMundopos(new long[] {0,0});
+			WorldRenderer.main.getCriaturas().add(testado);
+		});
+		
 		
 		
 		
@@ -146,12 +153,29 @@ public class CallbacksExternas implements ExternalCallback {
 		
 		
 		//TODO: CRIAR CLASSE PARA OS EVENTOS INTERNOS:
-		new TempoMarker(1000000, (camera_Marker)->{//Move o Player, e cada milisegundo vai executar!
+		new CameraMarker(1000000, (camera_Marker)->{//Move o Player, e cada milisegundo vai executar!
+			CameraMarker marcador=(CameraMarker) camera_Marker;
+			if(marcador.mundoPosAnterior==null)marcador.mundoPosAnterior=new float[] {Camera.getMain().getPos().x,Camera.getMain().getPos().y};
 			Camera.getMain().setPos(Camera.getMain().getPos().add(
-					(float)(-Entidade.getPlayer().getDirecModifiers()[0]*Entidade.getPlayer().getVelocModifier()*((int)Entidade.getPlayer().getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-((TempoMarker)camera_Marker).getTemporegistrado())/1000000000),
-					(float)(-Entidade.getPlayer().getDirecModifiers()[1]*Entidade.getPlayer().getVelocModifier()*((int)Entidade.getPlayer().getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-((TempoMarker)camera_Marker).getTemporegistrado())/1000000000),
+					(float)(-Entidade.getPlayer().getDirecModifiers()[0]*Entidade.getPlayer().getVelocModifier()*((int)Entidade.getPlayer().getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000),
+					(float)(-Entidade.getPlayer().getDirecModifiers()[1]*Entidade.getPlayer().getVelocModifier()*((int)Entidade.getPlayer().getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000),
 
 					0));
+			float[] pospos=new float[] {Camera.getMain().getPos().x,Camera.getMain().getPos().y};
+			if(
+					(pospos[0]-marcador.mundoPosAnterior[0]>1||pospos[0]-marcador.mundoPosAnterior[0]<-1)
+					||
+					(pospos[1]-marcador.mundoPosAnterior[1]>1||pospos[1]-marcador.mundoPosAnterior[1]<-1)
+					) {
+				long[] playerprepos=Entidade.getPlayer().getMundopos();
+				Entidade.getPlayer().setMundopos(new long[] {
+//						playerprepos[0]+(long)Math.round((pospos[0]-prepos[0])*GlobalVariables.intperbloco),
+//						playerprepos[1]+(long)Math.round((pospos[1]-prepos[1])*GlobalVariables.intperbloco)
+						playerprepos[0]-(long)Math.round(pospos[0]-marcador.mundoPosAnterior[0]),
+						playerprepos[1]-(long)Math.round(pospos[1]-marcador.mundoPosAnterior[1])
+				});
+				marcador.mundoPosAnterior=null;
+			}
 //			((TempoMarker)camera_Marker).resetTemporegistrado();
 		},null).ativar();;
 //		Camera_Marker.ativar();
