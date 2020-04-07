@@ -123,6 +123,12 @@ public class Humano extends Entidade{
 		return velocModifier*getModVelocModifier();
 	}
 	@Override
+	public void iniciarMovimento(float velocmodifier) {
+		super.iniciarMovimento(velocmodifier);
+//		if(movModo==modos.CORRENDO)impulso.ativar();
+		updateAnimacao();
+	}
+	@Override
 	public void pararMovimento() {
 		super.pararMovimento();
 		impulso.desativar();
@@ -170,9 +176,8 @@ public class Humano extends Entidade{
 		}
 	}
 	private void setMovModo(modos modo) {
-		if(movModo==modo)return;
-//		else if(movModo!=modo&&modo==modos.CORRENDO)impulso.ativar();
-//		else if(movModo!=modo) {
+//		if(movModo==modo)return;
+		
 		if(modo==modos.CORRENDO)impulso.ativar();
 		else {
 			impulso.desativar();

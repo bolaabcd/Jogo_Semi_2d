@@ -183,6 +183,7 @@ public class CallbacksExternas implements ExternalCallback {
 						playerprepos[0]-(long)Math.round(pospos[0]-marcador.mundoPosAnterior[0]),
 						playerprepos[1]-(long)Math.round(pospos[1]-marcador.mundoPosAnterior[1])
 				});
+//				System.out.println(Entidade.getPlayer().getMundopos()[0]);
 				marcador.mundoPosAnterior=null;
 			}
 //			((TempoMarker)camera_Marker).resetTemporegistrado();

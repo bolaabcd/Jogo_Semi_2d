@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.joml.Matrix4f;
 
 import com.firstJogo.utils.GlobalVariables;
-import com.firstJogo.visual.TipodeAzulejo;
+import com.firstJogo.visual.TipodeBloco;
 import com.firstJogo.visual.Camera;
 import com.firstJogo.visual.Modelo;
 import com.firstJogo.visual.Shaders;
@@ -60,7 +60,7 @@ private static final Modelo quadrado=new Modelo(
 public AzRenderer() {
 //	main=this;
 	texturas=new HashMap<String,Textura>();
-	for(TipodeAzulejo az:TipodeAzulejo.azulejos) {
+	for(TipodeBloco az:TipodeBloco.azulejos) {
 //		System.out.println(GlobalVariables.imagem_path+az.getTextura()+GlobalVariables.imagem_formato);
 		if(az!=null)	
 			if(!texturas.containsKey(az.getTextura()))
@@ -70,8 +70,8 @@ public AzRenderer() {
 
 public void Renderizar(char id,char x,char y, Shaders shad, Matrix4f mundo,Camera cam) {
 	shad.bindar();
-	if(texturas.containsKey(TipodeAzulejo.azulejos[id].getTextura())) 
-		texturas.get(TipodeAzulejo.azulejos[id].getTextura()).bind(0);//Bindou ao sampler número 0 ¯\_(ツ)_/¯
+	if(texturas.containsKey(TipodeBloco.azulejos[id].getTextura())) 
+		texturas.get(TipodeBloco.azulejos[id].getTextura()).bind(0);//Bindou ao sampler número 0 ¯\_(ツ)_/¯
 	else 
 		throw new IllegalStateException("Textura de criatura inválida!");
 	

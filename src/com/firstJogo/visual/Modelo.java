@@ -12,8 +12,10 @@ public class Modelo {
 	private int id_vertices;
 	private int id_texturas;
 	private int id_indices;
+	private float[] vertices;
 	
 	public Modelo(float[] vertices,int[] indices) {
+		this.vertices=vertices;
 		contagem=indices.length;
 		
 		id_vertices=GL15.glGenBuffers();
@@ -82,5 +84,8 @@ public class Modelo {
 		ib.put(valores);
 		ib.flip();
 		return ib;
+	}
+	public int[] getVertices() {
+		return new int[] {Math.round(this.vertices[0]*32),Math.round(this.vertices[1]*32)};
 	}
 }

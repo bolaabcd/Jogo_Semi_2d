@@ -29,6 +29,7 @@ public class Entidade {
 					ent.getMundopos()[1] + movy 
 			});
 			ob[3] = 0L;
+			
 		}
 	},new Object[] {3,null,this,new Long(0)});
 	
@@ -41,7 +42,7 @@ public class Entidade {
 	protected char veloc=0;
 	
 	private long[] mundopos;//Em ints de bloco! (32/bloco no padrão)
-	
+	private int[] hitboxPos;
 	
 //	public Entidade(TipodeCriatura tipo) { ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER
 //		tipo_visual=tipo;
@@ -49,6 +50,7 @@ public class Entidade {
 	public Entidade(Textura visu) {
 		visual=visu;
 		modelo=visu.genModelo();
+		hitboxPos=modelo.getVertices();
 	}
 	
 	public void pararMovimento() {
@@ -292,8 +294,12 @@ public class Entidade {
 
 	public void setMundopos(long[] mundopos) {
 		this.mundopos = mundopos;
-//		System.out.println("MundoPlayerPos x: "+this.getMundopos()[0]);
-//		System.out.println("MundoPlayerPos y: "+this.getMundopos()[1]);
+		if(!this.isPlayer)System.out.println("MundoPlayerPos x: "+this.getMundopos()[0]);
+		if(!this.isPlayer)System.out.println("MundoPlayerPos y: "+this.getMundopos()[1]);
+	}
+
+	public int[] getHitboxPos() {
+		return hitboxPos;
 	}
 	
 
