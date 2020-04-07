@@ -1,6 +1,8 @@
 package com.firstJogo.Mundos;
 
 import com.firstJogo.regras.DirecoesPadrao;
+import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.Modelo;
 import com.firstJogo.visual.Textura;
 
@@ -11,9 +13,28 @@ public class Entidade {
 //	private TipodeCriatura tipo_visual;
 	private Textura visual;
 	private Modelo modelo;
+	private final TempoMarker mover=new TempoMarker(1000000,(objetotal)->{
+		Object[] ob=(Object[]) objetotal;
+		TempoMarker marcador=(TempoMarker) ob[1];
+		Entidade ent=(Entidade)ob[2];
+		if((Long)ob[3]==0)
+			ob[3]=(Long)marcador.getTemporegistrado();//Tentei castar ob[3] para Long, mas ele não aceitou
+		long movx=(long) Math.round(ent.getDirecModifiers()[0]*ent.getVelocModifier()*((int)ent.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-(Long)ob[3])/1000000000);
+		long movy=(long) Math.round(ent.getDirecModifiers()[1]*ent.getVelocModifier()*((int)ent.getVeloc())*GlobalVariables.intperbloco*(double)(System.nanoTime()-(Long)ob[3])/1000000000);
+//		System.out.println(ob[3]);
+		
+		if (Math.abs(movx) > 1 || Math.abs(movy) > 1) {
+			this.setMundopos(new long[] {
+					ent.getMundopos()[0] + movx, 
+					ent.getMundopos()[1] + movy 
+			});
+			ob[3] = 0L;
+		}
+	},new Object[] {3,null,this,new Long(0)});
 	
 	private DirecoesPadrao olharDir=DirecoesPadrao.CIMA;
-	private double angulo=0;
+//	private double angulo=0;
+	private double angulo=1200;
 //	private boolean parado;
 	
 	protected float velocModifier=0f;//60% pra corrida maratonada, 100% na corrida rápida, se ficar em linha reta 2 segundos muda pra 120%, 10% pra agachado.
@@ -22,7 +43,7 @@ public class Entidade {
 	private long[] mundopos;//Em ints de bloco! (32/bloco no padrão)
 	
 	
-//	public Entidade(TipodeCriatura tipo) {
+//	public Entidade(TipodeCriatura tipo) { ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER
 //		tipo_visual=tipo;
 //	}
 	public Entidade(Textura visu) {
@@ -31,10 +52,14 @@ public class Entidade {
 	}
 	
 	public void pararMovimento() {
+		if(velocModifier==0)return;
 		velocModifier=0;
+		if(!this.isPlayer())mover.desativar();
 	}
 	public void iniciarMovimento(float velocModifier) {
+		if(this.velocModifier==velocModifier)return;
 		this.velocModifier=velocModifier;
+		if(!this.isPlayer())mover.ativar();
 	}
 	
 	public DirecoesPadrao getOlhar() {
@@ -46,6 +71,7 @@ public class Entidade {
 	}
 	
 	public void setAngulo(double angulo) {
+		if(this.angulo==angulo)return;
 //		System.out.println(angulo/Math.PI);
 		if(angulo<Math.PI/4&&angulo>-Math.PI/4)this.setOlhar(DirecoesPadrao.DIREITA);
 		else if(angulo>3*Math.PI/4||angulo<-3*Math.PI/4)this.setOlhar(DirecoesPadrao.ESQUERDA);

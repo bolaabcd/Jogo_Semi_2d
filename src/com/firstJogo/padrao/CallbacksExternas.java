@@ -18,49 +18,48 @@ public class CallbacksExternas implements ExternalCallback {
 //			Entidade.player.setMover("up");
 			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.CIMA);
 			Entidade.getPlayer().iniciarMovimento(1f);//TODO trocar esse 1f (futuramente) pelos mofificadores cabíveis de velocidade
-			try {
-				Humano player=(Humano) Entidade.getPlayer();
-				PlayerRegras.resetMovModo(player);
-//				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
-			}catch(ClassCastException c) {
-				
-			}
+//			try {
+//				Humano player=(Humano) Entidade.getPlayer();
+//				PlayerRegras.resetMovModo(player);
+////				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
+//			}catch(ClassCastException c) {
+//				
+//			}
 		});
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_A, (nada)->{
 //			Entidade.player.setMover("left");
 			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.ESQUERDA);
 			Entidade.getPlayer().iniciarMovimento(1f);
-			try {
-				Humano player=(Humano) Entidade.getPlayer();
-				PlayerRegras.resetMovModo(player);
-//				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
-			}catch(ClassCastException c) {
-				
-			}
+//			try {
+//				Humano player=(Humano) Entidade.getPlayer();
+//				PlayerRegras.resetMovModo(player);
+////				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
+//			}catch(ClassCastException c) {
+//				
+//			}
 		});
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_S, (nada)->{
 //			Entidade.player.setMover("down");
 			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.BAIXO);
 			Entidade.getPlayer().iniciarMovimento(1f);
-			try {
-				Humano player=(Humano) Entidade.getPlayer();
-				PlayerRegras.resetMovModo(player);
-//				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
-			}catch(ClassCastException c) {
-				
-			}
+//			try {
+//				Humano player=(Humano) Entidade.getPlayer();
+//				PlayerRegras.resetMovModo(player);
+////				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
+//			}catch(ClassCastException c) {
+//				
+//			}
 		});
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_D, (nada)->{
 //			Entidade.player.setMover("right");
 			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.DIREITA);
 			Entidade.getPlayer().iniciarMovimento(1f);
-			try {
-				Humano player=(Humano) Entidade.getPlayer();
-				PlayerRegras.resetMovModo(player);
-//				if(!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL)&&!GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT))player.setMovModo(Humano.modos.ANDANDO);
-			}catch(ClassCastException c) {
-				
-			}
+//			try {
+//				Humano player=(Humano) Entidade.getPlayer();
+//				PlayerRegras.resetMovModo(player);
+//			}catch(ClassCastException c) {
+//				
+//			}
 		});
 		
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_LEFT_CONTROL, (nada)->{
@@ -79,12 +78,22 @@ public class CallbacksExternas implements ExternalCallback {
 				
 			}
 		});
-		
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_P, (nada)->{
 			Humano testado=new Humano();
 			testado.setMundopos(new long[] {0,0});
 			WorldRenderer.main.getCriaturas().add(testado);
+			new TempoMarker(1000000,(perseguidor)-> {
+				Humano genti = (Humano) perseguidor;
+				long[] playerpos=Entidade.getPlayer().getMundopos();
+				long[] gentipos=genti.getMundopos();
+				genti.setAngulo(Math.atan2(playerpos[1]-gentipos[1], playerpos[0]-gentipos[0]));
+				genti.iniciarMovimento(1);
+				genti.modo_agachar();
+//				genti.setMundopos(mundopos);
+			},testado).ativar();
 		});
+		
+		
 		
 		
 		

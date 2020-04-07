@@ -128,6 +128,7 @@ public class Humano extends Entidade{
 		impulso.desativar();
 //		System.out.println("OI");
 //		GlobalVariables.contador=1;
+//		if(animado!=null)
 		animado.desativar();
 //		GlobalVariables.contador=0;
 
@@ -137,7 +138,7 @@ public class Humano extends Entidade{
 	public void setAngulo(double angulo) {
 		if(this.getAngulo()!=angulo) {
 			impulso.resetTemporegistrado();
-			if(this.isPlayer())PlayerRegras.resetMovModo(this);;
+			if(this.isPlayer())PlayerRegras.resetMovModo(this);
 		}
 		super.setAngulo(angulo);
 	}
@@ -169,8 +170,11 @@ public class Humano extends Entidade{
 		}
 	}
 	private void setMovModo(modos modo) {
-		if(movModo!=modo&&modo==modos.CORRENDO)impulso.ativar();
-		else if(movModo!=modo) {
+		if(movModo==modo)return;
+//		else if(movModo!=modo&&modo==modos.CORRENDO)impulso.ativar();
+//		else if(movModo!=modo) {
+		if(modo==modos.CORRENDO)impulso.ativar();
+		else {
 			impulso.desativar();
 			}
 		movModo=modo;
