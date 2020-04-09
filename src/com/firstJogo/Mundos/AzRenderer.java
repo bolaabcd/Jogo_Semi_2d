@@ -80,12 +80,12 @@ public void Renderizar(char id,char x,char y, Shaders shad, Matrix4f mundo,Camer
 	Matrix4f pos=new Matrix4f().translate(2*x,2*y,0);//O modelo tem a origem no centro, e ele escala pros dois lados!
 	//ERA PRA SER 2x e 2y!!!
 //	System.out.println(pos);
-	if(GlobalVariables.debugue==true)System.out.println("MATRIZ DE POSIÇÃO:");
-	if(GlobalVariables.debugue==true)System.out.println(pos);
-	if(GlobalVariables.debugue==true)System.out.println("MATRIZ DE CÂMERA:");
-	if(GlobalVariables.debugue==true)System.out.println(cam.getProjec());
-	if(GlobalVariables.debugue==true)System.out.println("MATRIZ DE MUNDO:");
-	if(GlobalVariables.debugue==true)System.out.println(mundo);//Ortho
+//	if(GlobalVariables.debugue==true)System.out.println("MATRIZ DE POSIÇÃO:");
+//	if(GlobalVariables.debugue==true)System.out.println(pos);
+//	if(GlobalVariables.debugue==true)System.out.println("MATRIZ DE CÂMERA:");
+//	if(GlobalVariables.debugue==true)System.out.println(cam.getProjec());
+//	if(GlobalVariables.debugue==true)System.out.println("MATRIZ DE MUNDO:");
+//	if(GlobalVariables.debugue==true)System.out.println(mundo);//Ortho
 	Matrix4f mat=new Matrix4f();
 	cam.getProjec().mul(mundo, mat);
 	mat.mul(pos);

@@ -19,7 +19,7 @@ public class TexturaAnimador {
 		t.marcadores[t.texatual].desativar();
 //		System.out.println("Referencial: "+t.textura_referencial);
 		t.texatual+=1;
-		if(t.texatual==t.texturas_alternativas.length)t.texatual=0;
+ 		if(t.texatual==t.texturas_alternativas.length)t.texatual=0;
 		t.textura_referencial.setId(t.texturas_alternativas[t.texatual]);
 		t.marcadores[t.texatual].ativar();
 		

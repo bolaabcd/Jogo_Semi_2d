@@ -58,9 +58,9 @@ public class WorldRenderer {
 	public void renderizar(AzRenderer rend,Shaders shad,Camera cam) {
 		for(char i=0;i<height;i++)
 			for(char j=0;j<width;j++){
-				if(GlobalVariables.debugue==true)System.out.println("RENDERIZANDO QUADRADO EM X= "+j+", Y= "+i);
+//				if(GlobalVariables.debugue==true)System.out.println("RENDERIZANDO QUADRADO EM X= "+j+", Y= "+i);
 				rend.Renderizar(azulejos[j][i], j, i, shad, mundo, cam);
-				GlobalVariables.debugue=false;
+//				GlobalVariables.debugue=false;
 			}
 		for(Entidade cr:criaturas)
 			RenderizarEntidade(cr, shad, mundo,cam);//Esse 8.5f é a posição no mundo que aparece.

@@ -119,7 +119,6 @@ public class Renderer implements Runnable{
 
 		
 		while(!principal.ShouldClose() ) {
-
 //			primeira.bind(0);//Usamos o sampler número 0!
 //			shad.bindar();
 //			mat=new Matrix4f()

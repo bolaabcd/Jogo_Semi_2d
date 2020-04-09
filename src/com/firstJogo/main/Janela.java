@@ -16,6 +16,7 @@ import org.lwjgl.system.MemoryStack;
 
 import com.firstJogo.padrao.CallbacksExternas;
 import com.firstJogo.regras.ExternalCallback;
+import com.firstJogo.utils.GlobalVariables;
 
 public class Janela {
 	private static Object principalready=new Object();
@@ -68,7 +69,7 @@ public boolean getFullscr() {
 //		this.recreate();
 //		this.setWindowPos(posx, posy);
 //		this.show();
-//	}
+//	}GlobalVariables.debugue
 //	
 //}
 public void Hide() {
@@ -129,7 +130,12 @@ public void apresente() {
 	GLFW.glfwSwapBuffers(id);
 }
 public void setWindowCallbacks() {
+		
 	GLFW.glfwSetKeyCallback(id, (window, key, scancode, action, mods) -> {
+//		System.out.println("DEB: "+GlobalVariables.debugue);
+//		System.out.println("DEB: "+GLFW.glfwGetWindowAttrib(window, GLFW.GLFW_FOCUSED));
+//		System.out.println("DEB: "+action);
+		if(!(GlobalVariables.debugue&&GLFW.glfwGetWindowAttrib(window, GLFW.GLFW_FOCUSED)==GLFW.GLFW_FALSE&&action==GLFW.GLFW_RELEASE))
 		for(ExternalCallback cback:callbacks) {
 			cback.KeyCallback(window, key, scancode, action, mods);
 		}
