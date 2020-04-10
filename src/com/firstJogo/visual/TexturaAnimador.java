@@ -39,20 +39,22 @@ public class TexturaAnimador {
 		}
 	}
 	public void ativar() {
+//		System.out.println("OI");
 		marcadores[0].ativar();
 	}
 	public void desativar() {
-		synchronized (GeradorEventos.chaveTempo) {
-			if(!Thread.currentThread().equals(GeradorEventos.main))
-				try {
-					GeradorEventos.chaveTempo.wait();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					System.exit(1);
-				}
-		}
+//		synchronized (GeradorEventos.chaveTempo) {
+//			if(!Thread.currentThread().equals(GeradorEventos.main))
+//				try {
+//					GeradorEventos.chaveTempo.wait();
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//					System.exit(1);
+//				}
+//		}
 		for(TempoMarker marc:marcadores) 
 			marc.desativar();
+		
 		this.textura_referencial.setId(this.texturas_alternativas[0]);
 //		if(GlobalVariables.contador==1) {
 //			 System.out.println(texturas_alternativas.length);
@@ -60,6 +62,12 @@ public class TexturaAnimador {
 //			 System.out.println(texturas_alternativas[1]);
 //			 System.out.println(texturas_alternativas[2]);
 //		}
+	}
+	public boolean isAtivado() {
+		for(TempoMarker marc:marcadores)
+			if(GeradorEventos.tempopassado.contains(marc))return true;
+		return false;
+		
 	}
 
 }

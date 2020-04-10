@@ -62,6 +62,33 @@ public class Humano extends Entidade{
 	};
 	//Agachado, andando, correndo, sprint
 	
+	private final TexturaAnimador[][] animadosaacsDirec=new TexturaAnimador[][] {
+		new TexturaAnimador[] {//AGACHADO
+				new TexturaAnimador(aacsTempo[0],udlrTextura[0],this.getTextura()),//UP
+				new TexturaAnimador(aacsTempo[0],udlrTextura[1],this.getTextura()),//DOWN
+				new TexturaAnimador(aacsTempo[0],udlrTextura[2],this.getTextura()),//LEFT
+				new TexturaAnimador(aacsTempo[0],udlrTextura[3],this.getTextura())//RIGHT
+		},
+		new TexturaAnimador[] {//ANDANDO
+				new TexturaAnimador(aacsTempo[1],udlrTextura[0],this.getTextura()),//UP
+				new TexturaAnimador(aacsTempo[1],udlrTextura[1],this.getTextura()),//DOWN
+				new TexturaAnimador(aacsTempo[1],udlrTextura[2],this.getTextura()),//LEFT
+				new TexturaAnimador(aacsTempo[1],udlrTextura[3],this.getTextura())//RIGHT
+		},
+		new TexturaAnimador[] {//CORRENDO
+				new TexturaAnimador(aacsTempo[2],udlrTextura[0],this.getTextura()),//UP
+				new TexturaAnimador(aacsTempo[2],udlrTextura[1],this.getTextura()),//DOWN
+				new TexturaAnimador(aacsTempo[2],udlrTextura[2],this.getTextura()),//LEFT
+				new TexturaAnimador(aacsTempo[2],udlrTextura[3],this.getTextura())//RIGHT
+		},
+		new TexturaAnimador[] {//SPRINT
+				new TexturaAnimador(aacsTempo[3],udlrTextura[0],this.getTextura()),//UP
+				new TexturaAnimador(aacsTempo[3],udlrTextura[1],this.getTextura()),//DOWN
+				new TexturaAnimador(aacsTempo[3],udlrTextura[2],this.getTextura()),//LEFT
+				new TexturaAnimador(aacsTempo[3],udlrTextura[3],this.getTextura())//RIGHT
+		}
+	};
+	
 	private TexturaAnimador animado;
 //	private final TexturaAnimador movendo=new TexturaAnimador(
 //			new long[] {aacsTempo[1],aacsTempo[1],aacsTempo[1]},
@@ -117,6 +144,12 @@ public class Humano extends Entidade{
 	
 	public modos getMovModo() {
 		return movModo;
+	}
+	
+	public void pararAnimacoes() {
+		for(TexturaAnimador[] an:animadosaacsDirec)
+			for(TexturaAnimador a:an)
+				a.desativar();
 	}
 	@Override
 	public float getVelocModifier() {
@@ -176,7 +209,7 @@ public class Humano extends Entidade{
 		}
 	}
 	private void setMovModo(modos modo) {
-//		if(movModo==modo)return;
+		boolean mesmomodo=movModo==modo;
 		
 		if(modo==modos.CORRENDO)impulso.ativar();
 		else {
@@ -184,7 +217,7 @@ public class Humano extends Entidade{
 			}
 		movModo=modo;
 		
-		if(velocModifier!=0) 
+		if(velocModifier!=0&&!mesmomodo) 
 			updateAnimacao();
 //		if(modo.equals(modos.CORRENDO))this.velocModifier=1f;
 //		else if(modo.equals(modos.ANDANDO))this.velocModifier=0.6f;
@@ -193,7 +226,9 @@ public class Humano extends Entidade{
 	}
 	private void updateAnimacao() {
 //		System.out.println("OI\n");
-		if(animado!=null)animado.desativar();
+		
+		if(animado!=null)if(animado.isAtivado())pararAnimacoes();
+		
 //		System.out.println(movModo);
 //		System.out.println(getOlhar());
 //		System.out.println("OI");
@@ -202,39 +237,40 @@ public class Humano extends Entidade{
 		case AGACHADO:
 			switch(this.getOlhar()) {
 			case CIMA:
-				animado=new TexturaAnimador(aacsTempo[0],udlrTextura[0],this.getTextura());
+//				animado=new TexturaAnimador(aacsTempo[0],udlrTextura[0],this.getTextura());
+				animado=animadosaacsDirec[0][0];
 				animado.ativar();
 				break;
 			case BAIXO:
-				animado=new TexturaAnimador(aacsTempo[0],udlrTextura[1],this.getTextura());
+				animado=animadosaacsDirec[0][1];
 				animado.ativar();
 				break;
 			case ESQUERDA:
-				animado=new TexturaAnimador(aacsTempo[0],udlrTextura[2],this.getTextura());
+				animado=animadosaacsDirec[0][2];
 				animado.ativar();
 				break;
 			case DIREITA:
-				animado=new TexturaAnimador(aacsTempo[0],udlrTextura[3],this.getTextura());
+				animado=animadosaacsDirec[0][3];
 				animado.ativar();
 			}
 			break;
 		case ANDANDO:
 			switch(this.getOlhar()) {
 			case CIMA:
-				animado=new TexturaAnimador(aacsTempo[1],udlrTextura[0],this.getTextura());
+				animado=animadosaacsDirec[1][0];
 //				System.out.println(udlrTextura[0][0].getId());
 				animado.ativar();
 				break;
 			case BAIXO:
-				animado=new TexturaAnimador(aacsTempo[1],udlrTextura[1],this.getTextura());
+				animado=animadosaacsDirec[1][1];
 				animado.ativar();
 				break;
 			case ESQUERDA:
-				animado=new TexturaAnimador(aacsTempo[1],udlrTextura[2],this.getTextura());
+				animado=animadosaacsDirec[1][2];
 				animado.ativar();
 				break;
 			case DIREITA:
-				animado=new TexturaAnimador(aacsTempo[1],udlrTextura[3],this.getTextura());
+				animado=animadosaacsDirec[1][3];
 				animado.ativar();
 				break;
 			}
@@ -242,19 +278,19 @@ public class Humano extends Entidade{
 		case CORRENDO:
 			switch(this.getOlhar()) {
 			case CIMA:
-				animado=new TexturaAnimador(aacsTempo[2],udlrTextura[0],this.getTextura());
+				animado=animadosaacsDirec[2][0];
 				animado.ativar();
 				break;
 			case BAIXO:
-				animado=new TexturaAnimador(aacsTempo[2],udlrTextura[1],this.getTextura());
+				animado=animadosaacsDirec[2][1];
 				animado.ativar();
 				break;
 			case ESQUERDA:
-				animado=new TexturaAnimador(aacsTempo[2],udlrTextura[2],this.getTextura());
+				animado=animadosaacsDirec[2][2];
 				animado.ativar();
 				break;
 			case DIREITA:
-				animado=new TexturaAnimador(aacsTempo[2],udlrTextura[3],this.getTextura());
+				animado=animadosaacsDirec[2][3];
 				animado.ativar();
 				break;
 			}
@@ -262,19 +298,19 @@ public class Humano extends Entidade{
 		case SPRINT:
 			switch(this.getOlhar()) {
 			case CIMA:
-				animado=new TexturaAnimador(aacsTempo[3],udlrTextura[0],this.getTextura());
+				animado=animadosaacsDirec[3][0];
 				animado.ativar();
 				break;
 			case BAIXO:
-				animado=new TexturaAnimador(aacsTempo[3],udlrTextura[1],this.getTextura());
+				animado=animadosaacsDirec[3][1];
 				animado.ativar();
 				break;
 			case ESQUERDA:
-				animado=new TexturaAnimador(aacsTempo[3],udlrTextura[2],this.getTextura());
+				animado=animadosaacsDirec[3][2];
 				animado.ativar();
 				break;
 			case DIREITA:
-				animado=new TexturaAnimador(aacsTempo[3],udlrTextura[3],this.getTextura());
+				animado=animadosaacsDirec[3][3];
 				animado.ativar();
 			}
 		}

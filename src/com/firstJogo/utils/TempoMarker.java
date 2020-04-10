@@ -10,7 +10,7 @@ public class TempoMarker {//Guarda a função e o objeto-argumento da função p
 	private long tempolimite;
 	private long temporegistrado;
 	
-	private boolean isAtivo=false;;
+	public boolean desativar=false;;
 	
 	public TempoMarker(long tempolimite,Funcao<Object> funcao,Object endereco_argumento) {//Nulo indica o prório objeto
 //		temporizadores.put(chave, this);
@@ -34,17 +34,68 @@ public class TempoMarker {//Guarda a função e o objeto-argumento da função p
 	}
 	
 	public void ativar() {
-		if(isAtivo)return;
+		if(GeradorEventos.tempopassado.contains(this))return;
+//		System.out.println("OI");
+		
+//		GeradorEventos.chaveUsando=true;
+//		synchronized (GeradorEventos.chaveIterando) {
+//			if(!Thread.currentThread().equals(GeradorEventos.main)&&GeradorEventos.chaveIterando)
+//				try {
+//					GeradorEventos.chaveIterando.wait();
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//					System.exit(1);
+//				}
+//		}
 		this.resetTemporegistrado();
 		GeradorEventos.tempopassado.add(this);
-		isAtivo=true;
+//		GeradorEventos.mapa.put(this, new Object());
+		
+//		synchronized (GeradorEventos.chaveUsando) {
+//			GeradorEventos.chaveUsando=false;
+//			GeradorEventos.chaveUsando.notify();
+//		}
+//		isAtivo=true;
 	}
 	
 	public void desativar() {
-		if(!isAtivo)return;
-//		if(GlobalVariables.contador==1) System.out.println(argumento);
-		GeradorEventos.tempopassado.remove(this);
-		isAtivo=false;
+		if(!GeradorEventos.tempopassado.contains(this))return;
+//		System.out.println("Desativando");
+//		boolean contem=GeradorEventos.tempopassado.contains(this);
+//		if(!GeradorEventos.tempopassado.remove(this))
+//			System.out.println(contem);
+//		GeradorEventos.tempopassado.remove(this);//BUGA QUANDO EXECUTA JUNTO COM O ITERATOR!
+//		if (!GeradorEventos.main.equals(Thread.currentThread()))
+//			synchronized (GeradorEventos.chaveObjeto) {
+//				try {
+//					GeradorEventos.chaveObjeto.wait();
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//					System.exit(1);
+//				}
+//			}
+		
+//		if (GeradorEventos.main.equals(Thread.currentThread()))
+		
+//		GeradorEventos.tempopassado.remove(this);
+//		new LoopCond(()-> {
+////			System.out.println(this);
+//			return GeradorEventos.tempopassado.contains(this);
+//			
+//		},(nada)->{
+//			System.out.println(
+		while(GeradorEventos.tempopassado.contains(this))
+			GeradorEventos.tempopassado.remove(this);
+//			GeradorEventos.mapa.remove(this);
+//			System.out.println(GeradorEventos.tempopassado.size());
+//		}
+//		).run();
+//		else
+//			GeradorEventos.todelete.add(this);
+		
+//		this.desativar=true;
+		
+//		isAtivo=false;
 	}
 	
 	public long getTemporegistrado() {
@@ -54,6 +105,7 @@ public class TempoMarker {//Guarda a função e o objeto-argumento da função p
 		temporegistrado=System.nanoTime();
 	}
 	public void checkTempo() {
+		if(desativar)return;
 		if(passouTempolimite()) {
 			funcao.run(argumento);
 			this.resetTemporegistrado();
@@ -70,7 +122,7 @@ public class TempoMarker {//Guarda a função e o objeto-argumento da função p
 		return false;
 	}
 
-	public boolean isAtivo() {
-		return isAtivo;
-	}
+//	public boolean isAtivo() {
+//		return isAtivo;
+//	}
 }

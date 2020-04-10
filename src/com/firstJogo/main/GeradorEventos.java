@@ -3,48 +3,39 @@ package com.firstJogo.main;
 import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.firstJogo.estrutura.Janela;
 import com.firstJogo.utils.Funcao;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
 
 public class GeradorEventos implements Runnable{
-	public static Thread main;
-	public static HashMap<Integer,Funcao<?>> botaomantido=new HashMap<Integer,Funcao<?>>();//Eventos externos!
-	public static HashMap<Integer,Funcao<?>> botaoremovido=new HashMap<Integer,Funcao<?>>();
-	public static HashMap<Integer,Funcao<?>> botaopressionado=new HashMap<Integer,Funcao<?>>();
-	//Gatilho, o que fazer
+	public static Thread main;//Objeto da Thread de eventos
+	//Callbacks dos botões mantidos,pressionados ou removidos, de acordo com o ID de cada botão (Integer).
+	public static HashMap<Integer,Funcao<?>> botaomantido=new HashMap<Integer,Funcao<?>>();
+	public static HashMap<Integer,Funcao<Boolean>> botaoremovido=new HashMap<Integer,Funcao<Boolean>>();
+	public static HashMap<Integer,Funcao<Boolean>> botaopressionado=new HashMap<Integer,Funcao<Boolean>>();
 	
-	//Temq ser copyonwrite pq ele pode ser deletado enquanto estiver iterando!
-	public static CopyOnWriteArrayList<TempoMarker> tempopassado=new  CopyOnWriteArrayList<TempoMarker>();//EVENTO INTERNO!!!
-	public static Object chaveTempo=new Object();
+	//CopyOnWrite porque as modificações podem vir de outras Threads.
+	public static CopyOnWriteArrayList<TempoMarker> tempopassado=new  CopyOnWriteArrayList<TempoMarker>();//Cbacks de tempo
 	
+	//Objeto da Janela do Jogo
 	private Janela principal;
+	
 	@Override
 	public void run() {
 		principal=Janela.getPrincipal();
 		
 		System.out.println("Iniciando Loop de eventos");
-		while(!principal.ShouldClose()) {
-//			Janela.PollEvents();//Recolhendo eventos de botao!
-			//Se nao tiver aqui buga...
-			
+		while(!principal.ShouldClose()) {//Enquanto não tiver mandado fechar a Janela, executa os eventos
+			//Ativando eventos de botão mantido:
 			for(int k:GlobalVariables.Keys)
 				if(botaomantido.containsKey(k))botaomantido.get(k).run(null);
-			//Ativando eventos de botão mantido!
-			
+
+			//Ativando eventos de tempo:
 			for(TempoMarker marker:tempopassado) 
-				marker.checkTempo();
-			synchronized (chaveTempo) {
-				chaveTempo.notify();
-			}
-
-//			for(Iterator<TempoMarker> iter=tempopassado.iterator();iter.hasNext();) 
-//				iter.next().checkTempo();
-//			tempopassado.forEach(o->o.checkTempo());
-			//Ativando eventos de tempo passado!
-
+				marker.checkTempo();//Confere se passou o tempo mínimo e,  se sim, xecuta a função adequada com o argumento adequado.
 			
-			GlobalVariables.TicksPorSegundo+=1;
+			GlobalVariables.TicksPorSegundo+=1;//Marca quantos Loops se passaram por segundo
 		}
 	}
 	

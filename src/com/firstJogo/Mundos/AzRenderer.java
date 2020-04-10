@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 import org.joml.Matrix4f;
 
+import com.firstJogo.estrutura.Camera;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.visual.TipodeBloco;
-import com.firstJogo.visual.Camera;
 import com.firstJogo.visual.Modelo;
 import com.firstJogo.visual.Shaders;
 import com.firstJogo.visual.Textura;

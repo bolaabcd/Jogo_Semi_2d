@@ -5,16 +5,16 @@ import org.lwjgl.glfw.GLFW;
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.Humano;
 import com.firstJogo.Mundos.WorldRenderer;
+import com.firstJogo.estrutura.Camera;
 import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.regras.DirecoesPadrao;
 import com.firstJogo.regras.ExternalCallback;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
-import com.firstJogo.visual.Camera;
 
 public class CallbacksExternas implements ExternalCallback {
 	public static void prepararBotoes() {
-		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_W, (nada)->{
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_W, (isSintetico)->{
 //			Entidade.player.setMover("up");
 			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.CIMA);
 			Entidade.getPlayer().iniciarMovimento(1f);//TODO trocar esse 1f (futuramente) pelos mofificadores cabíveis de velocidade
@@ -25,8 +25,12 @@ public class CallbacksExternas implements ExternalCallback {
 //			}catch(ClassCastException c) {
 //				
 //			}
+			if(!((Boolean) isSintetico).booleanValue())
+			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_S))
+				if(GeradorEventos.botaoremovido.get(GLFW.GLFW_KEY_S)!=null)GeradorEventos.botaoremovido.get(GLFW.GLFW_KEY_S).run(true);
+
 		});
-		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_A, (nada)->{
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_A, (isSintetico)->{
 //			Entidade.player.setMover("left");
 			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.ESQUERDA);
 			Entidade.getPlayer().iniciarMovimento(1f);
@@ -37,8 +41,12 @@ public class CallbacksExternas implements ExternalCallback {
 //			}catch(ClassCastException c) {
 //				
 //			}
+			if(!((Boolean) isSintetico).booleanValue())
+			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_D))
+				if(GeradorEventos.botaoremovido.get(GLFW.GLFW_KEY_D)!=null)GeradorEventos.botaoremovido.get(GLFW.GLFW_KEY_D).run(true);
+
 		});
-		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_S, (nada)->{
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_S, (isSintetico)->{
 //			Entidade.player.setMover("down");
 			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.BAIXO);
 			Entidade.getPlayer().iniciarMovimento(1f);
@@ -49,8 +57,12 @@ public class CallbacksExternas implements ExternalCallback {
 //			}catch(ClassCastException c) {
 //				
 //			}
+			if(!((Boolean) isSintetico).booleanValue())
+			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_W))
+				if(GeradorEventos.botaoremovido.get(GLFW.GLFW_KEY_W)!=null)GeradorEventos.botaoremovido.get(GLFW.GLFW_KEY_W).run(true);
+
 		});
-		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_D, (nada)->{
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_D, (isSintetico)->{
 //			Entidade.player.setMover("right");
 			PlayerRegras.setMoveDirection(Entidade.getPlayer(), DirecoesPadrao.DIREITA);
 			Entidade.getPlayer().iniciarMovimento(1f);
@@ -60,6 +72,10 @@ public class CallbacksExternas implements ExternalCallback {
 //			}catch(ClassCastException c) {
 //				
 //			}
+			if(!((Boolean) isSintetico).booleanValue())
+			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_A))
+				if(GeradorEventos.botaoremovido.get(GLFW.GLFW_KEY_A)!=null)GeradorEventos.botaoremovido.get(GLFW.GLFW_KEY_A).run(true);
+
 		});
 		
 		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_LEFT_CONTROL, (nada)->{
@@ -74,6 +90,7 @@ public class CallbacksExternas implements ExternalCallback {
 			try {
 				Humano player=(Humano) Entidade.getPlayer();
 				player.modo_agachar();
+//				Camera.getMain().setSize(32, 32);
 			}catch(ClassCastException c) {
 				
 			}
@@ -91,6 +108,27 @@ public class CallbacksExternas implements ExternalCallback {
 				genti.modo_agachar();
 //				genti.setMundopos(mundopos);
 			},testado).ativar();
+		});
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_PAGE_DOWN, (isSintetico)->{
+			Camera.getMain().setSize(Camera.getMain().getWidth()-GlobalVariables.intperbloco, Camera.getMain().getHeight()-GlobalVariables.intperbloco);
+		});
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_PAGE_UP, (isSintetico)->{
+			Camera.getMain().setSize(Camera.getMain().getWidth()+GlobalVariables.intperbloco, Camera.getMain().getHeight()+GlobalVariables.intperbloco);
+		});
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_UP, (isSintetico)->{
+			Camera.getMain().setSize(Camera.getMain().getWidth(), Camera.getMain().getHeight()+GlobalVariables.intperbloco);
+		});
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_DOWN, (isSintetico)->{
+			Camera.getMain().setSize(Camera.getMain().getWidth(), Camera.getMain().getHeight()-GlobalVariables.intperbloco);
+		});
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_LEFT, (isSintetico)->{
+			Camera.getMain().setSize(Camera.getMain().getWidth()-GlobalVariables.intperbloco, Camera.getMain().getHeight());
+		});
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_RIGHT, (isSintetico)->{
+			Camera.getMain().setSize(Camera.getMain().getWidth()+GlobalVariables.intperbloco, Camera.getMain().getHeight());
+		});
+		GeradorEventos.botaopressionado.put(GLFW.GLFW_KEY_R, (isSintetico)->{
+			Camera.getMain().setSize(GlobalVariables.intperbloco*16, GlobalVariables.intperbloco*16);
 		});
 		
 		
@@ -123,33 +161,37 @@ public class CallbacksExternas implements ExternalCallback {
 				System.exit(1);
 			}
 		});
-		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_W,(nada)->{
+		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_W,(isSintetico)->{
 //			Entidade.player.remMover("up");
 
 			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.CIMA);
+			if(!((Boolean) isSintetico).booleanValue())
 			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_S))
-				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_S)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_S).run(null);
+				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_S)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_S).run(true);
 			//Se a pessoa apertar direções contrárias e soltar uma, essa linha lida com isso.
 		});
-		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_A,(nada)->{
+		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_A,(isSintetico)->{
 //			Entidade.player.remMover("left");
 			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.ESQUERDA);
+			if(!((Boolean) isSintetico).booleanValue())
 			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_D))
-				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_D)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_D).run(null);
+				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_D)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_D).run(true);
 
 		});
-		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_S,(nada)->{
+		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_S,(isSintetico)->{
 //			Entidade.player.remMover("down");
 			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.BAIXO);
+			if(!((Boolean) isSintetico).booleanValue())
 			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_W))
-				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_W)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_W).run(null);
+				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_W)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_W).run(true);
 
 		});
-		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_D,(nada)->{
+		GeradorEventos.botaoremovido.put(GLFW.GLFW_KEY_D,(isSintetico)->{
 //			Entidade.player.remMover("right");
 			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.DIREITA);
+			if(!((Boolean) isSintetico).booleanValue())
 			if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_A))
-				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_A)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_A).run(null);
+				if(GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_A)!=null)GeradorEventos.botaopressionado.get(GLFW.GLFW_KEY_A).run(true);
 
 		});
 		
@@ -194,6 +236,7 @@ public class CallbacksExternas implements ExternalCallback {
 		new TempoMarker(1000000000, (nada)-> {
 			System.out.println("TPS: "+GlobalVariables.TicksPorSegundo);
 			GlobalVariables.TicksPorSegundo=0;
+			System.out.println(GeradorEventos.tempopassado.size());
 		},null).ativar();;
 		
 		
@@ -204,10 +247,10 @@ public class CallbacksExternas implements ExternalCallback {
 				GLFW.glfwSetWindowShouldClose(window, true);
 			else if(action==GLFW.GLFW_PRESS) {
 				GlobalVariables.Keys.add(key);
-				if(GeradorEventos.botaopressionado.get(key)!=null)GeradorEventos.botaopressionado.get(key).run(null);
+				if(GeradorEventos.botaopressionado.get(key)!=null)GeradorEventos.botaopressionado.get(key).run(false);
 			}else if(action==GLFW.GLFW_RELEASE) {
 				GlobalVariables.Keys.remove(key);
-				if(GeradorEventos.botaoremovido.get(key)!=null)GeradorEventos.botaoremovido.get(key).run(null);
+				if(GeradorEventos.botaoremovido.get(key)!=null)GeradorEventos.botaoremovido.get(key).run(false);
 			}
 	}
 

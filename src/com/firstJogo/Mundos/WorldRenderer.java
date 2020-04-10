@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import org.joml.Matrix4f;
 
-import com.firstJogo.main.Janela;
+import com.firstJogo.estrutura.Camera;
+import com.firstJogo.estrutura.Janela;
 import com.firstJogo.utils.GlobalVariables;
-import com.firstJogo.visual.Camera;
 import com.firstJogo.visual.Shaders;
 
 public class WorldRenderer {
