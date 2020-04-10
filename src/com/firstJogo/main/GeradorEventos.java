@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.firstJogo.estrutura.Janela;
+import com.firstJogo.estrutura.KeyHandler;
 import com.firstJogo.utils.Funcao;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
@@ -28,8 +29,7 @@ public class GeradorEventos implements Runnable{
 		System.out.println("Iniciando Loop de eventos");
 		while(!principal.ShouldClose()) {//Enquanto não tiver mandado fechar a Janela, executa os eventos
 			//Ativando eventos de botão mantido:
-			for(int k:GlobalVariables.Keys)
-				if(botaomantido.containsKey(k))botaomantido.get(k).run(null);
+			KeyHandler.ativarMantidos();
 
 			//Ativando eventos de tempo:
 			for(TempoMarker marker:tempopassado) 

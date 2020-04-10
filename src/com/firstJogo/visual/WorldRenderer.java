@@ -1,13 +1,13 @@
-package com.firstJogo.Mundos;
+package com.firstJogo.visual;
 
 import java.util.ArrayList;
 
 import org.joml.Matrix4f;
 
+import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.Janela;
 import com.firstJogo.utils.GlobalVariables;
-import com.firstJogo.visual.Shaders;
 
 public class WorldRenderer {
 	public static WorldRenderer main;

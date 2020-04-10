@@ -2,14 +2,14 @@ package com.firstJogo.main;
 
 import org.lwjgl.opengl.GL11;
 
-import com.firstJogo.Mundos.AzRenderer;
-import com.firstJogo.Mundos.WorldRenderer;
 import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.Janela;
 import com.firstJogo.padrao.CallbacksExternas;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoAtual;
+import com.firstJogo.visual.AzRenderer;
 import com.firstJogo.visual.Shaders;
+import com.firstJogo.visual.WorldRenderer;
 
 public class Renderer implements Runnable{
 	public static Thread main;//Objeto-Trhead de renderização

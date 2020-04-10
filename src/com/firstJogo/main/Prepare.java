@@ -17,6 +17,7 @@ import org.apache.commons.io.IOUtils;
 import com.firstJogo.Mundos.Humano;
 import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.Janela;
+import com.firstJogo.estrutura.KeyHandler;
 import com.firstJogo.utils.ArquivosGerais;
 import com.firstJogo.utils.GlobalVariables;
 
@@ -129,7 +130,7 @@ public class Prepare implements Runnable{
 			if(!blocktypes.exists())tipospadrao(blocktypes);
 			blocktypes=null;
 			
-			
+			KeyHandler.inicializar();
 			
 		} catch (IOException e) {//Erro ao manipular os arquivos
 			System.out.println("ERRO COM OS ARQUIVOS!");

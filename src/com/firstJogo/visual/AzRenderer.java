@@ -1,4 +1,4 @@
-package com.firstJogo.Mundos;
+package com.firstJogo.visual;
 
 import java.util.HashMap;
 
@@ -6,10 +6,6 @@ import org.joml.Matrix4f;
 
 import com.firstJogo.estrutura.Camera;
 import com.firstJogo.utils.GlobalVariables;
-import com.firstJogo.visual.TipodeBloco;
-import com.firstJogo.visual.Modelo;
-import com.firstJogo.visual.Shaders;
-import com.firstJogo.visual.Textura;
 
 public class AzRenderer {
 //public static AzRenderer main;

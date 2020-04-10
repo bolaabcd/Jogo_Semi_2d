@@ -177,7 +177,7 @@ public class Humano extends Entidade{
 	public void setAngulo(double angulo) {
 		if(this.getAngulo()!=angulo) {
 			impulso.resetTemporegistrado();
-			if(this.isPlayer())PlayerRegras.resetMovModo(this);
+			if(this.isPlayer()&&this.movModo==modos.SPRINT)PlayerRegras.resetMovModo(this);
 		}
 		super.setAngulo(angulo);
 	}

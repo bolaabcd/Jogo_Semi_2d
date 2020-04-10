@@ -18,8 +18,6 @@ public class GlobalVariables {
 
 	public static boolean debugue = false;//Modo "debug" para fins de desenvolvimento e análise
 
-	public static CopyOnWriteArraySet<Integer> Keys = new CopyOnWriteArraySet<Integer>();//Chaves atualmente pressionadas
-
 	public static final short intperbloco = 32;//Constante de ints por bloco (cada +32 na câmera ou na posição de alguma entidade é +1 bloco).
 
 }

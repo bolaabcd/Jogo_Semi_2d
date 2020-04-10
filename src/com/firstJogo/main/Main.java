@@ -12,12 +12,12 @@ public class Main {
 		Thread rend=new Thread(new Renderer());
 		Thread ev=new Thread(new GeradorEventos());
 		
-		//Seta as principais Threads para comparações posteriores
+		//Salva a localização das principais Threads para comparações posteriores
 		GeradorEventos.main=ev;
 		Renderer.main=rend;
 		
 		//Ativa a Thread Preparatória, responsável por ler as configurações e preparar as variáveis.
-		//É executada antes de todas na Thread Inicial.
+		//É executada antes de todas junto com a Thread Inicial.
 		prep.start();
 		try {
 			prep.join();

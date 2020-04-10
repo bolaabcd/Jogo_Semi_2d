@@ -4,17 +4,13 @@ import org.lwjgl.glfw.GLFW;
 
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.Humano;
+import com.firstJogo.estrutura.KeyHandler;
 import com.firstJogo.regras.DirecoesPadrao;
-import com.firstJogo.utils.GlobalVariables;
 
 public class PlayerRegras {
 	private static DirecoesPadrao[] getMoveDirection(Entidade e) {
 		DirecoesPadrao[] res = new DirecoesPadrao[2];
 		double[] mods = e.getDirecModifiers();
-//		System.out.println(e.getAngulo()/Math.PI);
-//		System.out.println(mods[0]);
-//		System.out.println(mods[1]);
-//		System.out.println(e.getAngulo());
 		if (mods[0] > 0)
 			res[0] = DirecoesPadrao.DIREITA;
 		else if (mods[0] < 0)
@@ -28,19 +24,22 @@ public class PlayerRegras {
 		return res;
 	}
 	public static void resetMovModo(Humano e) {
-		if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();//Prioridade é correr, afinal ele tava sprintando.
-		else if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
-		else e.modo_andar();
+		Humano.modos modoAnterior=e.getMovModo();
+		if(modoAnterior==Humano.modos.SPRINT||modoAnterior==Humano.modos.CORRENDO)
+			if(KeyHandler.containsKey(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();
+			else if(KeyHandler.containsKey(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
+			else e.modo_andar();
+		else
+			if(KeyHandler.containsKey(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
+			else if(KeyHandler.containsKey(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();
+			else e.modo_andar();
 	}
-	public static void setMoveDirection(Entidade e, DirecoesPadrao dir) {
+	public static void newMoveDirection(Entidade e, DirecoesPadrao dir) {
 		DirecoesPadrao[] dirs = getMoveDirection(e);
 
 		DirecoesPadrao horizontal = dirs[0];
 		DirecoesPadrao vertical = dirs[1];
 		dirs = null;
-		
-//		System.out.println(horizontal);
-//		System.out.println(vertical);
 
 		if (dir == DirecoesPadrao.BAIXO) {
 			if (horizontal == DirecoesPadrao.ESQUERDA)
@@ -79,8 +78,6 @@ public class PlayerRegras {
 		DirecoesPadrao horizontal = dirs[0];
 		DirecoesPadrao vertical = dirs[1];
 		
-//		System.out.println(horizontal);
-//		System.out.println(vertical);
 		dirs = null;
 
 		if (dir == DirecoesPadrao.BAIXO) {
