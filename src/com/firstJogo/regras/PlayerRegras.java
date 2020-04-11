@@ -1,13 +1,15 @@
-package com.firstJogo.padrao;
+package com.firstJogo.regras;
 
 import org.lwjgl.glfw.GLFW;
 
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.Humano;
 import com.firstJogo.estrutura.KeyHandler;
-import com.firstJogo.regras.DirecoesPadrao;
 
+//TODO: Transformar em interface para flexibilizar para players de classes não humanas!
 public class PlayerRegras {
+	private boolean todomarker;
+
 	private static DirecoesPadrao[] getMoveDirection(Entidade e) {
 		DirecoesPadrao[] res = new DirecoesPadrao[2];
 		double[] mods = e.getDirecModifiers();

@@ -18,7 +18,7 @@ public class Shaders {
 	public Shaders(String arquivosemestencao) {
 		programa=GL20.glCreateProgram();
 		
-		//Arquivo termina com .vs
+		//Arquivo termina com .vs (ou .fs)
 		
 		vertex_shader=GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
 		GL20.glShaderSource(vertex_shader, ArquivosGerais.lertudo(arquivosemestencao+".vs"));
@@ -83,7 +83,7 @@ public class Shaders {
 		FloatBuffer buf=BufferUtils.createFloatBuffer(4*4);
 		valor.get(buf);
 		if(local!=-1) GL20.glUniformMatrix4fv(local, false, buf);
-		//Setar esse transpose de false pra true não mudou absolutamente nada...
+		//Setar esse transpose de false pra true mudou muitas coisas
 		else {
 			System.out.println("ERRO INESPERADO! 3");
 			System.err.println(GL20.glGetProgramInfoLog(programa));

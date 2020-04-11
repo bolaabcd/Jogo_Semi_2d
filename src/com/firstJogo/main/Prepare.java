@@ -23,18 +23,16 @@ import com.firstJogo.utils.GlobalVariables;
 
 //Thread responsável por preparar as variáveis iniciais do programa e ler as configurações.
 public class Prepare implements Runnable{
-	
-	
-	
 	//Conjunto de argumentos presentes nas configurações.
 	private static final Set<String> configs=new HashSet<String>(Arrays.asList(
 			"Pasta de imagens:",
-			"Formato das imagens:",//TODO: inutilizado
+			"Formato das imagens:",//Apenas para avisar que SOMENTE png é aceito.
 			"Pasta-mundi:",
 			"Cor de fundo (RGBA):",
-			"Mundos:",//TODO: inutilizado
+			"Mundos:",//TODO: futuro próximo
 			"Pasta de plugins:",
-			"Plugins:"//TODO: inutilizado
+			"Plugins:",//TODO: futuro pouco mais distante
+			"FPS Maximo:"
 			));
 	
 	
@@ -155,6 +153,7 @@ public class Prepare implements Runnable{
 		args.put("Mundos:",new String[] {"Default"});//Lista de mundos padrão
 		args.put("Pasta de plugins:", new String[] {"./plugins/"});//Pasta de plugins padrão (INUTILIZADO)
 		args.put("Plugins:", new String[] {"Default"});//Lista de plugins padrão (INUTILIZADO)
+		args.put("FPS Maximo:", new String[] {"120"});//FPS Máximo Padrão
 		
 		ArquivosGerais.setArgs(config, args);//Escrevendo argumentos-padrão no arquivo de configurações.
 		
@@ -206,7 +205,14 @@ public class Prepare implements Runnable{
 		if(argatual==null)erroconfig(new IllegalStateException("Argumento 'Cor de fundo (RGBA):' indisponível!"));
 		if(argatual.length!=4)erroconfig(new IllegalArgumentException("RGBA são 4 valores entre 0 e 255! (erro no argumento 'Cor de fundo (RGBA)')"));
 		for(String arg:argatual)
-			if(Integer.valueOf(arg)<0)erroconfig(new IllegalArgumentException("Valor de cor RGBA inválido! (erro no argumento 'Cor de fundo (RGBA)')"));
+			if(Integer.valueOf(arg)<0||Integer.valueOf(arg)>255)erroconfig(new IllegalArgumentException("Valor de cor RGBA inválido! (erro no argumento 'Cor de fundo (RGBA)')"));
+		
+		//Verificando FPS Máximo:
+		argatual=args.get("FPS Maximo:");
+		if(argatual==null)erroconfig(new IllegalStateException("Argumento 'FPS Maximo:' indisponível!"));
+		if(argatual.length!=1)erroconfig(new IllegalArgumentException("FPS máximo é apenas 1 valor numérico! (erro no argumento 'FPS Maximo')"));
+		if(Integer.valueOf(argatual[0])<0)erroconfig(new IllegalArgumentException("Valor de FPS inválido! (erro no argumento 'FPS Maximo')"));
+		if(Integer.valueOf(argatual[0])>60)System.out.println("AVISO: Valores de FPS são limitados pela capacidade do seu monitor. Mesmo que coloque 5 000 FPS, se seu monitor não for capaz de apresentar tamanha quantidade de Frames Por Segundo, o jogo não atingirá esse valor de FPS.");
 		
 		//Verificando existência dos Mundos
 		argatual=args.get("Mundos:");
@@ -240,6 +246,7 @@ public class Prepare implements Runnable{
 				Integer.valueOf(cores[2])/255,//BLUE
 				Integer.valueOf(cores[3])/255//ALPHA
 				};
+		Janela.setFPS(Integer.valueOf(args.get("FPS Maximo:")[0]));
 		GlobalVariables.mundos=args.get("Mundos:");//Setando mundos
 		GlobalVariables.plugins=args.get("Plugins:");//Setando plugins
 	}

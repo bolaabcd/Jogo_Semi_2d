@@ -4,6 +4,8 @@ Pasta-mundi:
 ./mundos/
 Plugins:
 Default
+FPS Maximo:
+120
 Mundos:
 Default
 Pasta de imagens:

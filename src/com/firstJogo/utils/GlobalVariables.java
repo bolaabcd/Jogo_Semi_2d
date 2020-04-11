@@ -1,7 +1,5 @@
 package com.firstJogo.utils;
 
-import java.util.concurrent.CopyOnWriteArraySet;
-
 //Variáveis globais a serem acessadas por qualquer classe de qualquer lugar.
 public class GlobalVariables {
 	public static String imagem_path = "./imgs/";//Pasta de imagens

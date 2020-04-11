@@ -25,7 +25,6 @@ public Textura(String fileNome) {
 		if(GlobalVariables.debugue==true)System.out.println("ALTURA DA TEXTURA:");
 		if(GlobalVariables.debugue==true)System.out.println(height);
 		int[] prgba=new int[width*height*4];
-//		System.out.println(prgba.length);
 		prgba=bi.getRGB(0, 0, width, height, null, 0, width);
 		ByteBuffer pixels=BufferUtils.createByteBuffer(width*height*4);
 		if(GlobalVariables.debugue==true)System.out.println();
@@ -80,27 +79,21 @@ public Textura(String fileNome) {
 				GL13.glTexParameterf(GL13.GL_TEXTURE_2D, GL13.GL_TEXTURE_MAG_FILTER,GL13.GL_NEAREST );
 				
 				
-//				GL13.glTexParameterf(GL13.GL_TEXTURE_2D, GL13.wrap, param);
-				
 /*
  *Aparentemente é a mesma coisa do "MIN", só que pra quando a
  *imagem tiver que ser ampliada, "magnificação". 
  */
-//				GL13.glTexParameteri(GL13.GL_TEXTURE_2D, GL13.GL_TEXTURE_WRAP_R,GL13.GL_REPEAT);
-//				GL13.glTexParameteri(GL13.GL_TEXTURE_2D, GL13.GL_TEXTURE_WRAP_S,GL13.GL_REPEAT);
-//				GL13.glTexParameteri(GL13.GL_TEXTURE_2D, GL13.GL_TEXTURE_WRAP_T,GL13.GL_REPEAT);
-//				//TESTE DA CONFIGURAÇÃO ACIMA!
 				
 				GL13.glTexParameteri(GL13.GL_TEXTURE_2D, GL13.GL_TEXTURE_WRAP_R,GL13.GL_CLAMP_TO_EDGE);
 				GL13.glTexParameteri(GL13.GL_TEXTURE_2D, GL13.GL_TEXTURE_WRAP_S,GL13.GL_CLAMP_TO_EDGE);
 				GL13.glTexParameteri(GL13.GL_TEXTURE_2D, GL13.GL_TEXTURE_WRAP_T,GL13.GL_CLAMP_TO_EDGE);
-//				//TESTE DA CONFIGURAÇÃO ACIMA!
+//Acima seta-se o modo de não repetência das texturas caso elas sejam colocadas em áreas maiores que o que podem ocupar. Facilita visualizar alguns erros.
 				
 				GL13.glTexImage2D(GL13.GL_TEXTURE_2D, 0, GL13.GL_RGBA, width, height, 0,  GL13.GL_RGBA, GL13.GL_UNSIGNED_BYTE, pixels);
 
 /*
  * Mudar "level" (o primeiro 0) pra outro valor faz sumir...
- * Tentar mudar "border" (o segundo 0) faz ela desaparecer em valores fora de 0 e 1, e 1 tira um pixel da borda ¯\_(ツ)_/¯
+ * Tentar mudar "border" (o segundo 0) faz a textura desaparecer em valores fora de 0 e 1, e 1 tira um pixel da borda ¯\_(ツ)_/¯
  * Só o 1 valor de formato (RGBA,RGB e etc) é escolhível.
  * Se trocar de Unsigned_Byte pra Byte as cores trocam todas
  */
@@ -121,7 +114,6 @@ public Textura(String fileNome,int filtromin,int filtromag) {
 		ByteBuffer pixels=BufferUtils.createByteBuffer(width*height*4);
 		for(int c=0;c<width;c++) {
 			for(int a=0;a<height;a++) {
-				//System.out.println((prgba[c*width+a]&0x0000FF00)>>8);
 				//RED,GREEN,BLUE,ALPHA!
 				pixels.put((byte) ((prgba[c*width+a]&0x00FF0000)>>16));
 				pixels.put((byte) ((prgba[c*width+a]&0x0000FF00)>>8));
@@ -168,10 +160,6 @@ public Textura(String fileNome,int filtromin,int filtromag) {
 	}
 	public Modelo genModelo() {
 		return new Modelo(new float[] {
-//                -0.5f,-0.5f,0,//índice 0
-//                0.5f, 0.5f,0,//índice 1
-//                0.5f,-0.5f,0,//índice 2
-//                -0.5f, 0.5f,0,//índice 3
 				0,0,0,//índice 0
                 1,1,0,//índice 1
                 1,0,0,//índice 2
@@ -198,8 +186,6 @@ public Textura(String fileNome,int filtromin,int filtromag) {
 
 	public void setId(int id) {
 		this.id = id;
-//		GlobalVariables.contador+=1;
-//		System.out.println(GlobalVariables.contador);
 	}
 
 }

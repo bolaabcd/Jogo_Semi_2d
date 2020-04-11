@@ -4,9 +4,8 @@ import org.lwjgl.opengl.GL11;
 
 import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.Janela;
-import com.firstJogo.padrao.CallbacksExternas;
+import com.firstJogo.regras.CallbacksGerais;
 import com.firstJogo.utils.GlobalVariables;
-import com.firstJogo.utils.TempoAtual;
 import com.firstJogo.visual.AzRenderer;
 import com.firstJogo.visual.Shaders;
 import com.firstJogo.visual.WorldRenderer;
@@ -21,7 +20,8 @@ public class Renderer implements Runnable{
 		Prepare.prepararJanela();//Prepara a Janela (PRECISA ser feito aqui porque o WINDOWS não deixa mexer com Janelas criadas em outras Threads).
 		Prepare.prepararPlayer();//Prepara a entidade do player
 		Prepare.prepararCamera();//Prepara a câmera principal do player, já avisando que ela está pronta.
-		CallbacksExternas.prepararBotoes();//Prepara as callbacks de botões
+		CallbacksGerais.prepararBotoes();//Prepara as callbacks de botões
+		CallbacksGerais.prepararTempos();//Prepara as callbacks de tempo
 		
 		principal=Janela.getPrincipal();
 		principal.contextualize();//Contextualiza a Janela nessa Thread
@@ -48,7 +48,7 @@ public class Renderer implements Runnable{
 		principal.show();//Apresenta a Janela principal
 		
 		
-		long begtime=TempoAtual.getsec();//Seta o tempo do segundo atual
+		long begtime=System.nanoTime() / (long) 1000000000;//Seta o tempo do segundo atual
 		int amt=0;//Seta a quantidade de Frames Renderizados para 0
 		long begnano=System.nanoTime();//Seta o Tempo da checagem anterior de FPS
 		
@@ -56,22 +56,22 @@ public class Renderer implements Runnable{
 		
 		while(!principal.ShouldClose() ) {//Continua até a janela receber a ordem de ser fechada.
 			
-			if (begtime == TempoAtual.getsec()) {// Se estiver no mesmo segundo de antes
+			if (begtime == System.nanoTime() / (long) 1000000000) {// Se estiver no mesmo segundo de antes
 				try {
 					long temp = System.nanoTime();// Carrega o tempo atual
 
 					// Se tiver passado menos milisegundos (desde a última checagem) que o previsto pelos FPS
-					if ((1000 / principal.getFPS() - (temp - begnano) / (long) 1000000) >= 0)
+					if ((1000 / Janela.getFPS() - (temp - begnano) / (long) 1000000) >= 0)
 						// Dormir a Thread pelo número de milisegundos adequados entre-loops (1/FPS segundos)
-						Thread.sleep(1000 / principal.getFPS() - (temp - begnano) / (long) 1000000);
+						Thread.sleep(1000 / Janela.getFPS() - (temp - begnano) / (long) 1000000);
 					begnano = System.nanoTime();// Atualizar tempo da checagem anterior
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				if (amt == principal.getFPS())
+				if (amt == Janela.getFPS())
 					continue;//Se já tiver batido o limite desejado de FPS, continuar
 			}else {//Se tiver passado um segundo inteiro
-				begtime=TempoAtual.getsec();//Resetar tempo do segundo inicial
+				begtime=System.nanoTime() / (long) 1000000000;//Resetar tempo do segundo inicial
 				System.out.println("FPS: "+Integer.toString(amt));//Imprime a quantidade de frames do segundo
 				amt=0;//reseta a quantidade de frames
 				//Vai renderizar mais um frame.

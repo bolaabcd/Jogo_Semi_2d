@@ -1,7 +1,5 @@
 package com.firstJogo.estrutura;
 
-import java.awt.Frame;
-import java.awt.Toolkit;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
@@ -14,7 +12,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
-import com.firstJogo.padrao.CallbacksExternas;
+import com.firstJogo.regras.CallbacksGerais;
 import com.firstJogo.regras.ExternalCallback;
 import com.firstJogo.utils.GlobalVariables;
 
@@ -22,14 +20,12 @@ import com.firstJogo.utils.GlobalVariables;
 public class Janela {
 	private static Object principalready = new Object();//Objeto-chave pra avisar quando a Janela está pronta.
 	private static Janela principal;//Objeto da Janela do Jogo
-	private static int screen_width;//Comprimento da Tela TODO: inutilizado
-	private static int screen_height;//Altura da Tela TODO: inutilizado
 	
 	private long id;//Identificador da janela no GLFW
 	private int width = 480, height = 480;//Tamanho padrão da ViewPort e da Janela
 	private long fullscr = 0;//Se a janela está ou não em tela cheia
 	private ArrayList<ExternalCallback> callbacks = new ArrayList<ExternalCallback>();//Callbacks brutas de botões
-	private int FPS = 60;//Quantidade padrão de FPS TODO: inutilizado
+	private static int FPS;//Quantidade padrão de FPS 
 
 	//Obtendo comprimento atual da ViewPort da Janela
 	public int getWidth() {
@@ -39,10 +35,6 @@ public class Janela {
 	//Obtendo altura atual da ViewPort da Janela
 	public int getHeight() {
 		return height;
-	}
-	//Obter Frames Por Segundo padrão da Janela
-	public int getFPS() {
-		return FPS;
 	}
 	//Obtendo se a Janela está ou não em tela cheia.
 	public boolean getFullscr() {
@@ -64,14 +56,11 @@ public class Janela {
 			GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
 		//Criar Janela e associar ao um ID
 		id = GLFW.glfwCreateWindow(width, height, titulo, 0, 0);
-		//Setar tamanho da tela
-		Janela.getScreen_width();
-		Janela.getScreen_height();
-		//Aviso de erro ao criar Janela
+		
 		if (id == 0)
 			throw new IllegalStateException("Failed to create the GLFW window");
 		//Adicionando Callbacks Externas padrão
-		callbacks.add(new CallbacksExternas());
+		callbacks.add(new CallbacksGerais());
 		//Setando callbacks da Janela a partir da lista
 		setWindowCallbacks();
 		//Setando contexto GLFW pra Janela
@@ -115,10 +104,6 @@ public class Janela {
 	//Troca os buffers de preparação da tela pelos da tela, efetivamente fazendo o frame aparecer.
 	public void apresente() {
 		GLFW.glfwSwapBuffers(id);
-	}
-	//Setar FPS padrão da Janela
-	public void setFPS(int fPS) {
-		FPS = fPS;
 	}
 	//Ativa as callbacks da Janela
 	public void setWindowCallbacks() {
@@ -208,6 +193,14 @@ public class Janela {
 			principalready.notify();
 		}
 	}
+	//Setar FPS padrão da Janela
+	public static void setFPS(int fPS) {
+		FPS = fPS;
+	}
+	//Obter Frames Por Segundo padrão do jogo
+	public static int getFPS() {
+		return FPS;
+	}
 	//Obter Janela Principal, aguardando se ela ainda não existir
 	public static Janela getPrincipal() {
 		while (Janela.principal == null)//Enquanto não existir Janela principal
@@ -220,18 +213,6 @@ public class Janela {
 				}
 			}
 		return Janela.principal;
-	}
-	//Obter comprimento da Tela
-	public static int getScreen_width() {
-		screen_width = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).width()
-				- (int) Toolkit.getDefaultToolkit().getScreenInsets((new Frame()).getGraphicsConfiguration()).left;
-		return screen_width;
-	}
-	//Obter altura da Janela
-	public static int getScreen_height() {
-		screen_height = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor()).height()
-				- (int) Toolkit.getDefaultToolkit().getScreenInsets((new Frame()).getGraphicsConfiguration()).top;
-		return screen_height;
 	}
 
 }

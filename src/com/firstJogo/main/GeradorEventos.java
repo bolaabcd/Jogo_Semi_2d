@@ -13,8 +13,6 @@ public class GeradorEventos implements Runnable{
 	public static Thread main;//Objeto da Thread de eventos
 	//Callbacks dos botões mantidos,pressionados ou removidos, de acordo com o ID de cada botão (Integer).
 	public static HashMap<Integer,Funcao<?>> botaomantido=new HashMap<Integer,Funcao<?>>();
-	public static HashMap<Integer,Funcao<Boolean>> botaoremovido=new HashMap<Integer,Funcao<Boolean>>();
-	public static HashMap<Integer,Funcao<Boolean>> botaopressionado=new HashMap<Integer,Funcao<Boolean>>();
 	
 	//CopyOnWrite porque as modificações podem vir de outras Threads.
 	public static CopyOnWriteArrayList<TempoMarker> tempopassado=new  CopyOnWriteArrayList<TempoMarker>();//Cbacks de tempo
@@ -28,12 +26,14 @@ public class GeradorEventos implements Runnable{
 		
 		System.out.println("Iniciando Loop de eventos");
 		while(!principal.ShouldClose()) {//Enquanto não tiver mandado fechar a Janela, executa os eventos
+			
 			//Ativando eventos de botão mantido:
 			KeyHandler.ativarMantidos();
 
 			//Ativando eventos de tempo:
 			for(TempoMarker marker:tempopassado) 
-				marker.checkTempo();//Confere se passou o tempo mínimo e,  se sim, xecuta a função adequada com o argumento adequado.
+				marker.checkTempo();
+			//Confere se passou o tempo mínimo e,  se sim, executa a função adequada com o argumento adequado.
 			
 			GlobalVariables.TicksPorSegundo+=1;//Marca quantos Loops se passaram por segundo
 		}

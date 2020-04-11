@@ -26,7 +26,7 @@ public class Modelo {
  * Estático geralmente é usado quando não vai ficar alterando, e dinâmico quando vai
  * mudar o valor enquanto o negócio roda. Aparentemente dá pra setar se vai modificar
  * diretamente na variável ou se vai modificar a partir do GL ???? Tendi mt bem n.
- * TODOFEITO ver oq acontece se mudar esse DRAW pra READ ou COPY.//Nada mudou
+ * Pergunta: ver oq acontece se mudar esse DRAW pra READ ou COPY.//Nada mudou
  */
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);//Unbinding
 		
@@ -43,7 +43,6 @@ public class Modelo {
 		GL20.glEnableVertexAttribArray(1);//Aparentemente os valores da textura foram bindados aqui!
 		
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, id_vertices);
-		//GL15.glVertexPointer(3, GL15.GL_FLOAT, 0, 0);
 		GL20.glVertexAttribPointer(0, 3, GL20.GL_FLOAT, false, 0, 0);
 		//Local 0, tamanho 3(XYZ), tipo float, normalizar false, passo/stride 0,
 		//pointer 0

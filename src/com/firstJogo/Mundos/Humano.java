@@ -1,7 +1,7 @@
 package com.firstJogo.Mundos;
 
-import com.firstJogo.padrao.PlayerRegras;
 import com.firstJogo.regras.DirecoesPadrao;
+import com.firstJogo.regras.PlayerRegras;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.Textura;
@@ -12,6 +12,7 @@ public class Humano extends Entidade{
 	private modos movModo;
 	private int milisImpulso;
 	private float sprintModifier;
+	private TexturaAnimador animado;
 	
 	private final static long mediandando=450000000;
 	private final static Textura[][] udlrTextura=new Textura[][] {
@@ -89,16 +90,6 @@ public class Humano extends Entidade{
 		}
 	};
 	
-	private TexturaAnimador animado;
-//	private final TexturaAnimador movendo=new TexturaAnimador(
-//			new long[] {aacsTempo[1],aacsTempo[1],aacsTempo[1]},
-//			new Textura[] {
-//					udlrTextura[0][0],
-//					udlrTextura[0][1],
-//					udlrTextura[0][2]
-//					},
-//			this.getTextura()
-//			);
 	
 	private TempoMarker impulso;//Pode alterar os milisImpulso, então pode alterar o TempoMarker!
 	
@@ -109,18 +100,14 @@ public class Humano extends Entidade{
 		SPRINT
 	}
 	public Humano() {
-//		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato));
 		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato));
-//		this.velocModifier=0.6f;
 		this.veloc=5;
 		milisImpulso=2000;
 		movModo=modos.ANDANDO;
-		sprintModifier=2.4f;//Seria 1.2 (quando tiver a animação!)
+		sprintModifier=2.4f;//TODO:Seria 1.2 (quando não tiver com a fome completa!)
 		impulso=new TempoMarker(milisImpulso*1000000,(pessoa)->{
 			((Humano) pessoa).setMovModo(modos.SPRINT);
 		},this);
-//		animado=new TexturaAnimador(aacsTempo[3],udlrTextura[0],this.getTextura());
-//		animado.ativar();
 		
 	}
 	
@@ -136,12 +123,6 @@ public class Humano extends Entidade{
 		setMovModo(Humano.modos.ANDANDO);
 	}
 	
-//	public void resetMovModo() {
-//		if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_CONTROL))setMovModo(modos.CORRENDO);//Prioridade é correr, afinal ele tava sprintando.
-//		else if(GlobalVariables.Keys.contains(GLFW.GLFW_KEY_LEFT_SHIFT)) setMovModo(modos.AGACHADO);
-//		else setMovModo(Humano.modos.ANDANDO);
-//	}
-	
 	public modos getMovModo() {
 		return movModo;
 	}
@@ -152,24 +133,19 @@ public class Humano extends Entidade{
 				a.desativar();
 	}
 	@Override
-	public float getVelocModifier() {
-		return velocModifier*getModVelocModifier();
+	public float getVelocModified() {
+		return super.getVelocModified()*getModVelocModifier();
 	}
 	@Override
-	public void iniciarMovimento(float velocmodifier) {
-		super.iniciarMovimento(velocmodifier);
-//		if(movModo==modos.CORRENDO)impulso.ativar();
+	public void iniciarMovimento() {
+		super.iniciarMovimento();
 		updateAnimacao();
 	}
 	@Override
 	public void pararMovimento() {
 		super.pararMovimento();
 		impulso.desativar();
-//		System.out.println("OI");
-//		GlobalVariables.contador=1;
-//		if(animado!=null)
 		animado.desativar();
-//		GlobalVariables.contador=0;
 
 		if(this.isPlayer())PlayerRegras.resetMovModo(this);;
 	}
@@ -185,9 +161,6 @@ public class Humano extends Entidade{
 	public void setOlhar(DirecoesPadrao olhar) {
 		super.setOlhar(olhar);
 		updateAnimacao();
-		
-//		System.out.println("OI\n");
-//		if(olhar!=this.getOlhar()||this.getVelocModifier()==0)updateAnimacao();
 	}
 	
 	
@@ -217,27 +190,16 @@ public class Humano extends Entidade{
 			}
 		movModo=modo;
 		
-		if(velocModifier!=0&&!mesmomodo) 
+		if(!isParado&&!mesmomodo) 
 			updateAnimacao();
-//		if(modo.equals(modos.CORRENDO))this.velocModifier=1f;
-//		else if(modo.equals(modos.ANDANDO))this.velocModifier=0.6f;
-//		else if(modo.equals(modos.AGACHADO))this.velocModifier=0.2f;
-//		else if(modo.equals(modos.SPRINT))this.velocModifier=1.2f;
 	}
 	private void updateAnimacao() {
-//		System.out.println("OI\n");
-		
 		if(animado!=null)if(animado.isAtivado())pararAnimacoes();
-		
-//		System.out.println(movModo);
-//		System.out.println(getOlhar());
-//		System.out.println("OI");
-//		System.out.println();
+
 		switch(movModo) {
 		case AGACHADO:
 			switch(this.getOlhar()) {
 			case CIMA:
-//				animado=new TexturaAnimador(aacsTempo[0],udlrTextura[0],this.getTextura());
 				animado=animadosaacsDirec[0][0];
 				animado.ativar();
 				break;
@@ -258,7 +220,6 @@ public class Humano extends Entidade{
 			switch(this.getOlhar()) {
 			case CIMA:
 				animado=animadosaacsDirec[1][0];
-//				System.out.println(udlrTextura[0][0].getId());
 				animado.ativar();
 				break;
 			case BAIXO:
