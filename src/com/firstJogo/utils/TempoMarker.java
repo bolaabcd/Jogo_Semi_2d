@@ -4,28 +4,14 @@ import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.utils.Funcao;
 
 public class TempoMarker {//Guarda a função e o objeto-argumento da função pra quando o tempo passar.
-	private final Object argumento;
-	private final Funcao<Object> funcao;
+	private final FuncaoHandler fhand;
 	
 	private long tempolimite;
 	private long temporegistrado;
 	
-	public boolean desativar=false;;
-	
 	public TempoMarker(long tempolimite,Funcao<Object> funcao,Object endereco_argumento) {//Nulo indica o prório objeto
 		this.tempolimite=tempolimite;
-		this.funcao=funcao;
-		if(endereco_argumento==null)this.argumento=this;
-		else if(endereco_argumento instanceof Object[]) {
-			Object[] e=(Object[])endereco_argumento;
-			
-			for(int i= 1;i<(int)e[0];i++)
-				if(e[i]==null)
-					e[i]=this;//Acho que ia dar errado enhanced for pq ia alterar o endereço do elemento sob o scope do for apenas!
-			
-			this.argumento=endereco_argumento;
-		}
-		else this.argumento=endereco_argumento;
+		fhand=new FuncaoHandler(funcao,endereco_argumento,this);
 	}
 	
 	public void ativar() {
@@ -47,9 +33,8 @@ public class TempoMarker {//Guarda a função e o objeto-argumento da função p
 		temporegistrado=System.nanoTime();
 	}
 	public void checkTempo() {
-		if(desativar)return;
 		if(passouTempolimite()) {
-			funcao.run(argumento);
+			fhand.run();
 			this.resetTemporegistrado();
 		}
 	}

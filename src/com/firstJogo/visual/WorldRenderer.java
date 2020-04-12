@@ -84,7 +84,7 @@ public class WorldRenderer {
 			mat.mul(pos);
 		}else {
 			float[] rendpos=getRendPos(ent);
-			if(rendpos[0]>19||rendpos[0]<-1||rendpos[1]>19||rendpos[1]<-1)return;
+//			if(!GlobalVariables.debugue&&(rendpos[0]>19||rendpos[0]<-1||rendpos[1]>19||rendpos[1]<-1))return;
 			//Nem renderiza se tiver fora do mapa!
 			Matrix4f pos=new Matrix4f().translate(2*rendpos[0],2*rendpos[1],0);//O modelo tem a origem no centro, e ele escala pros dois lados!
 			cam.getProjec().mul(mundo, mat);
@@ -101,11 +101,11 @@ public class WorldRenderer {
 	}
 	
 	private float[] getRendPos(Entidade ent) {
-		long[] mundopos=ent.getMundopos();
+		float[] mundopos=ent.getMundopos();
 //		long[] mundopos=new long[] {0,0};
 		return new float[] {
-				8.5f+(float)(mundopos[0])/GlobalVariables.intperbloco,
-				8.5f+(float)(mundopos[1])/GlobalVariables.intperbloco
+				8.5f+(mundopos[0])/GlobalVariables.intperbloco,
+				8.5f+(mundopos[1])/GlobalVariables.intperbloco
 		};
 
 	}

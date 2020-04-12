@@ -45,7 +45,7 @@ public class Prepare implements Runnable{
 	public static void prepararPlayer() {
 		Humano player=new Humano();
 		player.setPlayer(true);
-		player.setMundopos(new long[] {0,0});
+		player.setMundopos(new float[] {0,0});
 	}
 	//OUTRA THREAD: Define a Janela do jogo:
 	public static void prepararJanela() {

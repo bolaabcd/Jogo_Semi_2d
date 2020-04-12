@@ -17,27 +17,23 @@ public class Entidade {
 		Object[] ob=(Object[]) objetotal;
 		TempoMarker marcador=(TempoMarker) ob[1];
 		Entidade ent=(Entidade)ob[2];
-		if((Long)ob[3]==0)
-			ob[3]=(Long)marcador.getTemporegistrado();//Tentei castar ob[3] para Long, mas ele não aceitou
-		long movx=(long) Math.round(ent.getDirecModifiers()[0]*ent.getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-(Long)ob[3])/1000000000);
-		long movy=(long) Math.round(ent.getDirecModifiers()[1]*ent.getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-(Long)ob[3])/1000000000);
+
+		float movx=(float) (ent.getDirecModifiers()[0]*ent.getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
+		float movy=(float) (ent.getDirecModifiers()[1]*ent.getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
+
+		ent.setMundopos(new float[] { 
+				ent.getMundopos()[0] + movx, 
+				ent.getMundopos()[1] + movy 
+				});
 		
-		if (Math.abs(movx) > 1 || Math.abs(movy) > 1) {
-			this.setMundopos(new long[] {
-					ent.getMundopos()[0] + movx, 
-					ent.getMundopos()[1] + movy 
-			});
-			ob[3] = 0L;
-			
-		}
-	},new Object[] {3,null,this,new Long(0)});
+	},new Object[] {2,null,this});
 	
 	private boolean isPlayer;
 	private Textura visual;
 	private Modelo modelo;
 	private DirecoesPadrao olharDir=DirecoesPadrao.CIMA;
 	private double angulo=1200;
-	private long[] mundopos;//Em ints de bloco! (32/bloco no padrão)
+	private float[] mundopos;//Em ints de bloco! (32/bloco no padrão)
 	private int[] hitboxPos;
 	
 	protected Set<Float> velocModifiers=new HashSet<Float>();
@@ -51,15 +47,17 @@ public class Entidade {
 		hitboxPos=modelo.getVertices();
 	}
 	
-	public void pararMovimento() {
-		if(isParado)return;
+	public boolean pararMovimento() {//True se foi, False se não.
+		if(isParado)return false;
 		isParado=true;
 		if(!this.isPlayer())mover.desativar();
+		return true;
 	}
-	public void iniciarMovimento() {
-		if(!isParado)return;
+	public boolean iniciarMovimento() {
+		if(!isParado)return false;
 		isParado=false;
 		if(!this.isPlayer())mover.ativar();
+		return true;
 	}
 	
 	public DirecoesPadrao getOlhar() {
@@ -70,14 +68,18 @@ public class Entidade {
 		
 	}
 	
-	public void setAngulo(double angulo) {
-		if(this.angulo==angulo)return;
+	public boolean setAngulo(double angulo) {
+		if(Math.abs(this.angulo-Math.round(angulo*180/Math.PI)*Math.PI/180)*180/Math.PI<=1)return false;
+		
+//		if(!this.isPlayer)System.out.println(Math.round((this.angulo-angulo)*180/Math.PI));
+		
 		if(angulo<Math.PI/4&&angulo>-Math.PI/4)this.setOlhar(DirecoesPadrao.DIREITA);
 		else if(angulo>3*Math.PI/4||angulo<-3*Math.PI/4)this.setOlhar(DirecoesPadrao.ESQUERDA);
 		else if(angulo>=Math.PI/4&&angulo<=3*Math.PI/4)this.setOlhar(DirecoesPadrao.CIMA);
 		else if(angulo<=-Math.PI/4&&angulo>=-3*Math.PI/4)this.setOlhar(DirecoesPadrao.BAIXO);
 		else System.out.println("ERRADO");
-		this.angulo=angulo;
+		this.angulo=Math.round(angulo*180/Math.PI)*Math.PI/180;
+		return true;
 	}
 	
 	public double getAngulo() {
@@ -145,14 +147,14 @@ public class Entidade {
 		return player;
 	}
 
-	public long[] getMundopos() {
+	public float[] getMundopos() {
 		return mundopos;
 	}
 
-	public void setMundopos(long[] mundopos) {
+	public void setMundopos(float[] mundopos) {
 		this.mundopos = mundopos;
-		if(!this.isPlayer)System.out.println("MundoPlayerPos x: "+this.getMundopos()[0]);
-		if(!this.isPlayer)System.out.println("MundoPlayerPos y: "+this.getMundopos()[1]);
+		if(GlobalVariables.debugue&&!this.isPlayer)System.out.println("MundoPlayerPos x: "+this.getMundopos()[0]);
+		if(GlobalVariables.debugue&&!this.isPlayer)System.out.println("MundoPlayerPos y: "+this.getMundopos()[1]);
 	}
 
 	public int[] getHitboxPos() {

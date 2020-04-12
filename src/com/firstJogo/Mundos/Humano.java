@@ -10,7 +10,7 @@ import com.firstJogo.visual.TexturaAnimador;
 
 public class Humano extends Entidade{
 	private modos movModo;
-	private int milisImpulso;
+	private long milisImpulso;
 	private float sprintModifier;
 	private TexturaAnimador animado;
 	
@@ -102,7 +102,7 @@ public class Humano extends Entidade{
 	public Humano() {
 		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato));
 		this.veloc=5;
-		milisImpulso=2000;
+		milisImpulso=2000;//2000
 		movModo=modos.ANDANDO;
 		sprintModifier=2.4f;//TODO:Seria 1.2 (quando não tiver com a fome completa!)
 		impulso=new TempoMarker(milisImpulso*1000000,(pessoa)->{
@@ -137,25 +137,38 @@ public class Humano extends Entidade{
 		return super.getVelocModified()*getModVelocModifier();
 	}
 	@Override
-	public void iniciarMovimento() {
-		super.iniciarMovimento();
-		updateAnimacao();
-	}
-	@Override
-	public void pararMovimento() {
-		super.pararMovimento();
-		impulso.desativar();
-		animado.desativar();
-
-		if(this.isPlayer())PlayerRegras.resetMovModo(this);;
-	}
-	@Override
-	public void setAngulo(double angulo) {
-		if(this.getAngulo()!=angulo) {
-			impulso.resetTemporegistrado();
-			if(this.isPlayer()&&this.movModo==modos.SPRINT)PlayerRegras.resetMovModo(this);
+	public boolean iniciarMovimento() {
+		if(super.iniciarMovimento()) {
+			updateAnimacao();
+			return true;
 		}
-		super.setAngulo(angulo);
+		return false;
+	}
+	@Override
+	public boolean pararMovimento() {
+		if(super.pararMovimento()) {
+			impulso.desativar();
+			animado.desativar();
+
+			if(this.isPlayer())PlayerRegras.resetMovModo(this);
+			
+			return true;
+		}
+		return false;
+	}
+	@Override
+	public boolean setAngulo(double angulo) {
+		if(super.setAngulo(angulo)) {
+			impulso.resetTemporegistrado();
+			if(this.movModo==modos.SPRINT) {
+				if(this.isPlayer())
+					PlayerRegras.resetMovModo(this);
+				else
+					this.modo_correr();
+			}
+			return true;
+		}
+		return false;
 	}
 	@Override
 	public void setOlhar(DirecoesPadrao olhar) {
@@ -185,7 +198,7 @@ public class Humano extends Entidade{
 		boolean mesmomodo=movModo==modo;
 		
 		if(modo==modos.CORRENDO)impulso.ativar();
-		else {
+		else if(modo!=modos.SPRINT){
 			impulso.desativar();
 			}
 		movModo=modo;

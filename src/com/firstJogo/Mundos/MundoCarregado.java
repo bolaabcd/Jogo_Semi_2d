@@ -16,12 +16,12 @@ public class MundoCarregado {
 	
 	public MundoCarregado() {
 		mundos.add(this);
-		long[] playerPos= Entidade.getPlayer().getMundopos();
-		long chunkLoaderX=Math.round((playerPos[0]/GlobalVariables.intperbloco)/16);
-		long chunkLoaderY=Math.round((playerPos[1]/GlobalVariables.intperbloco)/16);
+		float[] playerPos= Entidade.getPlayer().getMundopos();
+		float chunkLoaderX=(playerPos[0]/GlobalVariables.intperbloco)/16;
+		float chunkLoaderY=(playerPos[1]/GlobalVariables.intperbloco)/16;
 		for(int x=0;x<3;x++)
 			for(int y=0;y<3;y++)
-				blocos[x][y]=this.loadChunkBlocos(new long[] {chunkLoaderX+x-1,chunkLoaderY+y-1});
+				blocos[x][y]=this.loadChunkBlocos(new float[] {chunkLoaderX+x-1,chunkLoaderY+y-1});
 		
 	}
 	
@@ -30,49 +30,49 @@ public class MundoCarregado {
 	}
 	
 	public void updateChunks(DirecoesPadrao lado) {
-		long[] playerPos= Entidade.getPlayer().getMundopos();
-		long chunkLoaderX=Math.round((playerPos[0]/GlobalVariables.intperbloco)/16);
-		long chunkLoaderY=Math.round((playerPos[1]/GlobalVariables.intperbloco)/16);
+		float[] playerPos= Entidade.getPlayer().getMundopos();
+		float chunkLoaderX=(playerPos[0]/GlobalVariables.intperbloco)/16;
+		float chunkLoaderY=(playerPos[1]/GlobalVariables.intperbloco)/16;
 		ArrayList<int[]> quais=new ArrayList<int[]>();
-		ArrayList<long[]> coordenadas=new ArrayList<long[]>();
+		ArrayList<float[]> coordenadas=new ArrayList<float[]>();
 		if(lado==DirecoesPadrao.BAIXO) {
 			quais.add(new int[] {-1,-1});
 			quais.add(new int[] { 0,-1});
 			quais.add(new int[] { 1,-1});
-			coordenadas.add(new long[] {chunkLoaderX-1,chunkLoaderY-1});
-			coordenadas.add(new long[] {chunkLoaderX  ,chunkLoaderY-1});
-			coordenadas.add(new long[] {chunkLoaderX+1,chunkLoaderY-1});
+			coordenadas.add(new float[] {chunkLoaderX-1,chunkLoaderY-1});
+			coordenadas.add(new float[] {chunkLoaderX  ,chunkLoaderY-1});
+			coordenadas.add(new float[] {chunkLoaderX+1,chunkLoaderY-1});
 		}
 		else if(lado==DirecoesPadrao.CIMA){
 			quais.add(new int[] {-1,1});
 			quais.add(new int[] { 0,1});
 			quais.add(new int[] { 1,1});
-			coordenadas.add(new long[] {chunkLoaderX-1,chunkLoaderY+1});
-			coordenadas.add(new long[] {chunkLoaderX  ,chunkLoaderY+1});
-			coordenadas.add(new long[] {chunkLoaderX+1,chunkLoaderY+1});
+			coordenadas.add(new float[] {chunkLoaderX-1,chunkLoaderY+1});
+			coordenadas.add(new float[] {chunkLoaderX  ,chunkLoaderY+1});
+			coordenadas.add(new float[] {chunkLoaderX+1,chunkLoaderY+1});
 		}
 		else if(lado==DirecoesPadrao.ESQUERDA){
 			quais.add(new int[] {-1,-1});
 			quais.add(new int[] {-1, 0});
 			quais.add(new int[] {-1, 1});
-			coordenadas.add(new long[] {chunkLoaderX-1,chunkLoaderY-1});
-			coordenadas.add(new long[] {chunkLoaderX-1,chunkLoaderY  });
-			coordenadas.add(new long[] {chunkLoaderX-1,chunkLoaderY+1});
+			coordenadas.add(new float[] {chunkLoaderX-1,chunkLoaderY-1});
+			coordenadas.add(new float[] {chunkLoaderX-1,chunkLoaderY  });
+			coordenadas.add(new float[] {chunkLoaderX-1,chunkLoaderY+1});
 		}
 		else if(lado==DirecoesPadrao.DIREITA){
 			quais.add(new int[] {1,-1});
 			quais.add(new int[] {1, 0});
 			quais.add(new int[] {1, 1});
-			coordenadas.add(new long[] {chunkLoaderX+1,chunkLoaderY-1});
-			coordenadas.add(new long[] {chunkLoaderX+1,chunkLoaderY  });
-			coordenadas.add(new long[] {chunkLoaderX+1,chunkLoaderY+1});
+			coordenadas.add(new float[] {chunkLoaderX+1,chunkLoaderY-1});
+			coordenadas.add(new float[] {chunkLoaderX+1,chunkLoaderY  });
+			coordenadas.add(new float[] {chunkLoaderX+1,chunkLoaderY+1});
 		}
 		
 		
 		loadChunks(quais,coordenadas);
 	}
 	
-	private void loadChunks(ArrayList<int[]> quais,ArrayList<long[]> coordenadas) {
+	private void loadChunks(ArrayList<int[]> quais,ArrayList<float[]> coordenadas) {
 		if(quais.size()!=coordenadas.size())
 			throw new IllegalStateException("Quantidade de chunks a carregar não é igual a coordenadas de chunks a carregar!");
 		for(int i=0;i<quais.size();i++) {
@@ -81,7 +81,7 @@ public class MundoCarregado {
 			blocos[xy[0]][xy[1]]=loadChunkBlocos(coordenadas.get(i));
 		}
 	}
-	private Bloco[][] loadChunkBlocos(long[] coordenadas) {
+	private Bloco[][] loadChunkBlocos(float[] coordenadas) {
 		if(coordenadas.length!=2)throw new IllegalStateException("Coordenadas inválidas!");
 		//Código para carregar da memória os chunks
 		Bloco[][] ans=new Bloco[16][16];
