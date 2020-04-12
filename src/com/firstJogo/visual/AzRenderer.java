@@ -36,7 +36,7 @@ public class AzRenderer {
 		}
 	}
 
-	public void Renderizar(char id, char x, char y, Shaders shad, Matrix4f mundo, Camera cam) {
+	public void Renderizar(char id, long x, long y, Shaders shad, Matrix4f mundo, Camera cam) {
 		shad.bindar();
 		if (texturas.containsKey(TipodeBloco.azulejos[id].getTextura()))
 			texturas.get(TipodeBloco.azulejos[id].getTextura()).bind(0);// Bindou ao sampler número 0 ¯\_(ツ)_/¯

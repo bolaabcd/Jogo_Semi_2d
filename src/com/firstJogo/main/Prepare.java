@@ -15,6 +15,7 @@ import java.util.Set;
 import org.apache.commons.io.IOUtils;
 
 import com.firstJogo.Mundos.Humano;
+import com.firstJogo.Mundos.MundoCarregado;
 import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.Janela;
 import com.firstJogo.estrutura.KeyHandler;
@@ -55,6 +56,11 @@ public class Prepare implements Runnable{
 		Janela.getPrincipal().contextualize();
 		Janela.getPrincipal().setWindowPos(0.5f, 0.5f);
 		Janela.Vsync(true);
+	}
+	//OUTRA THREAD: Cria o mundo do jogo:
+	public static void prepararMundo() {
+		MundoCarregado mundo=new MundoCarregado();
+		mundo.setAtual();
 	}
 	
 	

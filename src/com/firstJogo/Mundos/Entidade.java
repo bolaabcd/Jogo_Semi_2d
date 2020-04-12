@@ -25,6 +25,9 @@ public class Entidade {
 				ent.getMundopos()[0] + movx, 
 				ent.getMundopos()[1] + movy 
 				});
+//		System.out.println("X: "+ent.getBlocoCoords()[0]);
+//		System.out.println("Y: "+ent.getBlocoCoords()[1]);
+
 		
 	},new Object[] {2,null,this});
 	
@@ -67,12 +70,21 @@ public class Entidade {
 		olharDir=olhar;
 		
 	}
-	
+	public long[] getChunkCoords() {
+		return new long[] {
+				(long)Math.round((this.getMundopos()[0]/GlobalVariables.intperbloco)/16),
+				(long)Math.round((this.getMundopos()[1]/GlobalVariables.intperbloco)/16)
+		};
+	}
+	public long[] getBlocoCoords() {
+		return new long[] {
+				(long)Math.round(this.getMundopos()[0]/GlobalVariables.intperbloco),
+				(long)Math.round(this.getMundopos()[1]/GlobalVariables.intperbloco)
+		};
+	}
 	public boolean setAngulo(double angulo) {
 		if(Math.abs(this.angulo-Math.round(angulo*180/Math.PI)*Math.PI/180)*180/Math.PI<=1)return false;
-		
-//		if(!this.isPlayer)System.out.println(Math.round((this.angulo-angulo)*180/Math.PI));
-		
+				
 		if(angulo<Math.PI/4&&angulo>-Math.PI/4)this.setOlhar(DirecoesPadrao.DIREITA);
 		else if(angulo>3*Math.PI/4||angulo<-3*Math.PI/4)this.setOlhar(DirecoesPadrao.ESQUERDA);
 		else if(angulo>=Math.PI/4&&angulo<=3*Math.PI/4)this.setOlhar(DirecoesPadrao.CIMA);

@@ -12,12 +12,7 @@ public class TexturaAnimador {
 	
 	private static final Funcao<Object> funcao=((objeto)->{
 		TexturaAnimador t=(TexturaAnimador) objeto;
-//		System.out.println(objeto);
-//		System.out.println();
-//		t.textura_referencial=t.texturas_alternativas[t.texatual];
-//		t.textura_referencial.setId(t.texturas_alternativas[t.texatual]);
 		t.marcadores[t.texatual].desativar();
-//		System.out.println("Referencial: "+t.textura_referencial);
 		t.texatual+=1;
  		if(t.texatual==t.texturas_alternativas.length)t.texatual=0;
 		t.textura_referencial.setId(t.texturas_alternativas[t.texatual]);
@@ -33,35 +28,18 @@ public class TexturaAnimador {
 		this.texturas_alternativas=new int[texturas_alternativas.length];
 		
 		for(int i=0;i<intervalos.length;i++) {
-//			System.out.println(intervalos[i]);
 			this.texturas_alternativas[i]=texturas_alternativas[i].getId();
 			marcadores[i]=new TempoMarker(intervalos[i],funcao,this);
 		}
 	}
 	public void ativar() {
-//		System.out.println("OI");
 		marcadores[0].ativar();
 	}
 	public void desativar() {
-//		synchronized (GeradorEventos.chaveTempo) {
-//			if(!Thread.currentThread().equals(GeradorEventos.main))
-//				try {
-//					GeradorEventos.chaveTempo.wait();
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//					System.exit(1);
-//				}
-//		}
 		for(TempoMarker marc:marcadores) 
 			marc.desativar();
 		
 		this.textura_referencial.setId(this.texturas_alternativas[0]);
-//		if(GlobalVariables.contador==1) {
-//			 System.out.println(texturas_alternativas.length);
-//			 System.out.println(texturas_alternativas[0]);
-//			 System.out.println(texturas_alternativas[1]);
-//			 System.out.println(texturas_alternativas[2]);
-//		}
 	}
 	public boolean isAtivado() {
 		for(TempoMarker marc:marcadores)

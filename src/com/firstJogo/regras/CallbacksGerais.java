@@ -6,6 +6,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.Humano;
+import com.firstJogo.Mundos.MundoCarregado;
 import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.KeyHandler;
 import com.firstJogo.utils.Funcao;
@@ -66,7 +67,7 @@ public class CallbacksGerais implements ExternalCallback {
 		botaopressionado.put(GLFW.GLFW_KEY_P, (nada)->{
 			Humano testado=new Humano();
 			testado.setMundopos(new float[] {0,0});
-			WorldRenderer.main.getCriaturas().add(testado);
+			MundoCarregado.atual.getEntidades().add(testado);
 			testado.setAngulo(Math.atan2(Entidade.getPlayer().getMundopos()[1]-testado.getMundopos()[1], Entidade.getPlayer().getMundopos()[0]-testado.getMundopos()[0]));
 			testado.iniciarMovimento();
 			testado.modo_correr();
@@ -101,6 +102,7 @@ public class CallbacksGerais implements ExternalCallback {
 		});
 		botaopressionado.put(GLFW.GLFW_KEY_R, (isSintetico)->{
 			Camera.getMain().setSize(480, 480);
+//			GlobalVariables.contador=1;
 		});
 		botaopressionado.put(GLFW.GLFW_KEY_J, (isSintetico)->{
 			Camera.getMain().setPos(Camera.getMain().getPos().add(1,0,0));
@@ -167,7 +169,10 @@ public class CallbacksGerais implements ExternalCallback {
 							});
 //					System.out.println("X: "+Entidade.getPlayer().getMundopos()[0]);
 //					System.out.println("Y: "+Entidade.getPlayer().getMundopos()[1]);
-					
+//					System.out.println("Xp: "+(long)Math.round((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)));//Bloco Coords
+//					System.out.println("Yp: "+(long)Math.round((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)));
+//					System.out.println("X: "+(float)Math.round((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)/16));//Chunk Coords
+//					System.out.println("Y: "+(float)Math.round((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)/16));
 					
 				},new Object[] {2,null}).ativar();
 				

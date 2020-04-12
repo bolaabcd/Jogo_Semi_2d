@@ -20,6 +20,7 @@ public class Renderer implements Runnable{
 		Prepare.prepararJanela();//Prepara a Janela (PRECISA ser feito aqui porque o WINDOWS não deixa mexer com Janelas criadas em outras Threads).
 		Prepare.prepararPlayer();//Prepara a entidade do player
 		Prepare.prepararCamera();//Prepara a câmera principal do player, já avisando que ela está pronta.
+		Prepare.prepararMundo();
 		CallbacksGerais.prepararBotoes();//Prepara as callbacks de botões
 		CallbacksGerais.prepararTempos();//Prepara as callbacks de tempo
 		

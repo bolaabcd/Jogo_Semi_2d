@@ -14,12 +14,6 @@ public class TipodeBloco {
 	
 	public static final TipodeBloco grama=new TipodeBloco("Grama");
 	
-//	public TipodeAzulejo(char id,String textura) {
-//		this.id=id;
-//		this.textura=textura;
-//		if(azulejos[id]!=null)throw new IllegalStateException("Azulejo de id "+id+" já salvo!");
-//		azulejos[id]=this;
-//	}
 	public TipodeBloco(String textura) {
 		this.id=nextid;
 		nextid+=1;

@@ -102,7 +102,7 @@ public class Humano extends Entidade{
 	public Humano() {
 		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato));
 		this.veloc=5;
-		milisImpulso=2000;//2000
+		milisImpulso=200000;//2000
 		movModo=modos.ANDANDO;
 		sprintModifier=2.4f;//TODO:Seria 1.2 (quando não tiver com a fome completa!)
 		impulso=new TempoMarker(milisImpulso*1000000,(pessoa)->{
