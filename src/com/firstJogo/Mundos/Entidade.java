@@ -1,5 +1,6 @@
 package com.firstJogo.Mundos;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -8,6 +9,8 @@ import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.Modelo;
 import com.firstJogo.visual.Textura;
+import com.firstJogo.visual.TipodeBloco;
+import com.firstJogo.visual.WorldRenderer;
 
 public class Entidade {
 	private static Entidade player;
@@ -45,21 +48,63 @@ public class Entidade {
 	protected char veloc=0;
 	
 	
-	public Entidade(Textura visu) {
+	public Entidade(Textura visu,float[] mundopos) {
 		visual=visu;
 		modelo=visu.genModelo();
 		hitboxPos=modelo.getVertices();
+		if(mundopos.length!=2)throw new IllegalArgumentException("Quantidade inválida de coordenadas!");
+		this.mundopos=mundopos;
 	}
-//	private boolean checkColisao() {
-//		
-//	}
-//	private long[][] getColidCoords() {//Obter os blocos que ele pode estar colidindo
-//		float posInBlocoX=this.mundopos[0]%32;
-//		float posInBlocoY=this.mundopos[1]%32;//Posição do centro da entidade!
-//		float deslocx=GlobalVariables.intperbloco*(hitboxPos[2][0]-hitboxPos[0][0])/2;
-//		float deslocy=GlobalVariables.intperbloco*(hitboxPos[2][1]-hitboxPos[0][1])/2;
-//		
-//	}
+	private boolean checkColisao(float[] mundopos) {
+//		System.out.println(getColidCoords(mundopos).size());
+		for(long[] bloco:getColidCoords(mundopos))  //TODO: Colocar no mundo em que a entidade está carregada! (aprimorar spawn)
+			if(TipodeBloco.azulejos[MundoCarregado.atual.getbloco(bloco[0], bloco[1])].getTangibilidade()>this.fantasmabilidade)return true;
+//		System.out.println();
+//		for(long[] bloco:getColidCoords(mundopos)) {
+//			System.out.println("X: "+bloco[0]);
+//			System.out.println("Y: "+bloco[1]);
+//		}
+		return false;
+	}
+	private ArrayList<long[]> getColidCoords(float[] mundopos) {//Obter os blocos que ele pode estar colidindo
+		float deslocx=GlobalVariables.intperbloco*(hitboxPos[2][0]-hitboxPos[0][0])/2;
+		float deslocy=GlobalVariables.intperbloco*(hitboxPos[2][1]-hitboxPos[0][1])/2;
+		float xi=(mundopos[0]-deslocx)/GlobalVariables.intperbloco;
+		float yi=(mundopos[1]-deslocy)/GlobalVariables.intperbloco;
+		float xf=(mundopos[0]+deslocx)/GlobalVariables.intperbloco;
+		float yf=(mundopos[1]+deslocy)/GlobalVariables.intperbloco;
+		int xmax=(int) Math.floor(Math.abs(2*deslocx/30)+1);//Arredondando pra cima quantos blocos a entidade ocupa.
+		int ymax=(int) Math.floor(Math.abs(2*deslocy/30)+1);
+		ArrayList<long[]> coords=new ArrayList<long[]>();
+		for(int ix=-1-xmax/2;ix<xmax/2+1;ix++)
+			for(int iy=-1-ymax/2;iy<ymax/2+1;iy++)
+				if(
+						colide(xi, yi, xf, yf, getBlocoCoords()[0]+ix, getBlocoCoords()[1]+iy,getBlocoCoords()[0]+ix+1, getBlocoCoords()[1]+iy+1)
+//						||
+//						colide(xi, yi, xf, yf, getBlocoCoords()[0]+ix, getBlocoCoords()[1]+iy,getBlocoCoords()[0]+ix+1, getBlocoCoords()[1]+iy+1)
+						)
+					coords.add(new long[] {
+							getBlocoCoords()[0]+ix,
+							getBlocoCoords()[1]+iy
+				});
+		return coords;
+	}
+	private boolean colide(float xi,float yi,float xf,float yf,float xi2,float yi2,float xf2,float yf2) {
+		if(
+				dentrode(xi,yi,xf,yf,xi2,yi2)||dentrode(xi,yi,xf,yf,xf2,yf2)
+				||
+				dentrode(xi,yi,xf,yf,xi2,yf2)||dentrode(xi,yi,xf,yf,xf2,yi2)
+				||
+				dentrode(xi2,yi2,xf2,yf2,xi,yi)||dentrode(xi2,yi2,xf2,yf2,xf,yf)
+				||
+				dentrode(xi2,yi2,xf2,yf2,xf,yi)||dentrode(xi2,yi2,xf2,yf2,xi,yf)
+				)return true;
+		return false;
+	}
+	private boolean dentrode(float xi,float yi,float xf,float yf,float x, float y) {
+		if(x>xi&&x<xf&&y>yi&&y<yf)return true;
+		return false;
+	}
 	public boolean pararMovimento() {//True se foi, False se não.
 		if(isParado)return false;
 		isParado=true;
@@ -80,7 +125,7 @@ public class Entidade {
 		olharDir=olhar;
 		
 	}
-	public long[] getChunkCoords() {
+	public long[] getChunkCoords() {//Chunk de -8 a 7.
 		return new long[] {
 				(long)Math.floor((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)/16+0.5f),
 				(long)Math.floor((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)/16+0.5f)
@@ -173,10 +218,16 @@ public class Entidade {
 		return mundopos;
 	}
 
-	public void setMundopos(float[] mundopos) {
+	public boolean setMundopos(float[] mundopos) {
+		if(mundopos[0]==this.mundopos[0]&&mundopos[1]==this.mundopos[1]) return false;
+		if(checkColisao(mundopos)) {
+			pararMovimento();
+			return false;
+		}
 		this.mundopos = mundopos;
 		if(GlobalVariables.debugue&&!this.isPlayer)System.out.println("MundoPlayerPos x: "+this.getMundopos()[0]);
 		if(GlobalVariables.debugue&&!this.isPlayer)System.out.println("MundoPlayerPos y: "+this.getMundopos()[1]);
+		return true;
 	}
 
 	public float[][] getHitboxPos() {

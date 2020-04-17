@@ -99,8 +99,8 @@ public class Humano extends Entidade{
 		AGACHADO,
 		SPRINT
 	}
-	public Humano() {
-		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato));
+	public Humano(float[] mundopos) {
+		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),mundopos);
 		this.veloc=5;
 		milisImpulso=2000;//2000
 		movModo=modos.ANDANDO;

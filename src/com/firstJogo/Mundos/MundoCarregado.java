@@ -89,10 +89,11 @@ public class MundoCarregado {
 		loadChunks(quais,coordenadas);
 	}
 	
-	private char getbloco(long x,long y) {
+	public char getbloco(long x,long y) {
 //		int coordx=(int) (x-chunkloader[0]*16)+8;
 //		int coordy=(int) (y-chunkloader[0]*16)+8;
-		if(Math.abs(x)%32>16&&Math.abs(y)%32>16)return 1;
+//		if(x==0&&y==0)return 1;
+		if(Math.abs(Math.floor((float)x/16+0.5f))%2==1&&Math.abs(Math.floor((float)y/16+0.5f))%2==1)return 1;
 		return 0;
 	}
 	

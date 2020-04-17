@@ -55,8 +55,9 @@ public class PlayerRegras {
 				e.setAngulo(3 * Math.PI / 4);
 			else if (horizontal == DirecoesPadrao.DIREITA)
 				e.setAngulo(Math.PI / 4);
-			else
+			else {
 				e.setAngulo(Math.PI / 2);
+				}
 		} else if (dir == DirecoesPadrao.ESQUERDA) {
 			if (vertical == DirecoesPadrao.CIMA)
 				e.setAngulo(3 * Math.PI / 4);
@@ -89,10 +90,9 @@ public class PlayerRegras {
 				e.setAngulo(Math.PI);//Só esquerda
 			else if (horizontal == DirecoesPadrao.DIREITA)
 				e.setAngulo(0);//Só direita
-			else {
-				System.out.println("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
-				System.exit(1);
-			}
+//			else 
+//				throw new IllegalStateException("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
+			
 			
 		} else if (dir == DirecoesPadrao.CIMA) {
 			if(vertical==DirecoesPadrao.BAIXO)return;//Ignorando se estiver na direção oposta
@@ -101,10 +101,9 @@ public class PlayerRegras {
 				e.setAngulo(Math.PI);//Só esquerda
 			else if (horizontal == DirecoesPadrao.DIREITA)
 				e.setAngulo(0);//Só direita
-			else {
-				System.out.println("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
-				System.exit(1);
-			}
+//			else {
+//				throw new IllegalStateException("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
+//			}
 		} else if (dir == DirecoesPadrao.ESQUERDA) {
 			if(horizontal==DirecoesPadrao.DIREITA)return;//Ignorando se estiver na direção oposta
 			else if(horizontal==DirecoesPadrao.ESQUERDA&&vertical==null)e.pararMovimento();//Se era apenas esquerda, parar.
@@ -112,10 +111,9 @@ public class PlayerRegras {
 				e.setAngulo(Math.PI/2);//Só cima
 			else if (vertical == DirecoesPadrao.BAIXO)
 				e.setAngulo(-Math.PI/2);//Só baixo
-			else {
-				System.out.println("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
-				System.exit(1);
-			}
+//			else {
+//				throw new IllegalStateException("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
+//			}
 		} else if (dir == DirecoesPadrao.DIREITA) {
 			if(horizontal==DirecoesPadrao.ESQUERDA)return;//Ignorando se estiver na direção oposta
 			else if(horizontal==DirecoesPadrao.DIREITA&&vertical==null)e.pararMovimento();//Se era apenas direita, parar.
@@ -123,10 +121,9 @@ public class PlayerRegras {
 				e.setAngulo(Math.PI/2);//Só cima
 			else if (vertical == DirecoesPadrao.BAIXO)
 				e.setAngulo(-Math.PI/2);//Só baixo
-			else {
-				System.out.println("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
-				System.exit(1);
-			}
+//			else {
+//				throw new IllegalStateException("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
+//			}
 		}
 	}
 

@@ -44,18 +44,18 @@ public class WorldRenderer {
 		
 		long xplayer=Entidade.getPlayer().getBlocoCoords()[0];
 		long yplayer=Entidade.getPlayer().getBlocoCoords()[1];
-		long[][] acarregar=new long[19*19][2];//X e Y pra cada elemento da lista
+		long[][] acarregar=new long[18*18][2];//X e Y pra cada elemento da lista
 		short temp=0;
-		for(short ypos=0;ypos<19;ypos++) 
-			for(short xpos=0;xpos<19;xpos++) {
+		for(short ypos=0;ypos<18;ypos++) 
+			for(short xpos=0;xpos<18;xpos++) {
 				acarregar[temp][0]=xplayer-9+xpos;
 				acarregar[temp][1]=yplayer-9+ypos;
 				temp++;
 			}
 		char[] blocos=MundoCarregado.atual.getBlocos(acarregar);
-		for(short posx=0;posx<19;posx++) {
-			for(short posy=0;posy<19;posy++)
-			rend.Renderizar(blocos[posx*19+posy], acarregar[posx*19+posy][0]+9, acarregar[posx*19+posy][1]+9, shad, mundo, cam);
+		for(short posx=0;posx<18;posx++) {
+			for(short posy=0;posy<18;posy++)
+			rend.Renderizar(blocos[posx*18+posy], acarregar[posx*18+posy][0]+9, acarregar[posx*18+posy][1]+9, shad, mundo, cam);
 		}
 		
 		

@@ -2,6 +2,7 @@ package com.firstJogo.regras;
 
 import java.util.HashMap;
 
+import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import com.firstJogo.Mundos.Entidade;
@@ -64,8 +65,8 @@ public class CallbacksGerais implements ExternalCallback {
 		
 		//TODO: aprimorar o spawnar humano
 		botaopressionado.put(GLFW.GLFW_KEY_P, (nada)->{
-			Humano testado=new Humano();
-			testado.setMundopos(new float[] {0,0});
+			Humano testado=new Humano(new float[] {0,0});
+//			testado.setMundopos(new float[] {0,0});
 			MundoCarregado.atual.getEntidades().add(testado);
 			testado.setAngulo(Math.atan2(Entidade.getPlayer().getMundopos()[1]-testado.getMundopos()[1], Entidade.getPlayer().getMundopos()[0]-testado.getMundopos()[0]));
 			testado.iniciarMovimento();
@@ -75,7 +76,7 @@ public class CallbacksGerais implements ExternalCallback {
 				float[] playerpos=Entidade.getPlayer().getMundopos();
 				float[] gentipos=genti.getMundopos();
 				genti.setAngulo(Math.atan2(playerpos[1]-gentipos[1], playerpos[0]-gentipos[0]));
-//				genti.iniciarMovimento();
+				genti.iniciarMovimento();
 //				genti.modo_correr();
 			},testado).ativar();
 		});
@@ -155,17 +156,26 @@ public class CallbacksGerais implements ExternalCallback {
 					
 					TempoMarker marcador=(TempoMarker) obs[1];
 					
-					
-					Camera.getMain().setPos(Camera.getMain().getPos().add(
-							(float)(-Entidade.getPlayer().getDirecModifiers()[0]*Entidade.getPlayer().getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000),
-							(float)(-Entidade.getPlayer().getDirecModifiers()[1]*Entidade.getPlayer().getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000),
+					float newx=Camera.getMain().getPos().x+(float)(-Entidade.getPlayer().getDirecModifiers()[0]*Entidade.getPlayer().getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
+					float newy=Camera.getMain().getPos().y+(float)(-Entidade.getPlayer().getDirecModifiers()[1]*Entidade.getPlayer().getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
 
-							0));
 					
-					Entidade.getPlayer().setMundopos(new float[] {
-							-Camera.getMain().getPos().x,
-							-Camera.getMain().getPos().y
-							});
+					if(Entidade.getPlayer().setMundopos(new float[] {
+							-newx,
+							-newy
+							}))//Se não puder mover o player nem seta posição da camera!
+						
+						Camera.getMain().setPos(new Vector3f(newx,newy,0)
+								
+//								(float)(-Entidade.getPlayer().getDirecModifiers()[0]*Entidade.getPlayer().getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000),
+//								(float)(-Entidade.getPlayer().getDirecModifiers()[1]*Entidade.getPlayer().getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000),
+
+								);
+					
+//					Entidade.getPlayer().setMundopos(new float[] {
+//							-Camera.getMain().getPos().x,
+//							-Camera.getMain().getPos().y
+//							});
 //					System.out.println("X: "+Entidade.getPlayer().getMundopos()[0]);
 //					System.out.println("Y: "+Entidade.getPlayer().getMundopos()[1]);
 //					System.out.println("Xb: "+(long)Math.floor((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)));//Bloco Coords

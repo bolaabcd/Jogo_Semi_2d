@@ -13,12 +13,20 @@ public class TipodeBloco {
 	private static char nextid=0;
 	
 	public static final TipodeBloco grama=new TipodeBloco("Grama");
-	public static final TipodeBloco ppedra=new TipodeBloco("PPedra");//Padrede de pedra
+	public static final TipodeBloco ppedra=new TipodeBloco("PPedra",(short) 20);//Padrede de pedra
 	
 	public TipodeBloco(String textura) {
 		this.id=nextid;
 		nextid+=1;
 		this.textura=textura;
+		if(azulejos[id]!=null)throw new IllegalStateException("Azulejo de id "+id+" já salvo!");
+		azulejos[id]=this;
+	}
+	public TipodeBloco(String textura,short tangibilidade) {
+		this.id=nextid;
+		nextid+=1;
+		this.textura=textura;
+		this.tangibilidadePadrao=tangibilidade;
 		if(azulejos[id]!=null)throw new IllegalStateException("Azulejo de id "+id+" já salvo!");
 		azulejos[id]=this;
 	}
