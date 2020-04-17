@@ -12,7 +12,6 @@ import com.firstJogo.estrutura.KeyHandler;
 import com.firstJogo.utils.Funcao;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
-import com.firstJogo.visual.WorldRenderer;
 
 public class CallbacksGerais implements ExternalCallback {
 	private boolean todomarker;
@@ -70,7 +69,7 @@ public class CallbacksGerais implements ExternalCallback {
 			MundoCarregado.atual.getEntidades().add(testado);
 			testado.setAngulo(Math.atan2(Entidade.getPlayer().getMundopos()[1]-testado.getMundopos()[1], Entidade.getPlayer().getMundopos()[0]-testado.getMundopos()[0]));
 			testado.iniciarMovimento();
-			testado.modo_correr();
+			testado.modo_andar();
 			new TempoMarker(1000000,(perseguidor)-> {
 				Humano genti = (Humano) perseguidor;
 				float[] playerpos=Entidade.getPlayer().getMundopos();
@@ -169,10 +168,10 @@ public class CallbacksGerais implements ExternalCallback {
 							});
 //					System.out.println("X: "+Entidade.getPlayer().getMundopos()[0]);
 //					System.out.println("Y: "+Entidade.getPlayer().getMundopos()[1]);
-//					System.out.println("Xb: "+(long)Math.round((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)));//Bloco Coords
-//					System.out.println("Yb: "+(long)Math.round((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)));
-//					System.out.println("Xc: "+(float)Math.round((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)/16));//Chunk Coords
-//					System.out.println("Yc: "+(float)Math.round((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)/16));
+//					System.out.println("Xb: "+(long)Math.floor((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)));//Bloco Coords
+//					System.out.println("Yb: "+(long)Math.floor((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)));
+//					System.out.println("Xc: "+Math.floor((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)/16+0.5f));//Chunk Coords
+//					System.out.println("Yc: "+Math.floor((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)/16+0.5f));
 					
 				},new Object[] {2,null}).ativar();
 				

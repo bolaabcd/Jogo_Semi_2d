@@ -32,14 +32,15 @@ public class Entidade {
 	},new Object[] {2,null,this});
 	
 	private boolean isPlayer;
+	private double angulo=1200;
+	private float[] mundopos;//A coordenada 0,0 é a quina inferior direita do bloco 0,0 (centro do chunk 0,0).
+	private float[][] hitboxPos;//Começa no baixo esquerda, sentido horário. 00 é a superior esquerda!
 	private Textura visual;
 	private Modelo modelo;
 	private DirecoesPadrao olharDir=DirecoesPadrao.CIMA;
-	private double angulo=1200;
-	private float[] mundopos;//Em ints de bloco! (32/bloco no padrão)
-	private int[] hitboxPos;
 	
 	protected Set<Float> velocModifiers=new HashSet<Float>();
+	protected short fantasmabilidade=10;
 	protected boolean isParado=true;
 	protected char veloc=0;
 	
@@ -49,7 +50,16 @@ public class Entidade {
 		modelo=visu.genModelo();
 		hitboxPos=modelo.getVertices();
 	}
-	
+//	private boolean checkColisao() {
+//		
+//	}
+//	private long[][] getColidCoords() {//Obter os blocos que ele pode estar colidindo
+//		float posInBlocoX=this.mundopos[0]%32;
+//		float posInBlocoY=this.mundopos[1]%32;//Posição do centro da entidade!
+//		float deslocx=GlobalVariables.intperbloco*(hitboxPos[2][0]-hitboxPos[0][0])/2;
+//		float deslocy=GlobalVariables.intperbloco*(hitboxPos[2][1]-hitboxPos[0][1])/2;
+//		
+//	}
 	public boolean pararMovimento() {//True se foi, False se não.
 		if(isParado)return false;
 		isParado=true;
@@ -72,14 +82,14 @@ public class Entidade {
 	}
 	public long[] getChunkCoords() {
 		return new long[] {
-				(long)Math.round((this.getMundopos()[0]/GlobalVariables.intperbloco)/16),
-				(long)Math.round((this.getMundopos()[1]/GlobalVariables.intperbloco)/16)
+				(long)Math.floor((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)/16+0.5f),
+				(long)Math.floor((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)/16+0.5f)
 		};
 	}
-	public long[] getBlocoCoords() {
+	public long[] getBlocoCoords() {//Bloco do centro da entidade.
 		return new long[] {
-				(long)Math.round(this.getMundopos()[0]/GlobalVariables.intperbloco),
-				(long)Math.round(this.getMundopos()[1]/GlobalVariables.intperbloco)
+				(long)Math.floor(this.getMundopos()[0]/GlobalVariables.intperbloco),
+				(long)Math.floor(this.getMundopos()[1]/GlobalVariables.intperbloco),
 		};
 	}
 	public boolean setAngulo(double angulo) {
@@ -169,10 +179,9 @@ public class Entidade {
 		if(GlobalVariables.debugue&&!this.isPlayer)System.out.println("MundoPlayerPos y: "+this.getMundopos()[1]);
 	}
 
-	public int[] getHitboxPos() {
+	public float[][] getHitboxPos() {
 		return hitboxPos;
 	}
-	
 
 	
 

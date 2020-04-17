@@ -12,10 +12,48 @@ public class Modelo {
 	private int id_vertices;
 	private int id_texturas;
 	private int id_indices;
-	private float[] vertices;
+	private float[][] vertices;
 	
+//	private float[][] ordenarPontos(float[][] pontos) {
+//		float[] Xizes=new float[pontos.length];
+//		float[] Yons=new float[pontos.length];
+//		int[] origorder=new int[pontos.length];
+//		float[] pontoCentral=new float[2];
+//		for(int i=0;i<pontos.length;i++) {
+//			if(pontos.length!=1)throw new IllegalStateException("Erro: pontos com mais de uma coordenada");
+//			Xizes[i]=pontos[i][0];
+//			Yons[i]=pontos[i][1];
+//			origorder[i]=i;
+//		}
+//		
+//		float menordist=Float.MAX_VALUE;
+//		int pontoInicial=0;
+//		for(int i=0;i<pontos.length;i++) {
+//			if(Math.sqrt(Math.pow(Xizes[i], 2)+Math.pow(Yons[i], 2))<menordist) {
+//				menordist=(float) Math.sqrt(Math.pow(Xizes[i], 2)+Math.pow(Yons[i], 2));
+//				pontoInicial=i;
+//			}
+//			pontoCentral[0]+=Xizes[i];
+//			pontoCentral[1]+=Yons[i];
+//		}
+//		pontoCentral[0]/=Xizes.length;
+//		pontoCentral[1]/=Yons.length;
+//		for(int i=0;i<pontos.length;i++) {
+//			
+//		}
+//		return null;
+//	}
 	public Modelo(float[] vertices,int[] indices) {
-		this.vertices=vertices;
+		float[] ponto1=new float[] {vertices[0],vertices[1]};
+		float[] ponto2=new float[] {vertices[3],vertices[4]};
+		float[] ponto3=new float[] {vertices[6],vertices[7]};
+		float[] ponto4=new float[] {vertices[9],vertices[10]};
+		this.vertices=new float[][]{//Esse é o padrão, pra simplificar.
+			ponto1,//00
+			ponto4,//01
+			ponto2,//11
+			ponto3,//10
+		};
 		contagem=indices.length;
 		
 		id_vertices=GL15.glGenBuffers();
@@ -84,7 +122,7 @@ public class Modelo {
 		ib.flip();
 		return ib;
 	}
-	public int[] getVertices() {
-		return new int[] {Math.round(this.vertices[0]*32),Math.round(this.vertices[1]*32)};
+	public float[][] getVertices() {//Começa no baixo esquerda, sentido horário.
+		return vertices;
 	}
 }

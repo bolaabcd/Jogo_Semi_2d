@@ -1,9 +1,6 @@
 package com.firstJogo.visual;
 
-import java.util.ArrayList;
-
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.MundoCarregado;
@@ -15,8 +12,8 @@ public class WorldRenderer {
 	public static WorldRenderer main;
 //	private char[][] azulejos;//Azulejos efetivos no mundo!
 //	private ArrayList<Entidade> criaturas;
-	private short width;
-	private short height;
+//	private short width;
+//	private short height;
 	private Matrix4f mundo;
 	
 	private short escala;
@@ -24,8 +21,8 @@ public class WorldRenderer {
 	public WorldRenderer() {
 		main=this;
 		
-		height=18;//32*3 -> NÃO DÁ PRA RENDERIZAR ISSO TUDO! ESSE MUNDO DEVE SER O RENDERIZADO APENAS!
-		width=18;
+//		height=18;//32*3 -> NÃO DÁ PRA RENDERIZAR ISSO TUDO! ESSE MUNDO DEVE SER O RENDERIZADO APENAS!
+//		width=18;
 		escala=15;//15
 //		azulejos=new char[18][18];
 		
