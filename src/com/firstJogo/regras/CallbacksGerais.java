@@ -169,10 +169,10 @@ public class CallbacksGerais implements ExternalCallback {
 							});
 //					System.out.println("X: "+Entidade.getPlayer().getMundopos()[0]);
 //					System.out.println("Y: "+Entidade.getPlayer().getMundopos()[1]);
-//					System.out.println("Xp: "+(long)Math.round((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)));//Bloco Coords
-//					System.out.println("Yp: "+(long)Math.round((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)));
-//					System.out.println("X: "+(float)Math.round((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)/16));//Chunk Coords
-//					System.out.println("Y: "+(float)Math.round((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)/16));
+//					System.out.println("Xb: "+(long)Math.round((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)));//Bloco Coords
+//					System.out.println("Yb: "+(long)Math.round((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)));
+//					System.out.println("Xc: "+(float)Math.round((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)/16));//Chunk Coords
+//					System.out.println("Yc: "+(float)Math.round((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)/16));
 					
 				},new Object[] {2,null}).ativar();
 				

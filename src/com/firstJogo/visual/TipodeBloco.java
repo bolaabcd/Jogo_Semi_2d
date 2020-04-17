@@ -13,6 +13,7 @@ public class TipodeBloco {
 	private static char nextid=0;
 	
 	public static final TipodeBloco grama=new TipodeBloco("Grama");
+	public static final TipodeBloco ppedra=new TipodeBloco("PPedra");//Padrede de pedra
 	
 	public TipodeBloco(String textura) {
 		this.id=nextid;

@@ -4,7 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 //Câmera virtual que pode ser movida pelo mundo.
-public class Camera {
+public class Camera{
 	private static Camera main;//Câmera principal (do player)
 	
 	private Vector3f pos;//Posição da câmera no mundo
@@ -20,6 +20,14 @@ public class Camera {
 		pos=new Vector3f(0,0,0);
 		projec=new Matrix4f().setOrtho2D(-width/2, width/2, -height/2, height/2);
 		//Setando origem da câmera pro centro da tela...
+		Camera.setMain(this);
+	}
+	public Camera(int width, int height,boolean main) {
+		this.width=width;
+		this.height=height;
+		pos=new Vector3f(0,0,0);
+		projec=new Matrix4f().setOrtho2D(-width/2, width/2, -height/2, height/2);
+		if(main)
 		Camera.setMain(this);
 	}
 	//Setando posição da Câmera
@@ -53,6 +61,14 @@ public class Camera {
 	//Obter altura do quanto a câmera apresenta EM INTS!
 	public int getHeight() {
 		return height;
+	}
+	public Camera getCopia() {
+		Camera res=new Camera(width,height,false);
+		float x=pos.x,y=pos.y,z=pos.z;
+		res.setPos(new Vector3f(x,y,z));
+		
+		
+		return res;
 	}
 	//Obter câmera principal (do player)
 	public static Camera getMain() {

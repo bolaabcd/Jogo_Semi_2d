@@ -92,6 +92,7 @@ public class MundoCarregado {
 	private char getbloco(long x,long y) {
 //		int coordx=(int) (x-chunkloader[0]*16)+8;
 //		int coordy=(int) (y-chunkloader[0]*16)+8;
+		if(Math.abs(x)%32>16&&Math.abs(y)%32>16)return 1;
 		return 0;
 	}
 	

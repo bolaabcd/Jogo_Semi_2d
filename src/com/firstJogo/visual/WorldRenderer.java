@@ -3,6 +3,7 @@ package com.firstJogo.visual;
 import java.util.ArrayList;
 
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.MundoCarregado;
@@ -42,6 +43,8 @@ public class WorldRenderer {
 //	}
 
 	public void renderizar(AzRenderer rend,Shaders shad,Camera cam) {
+		cam=cam.getCopia();//Para não alterar nada enquanto renderiza!
+		
 		long xplayer=Entidade.getPlayer().getBlocoCoords()[0];
 		long yplayer=Entidade.getPlayer().getBlocoCoords()[1];
 		long[][] acarregar=new long[19*19][2];//X e Y pra cada elemento da lista

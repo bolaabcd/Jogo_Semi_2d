@@ -126,6 +126,9 @@ public class Prepare implements Runnable{
 			defaultimage=new File(GlobalVariables.imagem_path+"HumanoRight3"+GlobalVariables.imagem_formato);
 			if(!defaultimage.exists())defimagem(defaultimage,"HumanoRight3");
 			defaultimage=null;//Tira a referência ao arquivo de imagens da memória
+			defaultimage=new File(GlobalVariables.imagem_path+"PPedra"+GlobalVariables.imagem_formato);
+			if(!defaultimage.exists())defimagem(defaultimage,"PPedra");
+			defaultimage=null;//Tira a referência ao arquivo de imagens da memória
 			
 			
 			

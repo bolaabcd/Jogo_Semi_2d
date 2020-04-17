@@ -5,7 +5,7 @@ Pasta-mundi:
 Plugins:
 Default
 FPS Maximo:
-120
+60
 Mundos:
 Default
 Pasta de imagens:
