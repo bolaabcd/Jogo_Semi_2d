@@ -6,6 +6,8 @@ import com.firstJogo.utils.GlobalVariables;
 
 import java.util.ArrayList;
 
+import org.joml.Vector2f;
+
 public class MundoCarregado {
 	public static MundoCarregado atual;
 	public static ArrayList<MundoCarregado> mundos=new ArrayList<MundoCarregado>();
@@ -47,9 +49,9 @@ public class MundoCarregado {
 	}
 	
 	public void updateChunks(DirecoesPadrao lado) {
-		float[] playerPos= Entidade.getPlayer().getMundopos();
-		float chunkLoaderX=(playerPos[0]/GlobalVariables.intperbloco)/16;
-		float chunkLoaderY=(playerPos[1]/GlobalVariables.intperbloco)/16;
+		Vector2f playerPos= Entidade.getPlayer().getMundopos();
+		float chunkLoaderX=(playerPos.x/GlobalVariables.intperbloco)/16;
+		float chunkLoaderY=(playerPos.y/GlobalVariables.intperbloco)/16;
 		ArrayList<int[]> quais=new ArrayList<int[]>();
 		ArrayList<float[]> coordenadas=new ArrayList<float[]>();
 		if(lado==DirecoesPadrao.BAIXO) {

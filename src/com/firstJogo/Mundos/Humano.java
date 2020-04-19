@@ -1,5 +1,7 @@
 package com.firstJogo.Mundos;
 
+import org.joml.Vector2f;
+
 import com.firstJogo.regras.DirecoesPadrao;
 import com.firstJogo.regras.PlayerRegras;
 import com.firstJogo.utils.GlobalVariables;
@@ -99,7 +101,7 @@ public class Humano extends Entidade{
 		AGACHADO,
 		SPRINT
 	}
-	public Humano(float[] mundopos) {
+	public Humano(Vector2f mundopos) {
 		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),mundopos);
 		this.veloc=5;
 		milisImpulso=2000;//2000
@@ -289,5 +291,6 @@ public class Humano extends Entidade{
 			}
 		}
 	}
+
 
 }

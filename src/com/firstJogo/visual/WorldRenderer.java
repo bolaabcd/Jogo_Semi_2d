@@ -1,6 +1,7 @@
 package com.firstJogo.visual;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.MundoCarregado;
@@ -98,10 +99,10 @@ public class WorldRenderer {
 	}
 	
 	private float[] getRendPos(Entidade ent) {
-		float[] mundopos=ent.getMundopos();
+		Vector2f mundopos=ent.getMundopos();
 		return new float[] {
-				8.5f+(mundopos[0])/GlobalVariables.intperbloco,
-				8.5f+(mundopos[1])/GlobalVariables.intperbloco
+				8.5f+(mundopos.x)/GlobalVariables.intperbloco,
+				8.5f+(mundopos.y)/GlobalVariables.intperbloco
 		};
 
 	}

@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+import org.joml.Vector2f;
 
 import com.firstJogo.Mundos.Humano;
 import com.firstJogo.Mundos.MundoCarregado;
@@ -44,7 +45,7 @@ public class Prepare implements Runnable{
 	}
 	//OUTRA THREAD: Define a entidade Humano que será o player:
 	public static void prepararPlayer() {
-		Humano player=new Humano(new float[] {0,0});
+		Humano player=new Humano(new Vector2f (0,0));
 		player.setPlayer(true);
 //		player.setMundopos(new float[] {0,0});
 	}

@@ -1,8 +1,9 @@
 package com.firstJogo.Mundos;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+
+import org.joml.Vector2f;
 
 import com.firstJogo.regras.DirecoesPadrao;
 import com.firstJogo.utils.GlobalVariables;
@@ -10,7 +11,6 @@ import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.Modelo;
 import com.firstJogo.visual.Textura;
 import com.firstJogo.visual.TipodeBloco;
-import com.firstJogo.visual.WorldRenderer;
 
 public class Entidade {
 	private static Entidade player;
@@ -20,68 +20,91 @@ public class Entidade {
 		Object[] ob=(Object[]) objetotal;
 		TempoMarker marcador=(TempoMarker) ob[1];
 		Entidade ent=(Entidade)ob[2];
+		
+		float movx=(float) ((ent.getForcedVelocModified().x+ent.getDirecModifiers()[0]*ent.getVelocModified())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
+		float movy=(float) ((ent.getForcedVelocModified().y+ent.getDirecModifiers()[1]*ent.getVelocModified())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
 
-		float movx=(float) (ent.getDirecModifiers()[0]*ent.getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
-		float movy=(float) (ent.getDirecModifiers()[1]*ent.getVelocModified()*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
-
-		ent.setMundopos(new float[] { 
-				ent.getMundopos()[0] + movx, 
-				ent.getMundopos()[1] + movy 
-				});
+		ent.setMundopos(new Vector2f (
+				ent.getMundopos().x + movx, 
+				ent.getMundopos().y 
+				));
+		
+		ent.setMundopos(new Vector2f (
+				ent.getMundopos().x, 
+				ent.getMundopos().y  +  movy 
+				));
 //		System.out.println("X: "+ent.getBlocoCoords()[0]);
 //		System.out.println("Y: "+ent.getBlocoCoords()[1]);
 
 		
 	},new Object[] {2,null,this});
-	
 	private boolean isPlayer;
 	private double angulo=1200;
-	private float[] mundopos;//A coordenada 0,0 é a quina inferior direita do bloco 0,0 (centro do chunk 0,0).
+	private Vector2f mundopos;//A coordenada 0,0 é a quina inferior direita do bloco 0,0 (centro do chunk 0,0).
 	private float[][] hitboxPos;//Começa no baixo esquerda, sentido horário. 00 é a superior esquerda!
 	private Textura visual;
 	private Modelo modelo;
 	private DirecoesPadrao olharDir=DirecoesPadrao.CIMA;
+	private HashMap<String,Float> velocModifiers=new HashMap<String,Float>();
+	private HashMap<String,Vector2f> forcedVelocModifiers=new HashMap<String,Vector2f>();
+//	private Vector2f colidido=new Vector2f(0,0);
 	
-	protected Set<Float> velocModifiers=new HashSet<Float>();
 	protected short fantasmabilidade=10;
 	protected boolean isParado=true;
 	protected char veloc=0;
 	
 	
-	public Entidade(Textura visu,float[] mundopos) {
+
+	public Entidade(Textura visu,Vector2f mundopos) {
 		visual=visu;
 		modelo=visu.genModelo();
 		hitboxPos=modelo.getVertices();
-		if(mundopos.length!=2)throw new IllegalArgumentException("Quantidade inválida de coordenadas!");
+//		if(mundopos.length!=2)throw new IllegalArgumentException("Quantidade inválida de coordenadas!");
 		this.mundopos=mundopos;
 	}
-	private boolean checkColisao(float[] mundopos) {
+	private boolean checkColisao(Vector2f mundopos) {
 //		System.out.println(getColidCoords(mundopos).size());
-		for(long[] bloco:getColidCoords(mundopos))  //TODO: Colocar no mundo em que a entidade está carregada! (aprimorar spawn)
-			if(TipodeBloco.azulejos[MundoCarregado.atual.getbloco(bloco[0], bloco[1])].getTangibilidade()>this.fantasmabilidade)return true;
-//		System.out.println();
-//		for(long[] bloco:getColidCoords(mundopos)) {
-//			System.out.println("X: "+bloco[0]);
-//			System.out.println("Y: "+bloco[1]);
-//		}
-		return false;
+		boolean res=false;
+//		int i=1;
+		for(long[] bloco:getColidCoords(mundopos)) { //TODO: Colocar no mundo em que a entidade está carregada! (aprimorar spawn)
+			TipodeBloco tipo=TipodeBloco.azulejos[MundoCarregado.atual.getbloco(bloco[0], bloco[1])];
+//			System.out.println("X"+i+": "+bloco[0]);
+//			System.out.println("Y"+i+": "+bloco[1]);
+//			i++;
+			
+//			System.out.println(tipo.getTangibilidade()>this.fantasmabilidade);
+			if(tipo.getTangibilidade()>this.fantasmabilidade) {
+				tipo.getFuncaoColisiva().run(new Object[] {this,Bloco.toCentroBloco(bloco[0], bloco[1])});
+				res=true;
+			}
+		}
+//		System.out.println("Xb: "+this.getBlocoCoords()[0]);
+//		System.out.println("Yb: "+this.getBlocoCoords()[1]);
+		return res;
 	}
-	private ArrayList<long[]> getColidCoords(float[] mundopos) {//Obter os blocos que ele pode estar colidindo
+	private ArrayList<long[]> getColidCoords(Vector2f mundopos) {//Obter os blocos que ele pode estar colidindo
 		float deslocx=GlobalVariables.intperbloco*(hitboxPos[2][0]-hitboxPos[0][0])/2;
 		float deslocy=GlobalVariables.intperbloco*(hitboxPos[2][1]-hitboxPos[0][1])/2;
-		float xi=(mundopos[0]-deslocx)/GlobalVariables.intperbloco;
-		float yi=(mundopos[1]-deslocy)/GlobalVariables.intperbloco;
-		float xf=(mundopos[0]+deslocx)/GlobalVariables.intperbloco;
-		float yf=(mundopos[1]+deslocy)/GlobalVariables.intperbloco;
-		int xmax=(int) Math.floor(Math.abs(2*deslocx/30)+1);//Arredondando pra cima quantos blocos a entidade ocupa.
-		int ymax=(int) Math.floor(Math.abs(2*deslocy/30)+1);
+		float xi=(mundopos.x-deslocx)/GlobalVariables.intperbloco;
+		float yi=(mundopos.y-deslocy)/GlobalVariables.intperbloco;
+		float xf=(mundopos.x+deslocx)/GlobalVariables.intperbloco;
+		float yf=(mundopos.y+deslocy)/GlobalVariables.intperbloco;
+		int xmax=(int) Math.floor(Math.abs(2*deslocx/GlobalVariables.intperbloco)+1);//Arredondando pra cima quantos blocos a entidade ocupa.
+		int ymax=(int) Math.floor(Math.abs(2*deslocy/GlobalVariables.intperbloco)+1);
+//		float deslocx=GlobalVariables.intperbloco*(hitboxPos[2][0]-hitboxPos[0][0])/2;
+//		float deslocy=GlobalVariables.intperbloco*(hitboxPos[2][1]-hitboxPos[0][1])/2;
+//		float xi=(mundopos.x-deslocx);
+//		float yi=(mundopos.y-deslocy);
+//		float xf=(mundopos.x+deslocx);
+//		float yf=(mundopos.y+deslocy);
+//		int xmax=(int) Math.floor(Math.abs(2*deslocx)+1);//Arredondando pra cima quantos blocos a entidade ocupa.
+//		int ymax=(int) Math.floor(Math.abs(2*deslocy)+1);
 		ArrayList<long[]> coords=new ArrayList<long[]>();
 		for(int ix=-1-xmax/2;ix<xmax/2+1;ix++)
 			for(int iy=-1-ymax/2;iy<ymax/2+1;iy++)
 				if(
 						colide(xi, yi, xf, yf, getBlocoCoords()[0]+ix, getBlocoCoords()[1]+iy,getBlocoCoords()[0]+ix+1, getBlocoCoords()[1]+iy+1)
-//						||
-//						colide(xi, yi, xf, yf, getBlocoCoords()[0]+ix, getBlocoCoords()[1]+iy,getBlocoCoords()[0]+ix+1, getBlocoCoords()[1]+iy+1)
+//						colide(xi, yi, xf, yf, getBlocoCoords()[0]*GlobalVariables.intperbloco+ix*GlobalVariables.intperbloco, getBlocoCoords()[1]*GlobalVariables.intperbloco+iy*GlobalVariables.intperbloco,getBlocoCoords()[0]*GlobalVariables.intperbloco+ix*GlobalVariables.intperbloco+30, getBlocoCoords()[1]*GlobalVariables.intperbloco+iy*GlobalVariables.intperbloco+30)
 						)
 					coords.add(new long[] {
 							getBlocoCoords()[0]+ix,
@@ -127,14 +150,14 @@ public class Entidade {
 	}
 	public long[] getChunkCoords() {//Chunk de -8 a 7.
 		return new long[] {
-				(long)Math.floor((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)/16+0.5f),
-				(long)Math.floor((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)/16+0.5f)
+				(long)Math.floor((Entidade.getPlayer().getMundopos().x/GlobalVariables.intperbloco)/16+0.5f),
+				(long)Math.floor((Entidade.getPlayer().getMundopos().y/GlobalVariables.intperbloco)/16+0.5f)
 		};
 	}
 	public long[] getBlocoCoords() {//Bloco do centro da entidade.
 		return new long[] {
-				(long)Math.floor(this.getMundopos()[0]/GlobalVariables.intperbloco),
-				(long)Math.floor(this.getMundopos()[1]/GlobalVariables.intperbloco),
+				(long)Math.floor(this.getMundopos().x/GlobalVariables.intperbloco),
+				(long)Math.floor(this.getMundopos().y/GlobalVariables.intperbloco),
 		};
 	}
 	public boolean setAngulo(double angulo) {
@@ -170,15 +193,21 @@ public class Entidade {
 	public float getVelocModified() {
 		if(isParado) return 0;
 		float velocModFinal=1f;
-		for(float modif:velocModifiers)
-			velocModFinal*=modif;
+		for(String modifchave:velocModifiers.keySet())
+			velocModFinal*=velocModifiers.get(modifchave);
+//		for(String modiforchave:forcedVelocModifiers.keySet())
+//			velocModFinal*=forcedVelocModifiers.get(modiforchave);
 		return velocModFinal*veloc;
 	}
-	public boolean addVelocModifier(float valor) {
-		return velocModifiers.add(valor);
+	public boolean addVelocModifier(String chave,float valor) {
+		if(velocModifiers.put(chave,valor)==null)
+			return false;
+		return true;
 	}
-	public boolean remVelocModifier(float valor) {
-		return velocModifiers.remove(valor);
+	public boolean remVelocModifier(String chave) {
+		if(velocModifiers.remove(chave)==null)
+			return false;
+		return true;
 	}
 
 	public double[] getDirecModifiers() {
@@ -214,25 +243,51 @@ public class Entidade {
 		return player;
 	}
 
-	public float[] getMundopos() {
+	public Vector2f getMundopos() {
 		return mundopos;
 	}
 
-	public boolean setMundopos(float[] mundopos) {
-		if(mundopos[0]==this.mundopos[0]&&mundopos[1]==this.mundopos[1]) return false;
-		if(checkColisao(mundopos)) {
-			pararMovimento();
+	public boolean setMundopos(Vector2f mundopos) {
+		if(mundopos.x==this.mundopos.x&&mundopos.y==this.mundopos.y) return false;
+		if(!checkColisao(mundopos)) {
+//			System.out.println("Que");
+//			if(forcedVelocModifiers.remove("colisao")!=null)return false;//Se removeu algo retorna falso.
+			forcedVelocModifiers.remove("colisao");
+//			colidido=new Vector2f(0f,0f);
+			
+		}else {
 			return false;
 		}
 		this.mundopos = mundopos;
-		if(GlobalVariables.debugue&&!this.isPlayer)System.out.println("MundoPlayerPos x: "+this.getMundopos()[0]);
-		if(GlobalVariables.debugue&&!this.isPlayer)System.out.println("MundoPlayerPos y: "+this.getMundopos()[1]);
+		if(GlobalVariables.debugue&&!this.isPlayer)System.out.println("MundoPlayerPos x: "+this.getMundopos().x);
+		if(GlobalVariables.debugue&&!this.isPlayer)System.out.println("MundoPlayerPos y: "+this.getMundopos().y);
 		return true;
 	}
 
 	public float[][] getHitboxPos() {
 		return hitboxPos;
 	}
+	public Vector2f getForcedVelocModified() {
+		Vector2f forcedVelocModFinal=new Vector2f(0,0);
+		for(String chave:forcedVelocModifiers.keySet())
+			forcedVelocModFinal.add(forcedVelocModifiers.get(chave));
+		return forcedVelocModFinal;
+	}
+	public boolean addForcedVelocModifier(String chave, Vector2f valor) {
+//		System.out.println("OI");
+		if(forcedVelocModifiers.put(chave, valor)==null)return false;
+		return true;
+	}
+	public boolean remForcedVelocModifier(String chave) {
+		if(forcedVelocModifiers.remove(chave)==null)return false;
+		return true;
+	}
+//	public Vector2f getColidido() {
+//		return colidido;
+//	}
+//	public void setColidido(Vector2f colidido) {
+//		this.colidido = colidido;
+//	}
 
 	
 

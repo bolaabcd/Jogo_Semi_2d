@@ -2,7 +2,7 @@ package com.firstJogo.utils;
 
 public class FuncaoHandler {
 	private final Funcao<Object> funcao;
-	private final Object argumento;
+	private Object argumento;
 	public FuncaoHandler(Funcao<Object> func,Object arg,Object ifNulo) {
 		this.funcao=func;
 		if(arg==null)this.argumento=ifNulo;
@@ -16,6 +16,9 @@ public class FuncaoHandler {
 			this.argumento=arg;
 		}
 		else this.argumento=arg;
+	}
+	public void setArgumento(Object argumento) {
+		this.argumento=argumento;
 	}
 	public void run() {
 		funcao.run(argumento);
