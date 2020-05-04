@@ -1,20 +1,21 @@
 package com.firstJogo.main;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.firstJogo.Handlers.EventHandler;
+import com.firstJogo.Handlers.KeyEventHandler;
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.estrutura.Janela;
-import com.firstJogo.estrutura.KeyHandler;
-import com.firstJogo.utils.Funcao;
+import com.firstJogo.estrutura.TexturaAnimador;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
-import com.firstJogo.visual.TexturaAnimador;
 
 public class GeradorEventos implements Runnable{
 	public static Thread main;//Objeto da Thread de eventos
 	//Callbacks dos botões mantidos,pressionados ou removidos, de acordo com o ID de cada botão (Integer).
-	public static HashMap<Integer,Funcao<?>> botaomantido=new HashMap<Integer,Funcao<?>>();
+//	public static HashMap<Integer,Funcao<?>> botaomantido=new HashMap<Integer,Funcao<?>>();
+	public static EventHandler<Integer,Integer> botaomantidoHandler=new EventHandler<Integer,Integer>();
 	
 	//CopyOnWrite porque as modificações podem vir de outras Threads.
 	public static CopyOnWriteArrayList<TempoMarker> tempopassado=new  CopyOnWriteArrayList<TempoMarker>();//Cbacks de tempo
@@ -24,6 +25,9 @@ public class GeradorEventos implements Runnable{
 	public static EventHandler<TempoMarker,Entidade> entidadeTempoHandler=new EventHandler<TempoMarker,Entidade>();
 	public static EventHandler<TempoMarker,TempoMarker> puroTempoHandler=new EventHandler<TempoMarker,TempoMarker>();
 	
+//	public static ArrayList<EventHandler<TempoMarker,Object>> eventHandlers= new ArrayList<EventHandler<TempoMarker,Object>>(); 
+	public static ArrayList<EventHandler<TempoMarker,?>> eventHandlers= new ArrayList<EventHandler<TempoMarker,?>>(); 
+
 	//Objeto da Janela do Jogo
 	private Janela principal;
 	
@@ -31,21 +35,27 @@ public class GeradorEventos implements Runnable{
 	public void run() {
 		principal=Janela.getPrincipal();
 		
+		eventHandlers.add(entidadeTempoHandler);
+		eventHandlers.add(texturaEventHandler);
+		eventHandlers.add(puroTempoHandler);
+		
 //		long init=System.nanoTime();
 		
 		System.out.println("Iniciando Loop de eventos");
 		while(!principal.ShouldClose()) {//Enquanto não tiver mandado fechar a Janela, executa os eventos
 			
 			//Ativando eventos de botão mantido: 1000000
-			KeyHandler.ativarMantidos();
+			KeyEventHandler.ativarMantidos();
 
 			//Ativando eventos de tempo:
 			for(TempoMarker marker:tempopassado) 
 				if(marker.checkTempo()) {
 //					System.out.println(System.nanoTime()-init);
-					texturaEventHandler.throwEvento(marker);
-					entidadeTempoHandler.throwEvento(marker);
-					puroTempoHandler.throwEvento(marker);
+					for(EventHandler<TempoMarker,?> ev:eventHandlers)
+						ev.throwEvento(marker);
+//					texturaEventHandler.throwEvento(marker);
+//					entidadeTempoHandler.throwEvento(marker);
+//					puroTempoHandler.throwEvento(marker);
 					marker.resetTemporegistrado();
 				}
 //			System.out.println(texturaEventHandler.getsize());

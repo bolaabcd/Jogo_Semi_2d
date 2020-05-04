@@ -1,7 +1,5 @@
 package com.firstJogo.Mundos;
 
-import java.util.HashMap;
-
 import org.joml.Vector2f;
 
 import com.firstJogo.utils.GlobalVariables;
@@ -14,7 +12,7 @@ public class Bloco {
 	}
 	
 	private char idTipo;
-	protected HashMap<String,String> dadosAdicionais;
+//	protected HashMap<String,String> dadosAdicionais=new HashMap<String,String>();
 	
 	public Bloco(char idTipo) {
 		this.idTipo=idTipo;

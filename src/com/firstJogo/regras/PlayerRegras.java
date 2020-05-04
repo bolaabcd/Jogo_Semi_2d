@@ -2,9 +2,10 @@ package com.firstJogo.regras;
 
 import org.lwjgl.glfw.GLFW;
 
+import com.firstJogo.Handlers.KeyEventHandler;
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.Humano;
-import com.firstJogo.estrutura.KeyHandler;
+import com.firstJogo.estrutura.DirecoesPadrao;
 
 //TODO: Transformar em interface para flexibilizar para players de classes não humanas!
 public class PlayerRegras {
@@ -28,12 +29,12 @@ public class PlayerRegras {
 	public static void resetMovModo(Humano e) {
 		Humano.modos modoAnterior=e.getMovModo();
 		if(modoAnterior==Humano.modos.SPRINT||modoAnterior==Humano.modos.CORRENDO)
-			if(KeyHandler.containsKey(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();
-			else if(KeyHandler.containsKey(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
+			if(KeyEventHandler.containsKey(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();
+			else if(KeyEventHandler.containsKey(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
 			else e.modo_andar();
 		else
-			if(KeyHandler.containsKey(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
-			else if(KeyHandler.containsKey(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();
+			if(KeyEventHandler.containsKey(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
+			else if(KeyEventHandler.containsKey(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();
 			else e.modo_andar();
 	}
 	public static void newMoveDirection(Entidade e, DirecoesPadrao dir) {

@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 import org.joml.Vector2f;
 
+import com.firstJogo.Handlers.FuncaoHandler;
+import com.firstJogo.estrutura.DirecoesPadrao;
 import com.firstJogo.main.GeradorEventos;
-import com.firstJogo.regras.DirecoesPadrao;
-import com.firstJogo.utils.FuncaoHandler;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.Modelo;
@@ -15,10 +15,11 @@ import com.firstJogo.visual.Textura;
 import com.firstJogo.visual.TipodeBloco;
 
 public class Entidade {
+	private static final long segundosRemover=30;
 	private static Entidade player;
 	
-	
 	private final TempoMarker mover=new TempoMarker(1000000);
+	private final TempoMarker remover=new TempoMarker(segundosRemover*1000000000L);
 //			new TempoMarker(1000000,(objetotal)->{
 //				Object[] ob=(Object[]) objetotal;
 //				TempoMarker marcador=(TempoMarker) ob[1];

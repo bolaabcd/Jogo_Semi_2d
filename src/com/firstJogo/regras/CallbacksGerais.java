@@ -6,14 +6,15 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
+import com.firstJogo.Handlers.FuncaoHandler;
+import com.firstJogo.Handlers.KeyEventHandler;
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.Humano;
 import com.firstJogo.Mundos.MundoCarregado;
 import com.firstJogo.estrutura.Camera;
-import com.firstJogo.estrutura.KeyHandler;
+import com.firstJogo.estrutura.DirecoesPadrao;
+import com.firstJogo.estrutura.ExternalCallback;
 import com.firstJogo.main.GeradorEventos;
-import com.firstJogo.utils.Funcao;
-import com.firstJogo.utils.FuncaoHandler;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
 
@@ -22,37 +23,37 @@ public class CallbacksGerais implements ExternalCallback {
 
 	// ATIVADO NA THREAD RENDERIZADORA
 	public static void prepararBotoes() {
-		HashMap<Integer, Funcao<Boolean>> botaoremovido = new HashMap<Integer, Funcao<Boolean>>();
-		HashMap<Integer, Funcao<Boolean>> botaopressionado = new HashMap<Integer, Funcao<Boolean>>();
-		botaopressionado.put(GLFW.GLFW_KEY_W, (isSintetico) -> {
+		HashMap<Integer, FuncaoHandler<Boolean>> botaoremovido = new HashMap<Integer, FuncaoHandler<Boolean>>();
+		HashMap<Integer, FuncaoHandler<Boolean>> botaopressionado = new HashMap<Integer, FuncaoHandler<Boolean>>();
+		botaopressionado.put(GLFW.GLFW_KEY_W, new FuncaoHandler<Boolean>((isSintetico) -> {
 			// Ativando a movimentação do player para a direção adequada e iniciando o
 			// movimento
 			PlayerRegras.newMoveDirection(Entidade.getPlayer(), DirecoesPadrao.CIMA);
 			Entidade.getPlayer().iniciarMovimento();
 //			System.out.println(Entidade.getPlayer().getAngulo()*180/Math.PI);
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_A, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_A, new FuncaoHandler<Boolean>((isSintetico) -> {
 			// Ativando a movimentação do player para a direção adequada e iniciando o
 			// movimento
 			PlayerRegras.newMoveDirection(Entidade.getPlayer(), DirecoesPadrao.ESQUERDA);
 			Entidade.getPlayer().iniciarMovimento();
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_S, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_S, new FuncaoHandler<Boolean>((isSintetico) -> {
 			// Ativando a movimentação do player para a direção adequada e iniciando o
 			// movimento
 			PlayerRegras.newMoveDirection(Entidade.getPlayer(), DirecoesPadrao.BAIXO);
 			Entidade.getPlayer().iniciarMovimento();
 
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_D, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_D, new FuncaoHandler<Boolean>((isSintetico) -> {
 			// Ativando a movimentação do player para a direção adequada e iniciando o
 			// movimento
 			PlayerRegras.newMoveDirection(Entidade.getPlayer(), DirecoesPadrao.DIREITA);
 			Entidade.getPlayer().iniciarMovimento();
 
-		});
+		},null));
 
-		botaopressionado.put(GLFW.GLFW_KEY_LEFT_CONTROL, (isSintetico) -> {
+		botaopressionado.put(GLFW.GLFW_KEY_LEFT_CONTROL, new FuncaoHandler<Boolean>((isSintetico) -> {
 			try {
 				// Ativar modo correr se for humano
 				Humano player = (Humano) Entidade.getPlayer();
@@ -60,8 +61,8 @@ public class CallbacksGerais implements ExternalCallback {
 			} catch (ClassCastException c) {
 
 			}
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_LEFT_SHIFT, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_LEFT_SHIFT, new FuncaoHandler<Boolean>((isSintetico) -> {
 			try {
 				// Ativar modo agachar se for humano
 				Humano player = (Humano) Entidade.getPlayer();
@@ -69,10 +70,10 @@ public class CallbacksGerais implements ExternalCallback {
 			} catch (ClassCastException c) {
 
 			}
-		});
+		},null));
 
 		// TODO: aprimorar o spawnar humano
-		botaopressionado.put(GLFW.GLFW_KEY_P, (nada) -> {
+		botaopressionado.put(GLFW.GLFW_KEY_P, new FuncaoHandler<Boolean>((isSintetico) -> {
 			Humano testado = new Humano(new Vector2f(0, 0));
 //			testado.setMundopos(new float[] {0,0});
 			MundoCarregado.atual.getEntidades().add(testado);
@@ -102,74 +103,74 @@ public class CallbacksGerais implements ExternalCallback {
 			},testado));
 			
 			
-		});
+		},null));
 
 		// Alteradores de visão da câmera do player
-		botaopressionado.put(GLFW.GLFW_KEY_PAGE_DOWN, (isSintetico) -> {
+		botaopressionado.put(GLFW.GLFW_KEY_PAGE_DOWN, new FuncaoHandler<Boolean>((isSintetico) -> {
 			Camera.getMain().setSize(Camera.getMain().getWidth() - GlobalVariables.intperbloco,
 					Camera.getMain().getHeight() - GlobalVariables.intperbloco);
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_PAGE_UP, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_PAGE_UP, new FuncaoHandler<Boolean>((isSintetico) -> {
 			Camera.getMain().setSize(Camera.getMain().getWidth() + GlobalVariables.intperbloco,
 					Camera.getMain().getHeight() + GlobalVariables.intperbloco);
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_UP, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_UP, new FuncaoHandler<Boolean>((isSintetico) -> {
 			Camera.getMain().setSize(Camera.getMain().getWidth(),
 					Camera.getMain().getHeight() + GlobalVariables.intperbloco);
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_DOWN, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_DOWN, new FuncaoHandler<Boolean>((isSintetico) -> {
 			Camera.getMain().setSize(Camera.getMain().getWidth(),
 					Camera.getMain().getHeight() - GlobalVariables.intperbloco);
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_LEFT, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_LEFT, new FuncaoHandler<Boolean>((isSintetico) -> {
 			Camera.getMain().setSize(Camera.getMain().getWidth() - GlobalVariables.intperbloco,
 					Camera.getMain().getHeight());
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_RIGHT, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_RIGHT, new FuncaoHandler<Boolean>((isSintetico) -> {
 			Camera.getMain().setSize(Camera.getMain().getWidth() + GlobalVariables.intperbloco,
 					Camera.getMain().getHeight());
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_R, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_R, new FuncaoHandler<Boolean>((isSintetico) -> {
 			Camera.getMain().setSize(480, 480);
 //			GlobalVariables.contador=1;
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_J, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_J, new FuncaoHandler<Boolean>((isSintetico) -> {
 			Camera.getMain().setPos(Camera.getMain().getPos().add(1, 0, 0));
-		});
-		botaopressionado.put(GLFW.GLFW_KEY_K, (isSintetico) -> {
+		},null));
+		botaopressionado.put(GLFW.GLFW_KEY_K, new FuncaoHandler<Boolean>((isSintetico) -> {
 			Camera.getMain().setPos(Camera.getMain().getPos().add(-1, 0, 0));
-		});
+		},null));
 
-		botaoremovido.put(GLFW.GLFW_KEY_LEFT_CONTROL, (nada) -> {
+		botaoremovido.put(GLFW.GLFW_KEY_LEFT_CONTROL, new FuncaoHandler<Boolean>((isSintetico) -> {
 			try {
 				Humano player = (Humano) Entidade.getPlayer();
 				PlayerRegras.resetMovModo(player);
 			} catch (ClassCastException c) {
 
 			}
-		});
-		botaoremovido.put(GLFW.GLFW_KEY_LEFT_SHIFT, (nada) -> {
+		},null));
+		botaoremovido.put(GLFW.GLFW_KEY_LEFT_SHIFT, new FuncaoHandler<Boolean>((isSintetico) -> {
 			try {
 				Humano player = (Humano) Entidade.getPlayer();
 				PlayerRegras.resetMovModo(player);
 			} catch (ClassCastException c) {
 
 			}
-		});
-		botaoremovido.put(GLFW.GLFW_KEY_W, (isSintetico) -> {
+		},null));
+		botaoremovido.put(GLFW.GLFW_KEY_W, new FuncaoHandler<Boolean>((isSintetico) -> {
 			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.CIMA);
-		});
-		botaoremovido.put(GLFW.GLFW_KEY_A, (isSintetico) -> {
+		},null));
+		botaoremovido.put(GLFW.GLFW_KEY_A, new FuncaoHandler<Boolean>((isSintetico) -> {
 			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.ESQUERDA);
-		});
-		botaoremovido.put(GLFW.GLFW_KEY_S, (isSintetico) -> {
+		},null));
+		botaoremovido.put(GLFW.GLFW_KEY_S, new FuncaoHandler<Boolean>((isSintetico) -> {
 			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.BAIXO);
-		});
-		botaoremovido.put(GLFW.GLFW_KEY_D, (isSintetico) -> {
+		},null));
+		botaoremovido.put(GLFW.GLFW_KEY_D, new FuncaoHandler<Boolean>((isSintetico) -> {
 			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.DIREITA);
-		});
+		},null));
 
-		KeyHandler.addBotaoCallbacks(botaoremovido, botaopressionado);
+		KeyEventHandler.addBotaoCallbacks(botaoremovido, botaopressionado);
 
 	}
 
@@ -318,9 +319,9 @@ public class CallbacksGerais implements ExternalCallback {
 		if (key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE)
 			GLFW.glfwSetWindowShouldClose(window, true);
 		else if (action == GLFW.GLFW_PRESS) {
-			KeyHandler.botaoPressionado(key, false);
+			KeyEventHandler.botaoPressionado(key, false);
 		} else if (action == GLFW.GLFW_RELEASE) {
-			KeyHandler.botaoRemovido(key, false);
+			KeyEventHandler.botaoRemovido(key, false);
 		}
 	}
 

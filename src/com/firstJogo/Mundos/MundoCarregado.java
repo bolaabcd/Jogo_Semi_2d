@@ -1,12 +1,11 @@
 package com.firstJogo.Mundos;
 
-import com.firstJogo.Mundos.Entidade;
-import com.firstJogo.regras.DirecoesPadrao;
-import com.firstJogo.utils.GlobalVariables;
-
 import java.util.ArrayList;
 
 import org.joml.Vector2f;
+
+import com.firstJogo.estrutura.DirecoesPadrao;
+import com.firstJogo.utils.GlobalVariables;
 
 public class MundoCarregado {
 	public static MundoCarregado atual;

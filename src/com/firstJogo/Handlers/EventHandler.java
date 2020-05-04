@@ -1,8 +1,6 @@
-package com.firstJogo.main;
+package com.firstJogo.Handlers;
 
 import java.util.HashMap;
-
-import com.firstJogo.utils.FuncaoHandler;
 
 public class EventHandler<K, V> {
 	private final HashMap<K, FuncaoHandler<V>> funcoes=new HashMap<K, FuncaoHandler<V>>();
@@ -22,7 +20,7 @@ public class EventHandler<K, V> {
 //	}
 	public void throwEvento(K chave) {
 //		System.out.println(funcoes.size());
-//		if(funcoes.get(chave)!=null)
+		if(funcoes.get(chave)!=null)
 			funcoes.get(chave).run();
 	}
 	

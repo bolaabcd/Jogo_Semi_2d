@@ -13,7 +13,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryStack;
 
 import com.firstJogo.regras.CallbacksGerais;
-import com.firstJogo.regras.ExternalCallback;
 import com.firstJogo.utils.GlobalVariables;
 
 //Classe da Janela do Jogo.

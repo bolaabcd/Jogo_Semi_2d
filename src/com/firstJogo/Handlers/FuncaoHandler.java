@@ -24,7 +24,9 @@
 //		funcao.run(argumento);
 //	}
 //}
-package com.firstJogo.utils;
+package com.firstJogo.Handlers;
+
+import com.firstJogo.utils.Funcao;
 
 public class FuncaoHandler<V> {
 	private final Funcao<V> funcao;

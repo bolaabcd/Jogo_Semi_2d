@@ -1,9 +1,10 @@
-package com.firstJogo.visual;
+package com.firstJogo.estrutura;
 
+import com.firstJogo.Handlers.FuncaoHandler;
 import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.utils.Funcao;
-import com.firstJogo.utils.FuncaoHandler;
 import com.firstJogo.utils.TempoMarker;
+import com.firstJogo.visual.Textura;
 
 public class TexturaAnimador {
 	public TempoMarker[] marcadores;//Marca o tempo DEPOIS de a textura ser colocada!

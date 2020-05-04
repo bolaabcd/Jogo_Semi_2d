@@ -1,4 +1,4 @@
-package com.firstJogo.regras;
+package com.firstJogo.estrutura;
 
 public enum DirecoesPadrao {
 	CIMA,

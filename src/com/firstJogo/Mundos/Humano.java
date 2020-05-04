@@ -2,15 +2,14 @@ package com.firstJogo.Mundos;
 
 import org.joml.Vector2f;
 
+import com.firstJogo.Handlers.FuncaoHandler;
+import com.firstJogo.estrutura.DirecoesPadrao;
+import com.firstJogo.estrutura.TexturaAnimador;
 import com.firstJogo.main.GeradorEventos;
-import com.firstJogo.regras.DirecoesPadrao;
 import com.firstJogo.regras.PlayerRegras;
-import com.firstJogo.utils.FuncaoHandler;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.Textura;
-import com.firstJogo.visual.TexturaAnimador;
-//import com.firstJogo.visual.TipodeCriatura;
 
 public class Humano extends Entidade{
 	private modos movModo;
