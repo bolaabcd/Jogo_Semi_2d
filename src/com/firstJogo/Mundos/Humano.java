@@ -2,8 +2,10 @@ package com.firstJogo.Mundos;
 
 import org.joml.Vector2f;
 
+import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.regras.DirecoesPadrao;
 import com.firstJogo.regras.PlayerRegras;
+import com.firstJogo.utils.FuncaoHandler;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.Textura;
@@ -107,10 +109,14 @@ public class Humano extends Entidade{
 		milisImpulso=2000;//2000
 		movModo=modos.ANDANDO;
 		sprintModifier=2.4f;//TODO:Seria 1.2 (quando não tiver com a fome completa!)
-		impulso=new TempoMarker(milisImpulso*1000000,(pessoa)->{
-			((Humano) pessoa).setMovModo(modos.SPRINT);
-		},this);
 		
+//		impulso=new TempoMarker(milisImpulso*1000000,(pessoa)->{
+//			((Humano) pessoa).setMovModo(modos.SPRINT);
+//		},this);
+		impulso=new TempoMarker(milisImpulso*1000000);
+		GeradorEventos.entidadeTempoHandler.addEvento(impulso, new FuncaoHandler<Entidade>((pessoa)->{
+			((Humano) pessoa).setMovModo(modos.SPRINT);
+		},this));
 	}
 	
 	public void modo_agachar() {

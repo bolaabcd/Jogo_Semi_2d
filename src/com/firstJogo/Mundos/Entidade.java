@@ -5,7 +5,9 @@ import java.util.HashMap;
 
 import org.joml.Vector2f;
 
+import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.regras.DirecoesPadrao;
+import com.firstJogo.utils.FuncaoHandler;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.Modelo;
@@ -16,28 +18,29 @@ public class Entidade {
 	private static Entidade player;
 	
 	
-	private final TempoMarker mover=new TempoMarker(1000000,(objetotal)->{
-		Object[] ob=(Object[]) objetotal;
-		TempoMarker marcador=(TempoMarker) ob[1];
-		Entidade ent=(Entidade)ob[2];
-		
-		float movx=(float) ((ent.getForcedVelocModified().x+ent.getDirecModifiers()[0]*ent.getVelocModified())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
-		float movy=(float) ((ent.getForcedVelocModified().y+ent.getDirecModifiers()[1]*ent.getVelocModified())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
-
-		ent.setMundopos(new Vector2f (
-				ent.getMundopos().x + movx, 
-				ent.getMundopos().y 
-				));
-		
-		ent.setMundopos(new Vector2f (
-				ent.getMundopos().x, 
-				ent.getMundopos().y  +  movy 
-				));
-//		System.out.println("X: "+ent.getBlocoCoords()[0]);
-//		System.out.println("Y: "+ent.getBlocoCoords()[1]);
-
-		
-	},new Object[] {2,null,this});
+	private final TempoMarker mover=new TempoMarker(1000000);
+//			new TempoMarker(1000000,(objetotal)->{
+//				Object[] ob=(Object[]) objetotal;
+//				TempoMarker marcador=(TempoMarker) ob[1];
+//				Entidade ent=(Entidade)ob[2];
+//				
+//				float movx=(float) ((ent.getForcedVelocModified().x+ent.getDirecModifiers()[0]*ent.getVelocModified())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
+//				float movy=(float) ((ent.getForcedVelocModified().y+ent.getDirecModifiers()[1]*ent.getVelocModified())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
+//
+//				ent.setMundopos(new Vector2f (
+//						ent.getMundopos().x + movx, 
+//						ent.getMundopos().y 
+//						));
+//				
+//				ent.setMundopos(new Vector2f (
+//						ent.getMundopos().x, 
+//						ent.getMundopos().y  +  movy 
+//						));
+////				System.out.println("X: "+ent.getBlocoCoords()[0]);
+////				System.out.println("Y: "+ent.getBlocoCoords()[1]);
+//
+//				
+//			},new Object[] {2,null,this});
 	private boolean isPlayer;
 	private double angulo=1200;
 	private Vector2f mundopos;//A coordenada 0,0 é a quina inferior direita do bloco 0,0 (centro do chunk 0,0).
@@ -61,6 +64,28 @@ public class Entidade {
 		hitboxPos=modelo.getVertices();
 //		if(mundopos.length!=2)throw new IllegalArgumentException("Quantidade inválida de coordenadas!");
 		this.mundopos=mundopos;
+		GeradorEventos.entidadeTempoHandler.addEvento(mover, new FuncaoHandler<Entidade>((entidade)->{
+//			Object[] ob=(Object[]) objetotal;
+			TempoMarker marcador=entidade.mover;
+			Entidade ent=entidade;
+			
+			float movx=(float) ((ent.getForcedVelocModified().x+ent.getDirecModifiers()[0]*ent.getVelocModified())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
+			float movy=(float) ((ent.getForcedVelocModified().y+ent.getDirecModifiers()[1]*ent.getVelocModified())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
+
+			ent.setMundopos(new Vector2f (
+					ent.getMundopos().x + movx, 
+					ent.getMundopos().y 
+					));
+			
+			ent.setMundopos(new Vector2f (
+					ent.getMundopos().x, 
+					ent.getMundopos().y  +  movy 
+					));
+//			System.out.println("X: "+ent.getBlocoCoords()[0]);
+//			System.out.println("Y: "+ent.getBlocoCoords()[1]);
+
+			
+		},this));
 	}
 	private boolean checkColisao(Vector2f mundopos) {
 //		System.out.println(getColidCoords(mundopos).size());
