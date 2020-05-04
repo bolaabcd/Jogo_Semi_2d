@@ -53,7 +53,8 @@ public class TexturaAnimador {
 	}
 	public boolean isAtivado() {
 		for(TempoMarker marc:marcadores)
-			if(GeradorEventos.tempopassado.contains(marc))return true;
+//			if(GeradorEventos.tempopassado.contains(marc))return true;
+			if(GeradorEventos.isOn(marc))return true;
 		return false;
 		
 	}

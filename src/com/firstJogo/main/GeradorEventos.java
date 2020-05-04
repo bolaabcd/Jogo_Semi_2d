@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.firstJogo.Handlers.EventHandler;
+import com.firstJogo.Handlers.FuncaoHandler;
 import com.firstJogo.Handlers.KeyEventHandler;
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.estrutura.Janela;
@@ -18,7 +19,7 @@ public class GeradorEventos implements Runnable{
 	public static EventHandler<Integer,Integer> botaomantidoHandler=new EventHandler<Integer,Integer>();
 	
 	//CopyOnWrite porque as modificações podem vir de outras Threads.
-	public static CopyOnWriteArrayList<TempoMarker> tempopassado=new  CopyOnWriteArrayList<TempoMarker>();//Cbacks de tempo
+	private static CopyOnWriteArrayList<TempoMarker> tempopassado=new  CopyOnWriteArrayList<TempoMarker>();//Cbacks de tempo
 //	public static EventHandler<TempoMarker,TempoMarker> autotemperHandler=new EventHandler<TempoMarker,TempoMarker>();
 //	public static HashMap<TempoMarker,EventHandler> tempoHandler=new HashMap<TempoMarker,EventHandler>();
 	public static EventHandler<TempoMarker,TexturaAnimador> texturaEventHandler=new EventHandler<TempoMarker,TexturaAnimador>();
@@ -27,7 +28,27 @@ public class GeradorEventos implements Runnable{
 	
 //	public static ArrayList<EventHandler<TempoMarker,Object>> eventHandlers= new ArrayList<EventHandler<TempoMarker,Object>>(); 
 	public static ArrayList<EventHandler<TempoMarker,?>> eventHandlers= new ArrayList<EventHandler<TempoMarker,?>>(); 
+//	public static EventHandler<TempoMarker,?> tempoHandlers=new EventHandler<TempoMarker,?>();
+	
+	
+	public static <T> void addTempoEvento(EventHandler<TempoMarker, T> handler, FuncaoHandler<T> func,
+			TempoMarker marcador) {
+		GeradorEventos.tempopassado.add(marcador);
+		handler.addEvento(marcador, func);
+	}
 
+	public static boolean isOn(TempoMarker marc) {
+		return tempopassado.contains(marc);
+	}
+
+	public static void addMarker(TempoMarker marc) {
+		tempopassado.add(marc);
+	}
+
+	public static void remMarker(TempoMarker marc) {
+		tempopassado.remove(marc);
+	}
+	
 	//Objeto da Janela do Jogo
 	private Janela principal;
 	
@@ -64,5 +85,6 @@ public class GeradorEventos implements Runnable{
 			GlobalVariables.TicksPorSegundo+=1;//Marca quantos Loops se passaram por segundo
 		}
 	}
+	
 	
 }

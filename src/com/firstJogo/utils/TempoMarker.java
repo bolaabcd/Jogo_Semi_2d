@@ -14,17 +14,17 @@ public class TempoMarker {//Guarda a função e o objeto-argumento da função p
 	}
 	
 	public void ativar() {
-		if(GeradorEventos.tempopassado.contains(this))return;
+		if(GeradorEventos.isOn(this))return;
 		this.resetTemporegistrado();
-		GeradorEventos.tempopassado.add(this);
+		GeradorEventos.addMarker(this);
 //		GeradorEventos.puroTempoHandler.addEvento(this);
 //		GeradorEventos.entidadeTempoHandler.remEvento(this);
 	}
 	
 	public void desativar() {
-		if(!GeradorEventos.tempopassado.contains(this))return;
-		while(GeradorEventos.tempopassado.contains(this))
-			GeradorEventos.tempopassado.remove(this);
+		if(!GeradorEventos.isOn(this))return;
+		while(GeradorEventos.isOn(this))
+			GeradorEventos.remMarker(this);
 //			GeradorEventos.puroTempoHandler.remEvento(this);
 //			GeradorEventos.entidadeTempoHandler.remEvento(this);
 	}
