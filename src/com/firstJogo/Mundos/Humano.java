@@ -104,6 +104,17 @@ public class Humano extends Entidade{
 	}
 	public Humano(Vector2f mundopos) {
 		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),mundopos);
+		if(!isPlayer()) 
+			GeradorEventos.entidadeTempoHandler.addEvento(remover, new FuncaoHandler<Entidade>((entidade)->{
+//				System.out.println("REMOVIDO2");
+				GeradorEventos.forcedRemMarker(entidade.remover);
+				GeradorEventos.forcedRemMarker(entidade.mover);
+				GeradorEventos.forcedRemMarker(impulso);
+				animado.desativar();
+			},this));
+			
+		
+		
 		this.veloc=5;
 		milisImpulso=2000;//2000
 		movModo=modos.ANDANDO;
@@ -127,6 +138,7 @@ public class Humano extends Entidade{
 	}
 	
 	public void modo_andar() {
+		if(!isPlayer())remover.ativar();
 		setMovModo(Humano.modos.ANDANDO);
 	}
 	

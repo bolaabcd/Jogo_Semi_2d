@@ -47,6 +47,13 @@ public class GeradorEventos implements Runnable{
 
 	public static void remMarker(TempoMarker marc) {
 		tempopassado.remove(marc);
+//		for(EventHandler<TempoMarker,?> ev:eventHandlers)
+//			ev.remEvento(marc);
+	}
+	public static void forcedRemMarker(TempoMarker marc) {
+		tempopassado.remove(marc);
+		for(EventHandler<TempoMarker,?> ev:eventHandlers)
+			ev.remEvento(marc);
 	}
 	
 	//Objeto da Janela do Jogo
@@ -79,7 +86,7 @@ public class GeradorEventos implements Runnable{
 //					puroTempoHandler.throwEvento(marker);
 					marker.resetTemporegistrado();
 				}
-//			System.out.println(texturaEventHandler.getsize());
+//			System.out.println(entidadeTempoHandler.getsize());
 			//Confere se passou o tempo mínimo e,  se sim, executa a função adequada com o argumento adequado.
 			
 			GlobalVariables.TicksPorSegundo+=1;//Marca quantos Loops se passaram por segundo

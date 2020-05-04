@@ -18,8 +18,8 @@ public class Entidade {
 	private static final long segundosRemover=30;
 	private static Entidade player;
 	
-	private final TempoMarker mover=new TempoMarker(1000000);
-	private final TempoMarker remover=new TempoMarker(segundosRemover*1000000000L);
+	protected final TempoMarker mover=new TempoMarker(1000000);
+	protected final TempoMarker remover=new TempoMarker(segundosRemover*1000000000L);
 //			new TempoMarker(1000000,(objetotal)->{
 //				Object[] ob=(Object[]) objetotal;
 //				TempoMarker marcador=(TempoMarker) ob[1];
@@ -65,7 +65,7 @@ public class Entidade {
 		hitboxPos=modelo.getVertices();
 //		if(mundopos.length!=2)throw new IllegalArgumentException("Quantidade inválida de coordenadas!");
 		this.mundopos=mundopos;
-		GeradorEventos.entidadeTempoHandler.addEvento(mover, new FuncaoHandler<Entidade>((entidade)->{
+		if(!isPlayer)GeradorEventos.entidadeTempoHandler.addEvento(mover, new FuncaoHandler<Entidade>((entidade)->{
 //			Object[] ob=(Object[]) objetotal;
 			TempoMarker marcador=entidade.mover;
 			Entidade ent=entidade;
@@ -84,9 +84,15 @@ public class Entidade {
 					));
 //			System.out.println("X: "+ent.getBlocoCoords()[0]);
 //			System.out.println("Y: "+ent.getBlocoCoords()[1]);
-
 			
 		},this));
+		if(!isPlayer)
+			GeradorEventos.entidadeTempoHandler.addEvento(remover, new FuncaoHandler<Entidade>((entidade)->{
+//				System.out.println("REMOVIDO1");
+				GeradorEventos.forcedRemMarker(entidade.remover);
+				GeradorEventos.forcedRemMarker(entidade.mover);
+			},this));
+//		remover.ativar();
 	}
 	private boolean checkColisao(Vector2f mundopos) {
 //		System.out.println(getColidCoords(mundopos).size());
