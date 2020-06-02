@@ -91,6 +91,7 @@ public class Entidade {
 //				System.out.println("REMOVIDO1");
 				GeradorEventos.forcedRemMarker(entidade.remover);
 				GeradorEventos.forcedRemMarker(entidade.mover);
+				
 			},this));
 //		remover.ativar();
 	}

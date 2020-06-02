@@ -45,7 +45,7 @@ public class TipodeBloco {
 	public static TipodeBloco[] azulejos=new TipodeBloco[256*256];//Todos os azulejos existentes!
 	
 	public static final TipodeBloco grama=new TipodeBloco("Grama");
-	public static final TipodeBloco ppedra=new TipodeBloco("PPedra",(short) 20);//Padrede de pedra
+	public static final TipodeBloco pedra=new TipodeBloco("Pedra",(short) 20);//Padrede de pedra
 	public TipodeBloco(String textura) {
 		this.id=nextid;
 		nextid+=1;
