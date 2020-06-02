@@ -26,29 +26,25 @@ import com.firstJogo.utils.GlobalVariables;
 //Thread responsável por preparar as variáveis iniciais do programa e ler as configurações.
 public class Prepare implements Runnable {
 	
-	// OUTRA THREAD: Prepara o objeto da câmera principal (do player):
 	public static void prepararCamera() {
 		Camera camera = new Camera(Janela.getPrincipal().getWidth(), Janela.getPrincipal().getHeight());
 		Camera.setMain(camera);
 	}
 
-	// OUTRA THREAD: Define a entidade Humano que será o player:
 	public static void prepararPlayer() {
-		Humano player = new Humano(new Vector2f(0, 0));
-		player.setPlayer(true);
+		Humano player = new Humano(new Vector2f(0, 0),true);
+//		player.setPlayer(true);
 	}
 
-	// OUTRA THREAD: Define a Janela do jogo:
 	public static void prepararJanela() {
 		Janela.setGeneralCallbacks();
 		Janela.Iniciar();
 		Janela.setPrincipal(new Janela("MicroCraft!", true));
 		Janela.getPrincipal().contextualize();
 		Janela.getPrincipal().setWindowPos(0.5f, 0.5f);
-		Janela.Vsync(true);
+		Janela.Vsync(GlobalVariables.vSync);
 	}
 
-	// OUTRA THREAD: Cria o mundo do jogo:
 	public static void prepararMundo() {
 		MundoCarregado mundo = new MundoCarregado();
 		mundo.setAtual();
@@ -88,13 +84,13 @@ public class Prepare implements Runnable {
 						(File arqi) -> defimagem(arqi, str));
 
 			
-			// Cria o arquivo padrão para os tipos de bloco.
+			// Cria o arquivo padrão para os tipos de bloco. TODO
 			arq = new File(GlobalVariables.mundos_pastas[0] + "descricao_dos_blocos" + ".txt");
 			runIfNotExists(arq, this::tipospadrao);
 
 			KeyEventHandler.inicializar();
 
-		} catch (IOException e) {// Erro ao manipular os arquivos
+		} catch (IOException e) {
 			System.out.println("ERRO COM OS ARQUIVOS!");
 			throw new UncheckedIOException(e);
 		} 
@@ -105,35 +101,32 @@ public class Prepare implements Runnable {
 			c.accept(arq);
 	}
 
-	// Criando configurações padrão:
 	private void config_padrao(File config) throws IOException {
-		config.createNewFile();// Criando arquivo
+		config.createNewFile();
 		Properties prop = new Properties();
-		prop.put("Pastas de imagem:", "./imgs/");// Pasta de imagens padrão
-		prop.put("Pastas de mundo:", "./mundos/");// Pasta de mundos padrão
-		prop.put("Cor de fundo (RGBA):", "0,0,0,0");// Cor de fundo padrão
+		prop.put("Pastas de imagem:", "./imgs/");
+		prop.put("Pastas de mundo:", "./mundos/");
+		prop.put("Cor de fundo (RGBA):", "0,0,0,0");
 		prop.put("Pastas de plugins:", "./plugins/");// TODO: Pasta de plugins padrão
-		prop.put("Plugins:", "");// Lista de plugins
-		prop.put("FPS Maximo:", "60");// FPS Máximo Padrão
+		prop.put("Plugins:", "");// TODO: Lista de plugins
+		prop.put("FPS Maximo:", "60");
+		prop.put("VSync ativado:", "true");
 
 		FileOutputStream out = new FileOutputStream(config);
 
 		prop.store(out, "Configurações gerais do jogo!");
 
 		out.close();
-
-		if (!new File("./imgs/").exists())
-			new File("./imgs/").mkdir();// Criando pasta padrão de imagens
-		if (!new File("./mundos/").exists())
-			new File("./mundos/").mkdir();// Criando pasta padrão de mundos
-		if (!new File("./plugins/").exists())
-			new File("./plugins/").mkdir();// Criando pasta padrão de plugins
-
+		
+		runIfNotExists(new File("./imgs/"), File::mkdir);
+		runIfNotExists(new File("./mundos/"), File::mkdir);
+		runIfNotExists(new File("./plugins/"), File::mkdir);
 	}
 
 	private String[] getArgs(Properties prop, String chave) {
 		try {
-			return ((String) prop.get(chave)).split(",");
+			String s=(String) prop.get(chave);
+			return s==null?null:s.split(",");
 		} catch (ClassCastException c) {
 			throw new RuntimeException("Erro inesperado!");
 		}
@@ -159,7 +152,7 @@ public class Prepare implements Runnable {
 
 	private void validateNumerico(String chave, int min, int max, int quantiaMin, int quantiaMax, Properties prop) {
 		String[] args = validacaoInicial(chave, quantiaMax, quantiaMax, prop);
-		String mensagem = "Os elementos do argumento " + chave + " devem possuir valores numéricos entre " + min + " e "
+		String mensagem = "Os elementos do argumento \"" + chave + "\" devem possuir valores numéricos entre " + min + " e "
 				+ max + ".";
 		for (String arg : args) {
 			int valor = 0;
@@ -172,6 +165,12 @@ public class Prepare implements Runnable {
 				erroconfig(new IllegalStateException(mensagem));
 		}
 	}
+	
+	private void validateBooleano(String chave,int quantiaMin,int quantiaMax,Properties prop) {
+		String[] args=validacaoInicial(chave, quantiaMin, quantiaMax, prop);
+		if(!(args[0].equals("true")||args[0].equals("false")))
+			erroconfig(new IllegalStateException("Os elementos do argumento \""+chave+"\" devem ser \"true\" ou \"false\"."));
+	}
 
 	// Validando configurações atuais:
 	private void valid_config(File config) throws IOException {
@@ -180,11 +179,11 @@ public class Prepare implements Runnable {
 		prop.load(fin);
 		fin.close();
 
-		System.out.println(prop);
 		for (String chave : new String[] { "Pastas de imagem:", "Pastas de mundo:", "Pastas de plugins:" })
 			validateArquivos(chave, 1, Integer.MAX_VALUE, prop);
 		validateNumerico("Cor de fundo (RGBA):", 0, 255, 4, 4, prop);
 		validateNumerico("FPS Maximo:", 0, Integer.MAX_VALUE, 1, 1, prop);
+		validateBooleano("VSync ativado:", 1, 1, prop);
 	}
 
 	// Carregando configurações
@@ -192,6 +191,7 @@ public class Prepare implements Runnable {
 		FileInputStream fin = new FileInputStream(config);
 		Properties prop = new Properties();
 		prop.load(fin);
+		GlobalVariables.vSync=prop.get("VSync ativado:").equals("true");
 		GlobalVariables.imagem_pastas = getArgs(prop, "Pastas de imagem:");// Setando pasta de imagens
 		GlobalVariables.mundos_pastas = getArgs(prop, "Pastas de mundo:");// Setando pasta-mundi
 		GlobalVariables.plugins_pastas = getArgs(prop, "Pastas de plugins:");// Setando pasta de plugins

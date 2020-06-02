@@ -2,7 +2,7 @@ package com.firstJogo.utils;
 
 //Variáveis globais a serem acessadas por qualquer classe de qualquer lugar.
 public class GlobalVariables {
-	public static String imagem_path="./imgs";
+	public static String imagem_path="./imgs/";
 	public static String imagem_formato = ".png";//Formato de imagens
 	
 	
@@ -12,7 +12,9 @@ public class GlobalVariables {
 	public static String[] plugins_pastas;//Pasta de plugins
 //	public static String[] plugins;//Lista dos nomes de plugins
 	public static float[] ClearColor = new float[] { 1f, 0f, 0f, 0f };//Cor de limpeza da tela
-
+	public static boolean vSync;
+	
+	
 	public static int TicksPorSegundo;//Quantidade de Ticks Por Segundo realizados
 
 	public static int contador = 0;//Contador global para fins de desenvolvimento

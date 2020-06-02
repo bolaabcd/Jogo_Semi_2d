@@ -10,6 +10,7 @@ public class TempoMarker {//Guarda a função e o objeto-argumento da função p
 	
 	public TempoMarker(long tempolimite) {//Nulo indica o prório objeto
 		this.tempolimite=tempolimite;
+		this.temporegistrado=Long.MAX_VALUE;
 //		fhand=new FuncaoHandler(funcao,endereco_argumento,this);
 	}
 	

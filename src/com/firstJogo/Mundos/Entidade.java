@@ -57,42 +57,45 @@ public class Entidade {
 	protected boolean isParado=true;
 	protected char veloc=0;
 	
-	
-
-	public Entidade(Textura visu,Vector2f mundopos) {
+	protected Entidade(Textura visu,Vector2f mundopos,boolean isPlayer) {
 		visual=visu;
 		modelo=visu.genModelo();
 		hitboxPos=modelo.getVertices();
+//		this.isPlayer=isPlayer;
+		setPlayer(isPlayer);
 //		if(mundopos.length!=2)throw new IllegalArgumentException("Quantidade inválida de coordenadas!");
 		this.mundopos=mundopos;
-		if(!isPlayer)GeradorEventos.entidadeTempoHandler.addEvento(mover, new FuncaoHandler<Entidade>((entidade)->{
-//			Object[] ob=(Object[]) objetotal;
-			TempoMarker marcador=entidade.mover;
-			Entidade ent=entidade;
-			
-			float movx=(float) ((ent.getForcedVelocModified().x+ent.getDirecModifiers()[0]*ent.getVelocModified())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
-			float movy=(float) ((ent.getForcedVelocModified().y+ent.getDirecModifiers()[1]*ent.getVelocModified())*GlobalVariables.intperbloco*(double)(System.nanoTime()-marcador.getTemporegistrado())/1000000000);
+//		if(!isPlayer)GeradorEventos.entidadeTempoHandler.addEvento(mover, new FuncaoHandler<Entidade>((entidade)->{
+		if (!isPlayer) {
+			GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((entidade) -> {
 
-			ent.setMundopos(new Vector2f (
-					ent.getMundopos().x + movx, 
-					ent.getMundopos().y 
-					));
-			
-			ent.setMundopos(new Vector2f (
-					ent.getMundopos().x, 
-					ent.getMundopos().y  +  movy 
-					));
+//			Object[] ob=(Object[]) objetotal;
+				TempoMarker marcador = entidade.mover;
+//				System.out.println(marcador);
+				Entidade ent = entidade;
+
+				float movx = (float) ((ent.getForcedVelocModified().x
+						+ ent.getDirecModifiers()[0] * ent.getVelocModified()) * GlobalVariables.intperbloco
+						* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
+				float movy = (float) ((ent.getForcedVelocModified().y
+						+ ent.getDirecModifiers()[1] * ent.getVelocModified()) * GlobalVariables.intperbloco
+						* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
+
+				ent.setMundopos(new Vector2f(ent.getMundopos().x + movx, ent.getMundopos().y));
+
+				ent.setMundopos(new Vector2f(ent.getMundopos().x, ent.getMundopos().y + movy));
 //			System.out.println("X: "+ent.getBlocoCoords()[0]);
 //			System.out.println("Y: "+ent.getBlocoCoords()[1]);
-			
-		},this));
-		if(!isPlayer)
-			GeradorEventos.entidadeTempoHandler.addEvento(remover, new FuncaoHandler<Entidade>((entidade)->{
-//				System.out.println("REMOVIDO1");
+
+			}, this), mover);
+//			GeradorEventos.entidadeTempoHandler.addEvento(remover, new FuncaoHandler<Entidade>((entidade)->{
+			GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((entidade) -> {
 				GeradorEventos.forcedRemMarker(entidade.remover);
 				GeradorEventos.forcedRemMarker(entidade.mover);
-				
-			},this));
+
+			}, this), remover);
+//			mover.ativar();
+		}
 //		remover.ativar();
 	}
 	private boolean checkColisao(Vector2f mundopos) {
@@ -107,7 +110,7 @@ public class Entidade {
 			
 //			System.out.println(tipo.getTangibilidade()>this.fantasmabilidade);
 			if(tipo.getTangibilidade()>this.fantasmabilidade) {
-				tipo.getFuncaoColisiva().run(new Object[] {this,Bloco.toCentroBloco(bloco[0], bloco[1])});
+				tipo.getFuncaoColisiva().accept(new Object[] {this,Bloco.toCentroBloco(bloco[0], bloco[1])});
 				res=true;
 			}
 		}
@@ -260,8 +263,8 @@ public class Entidade {
 		return isPlayer;
 	}
 
-	public void setPlayer(boolean isPlayer) {
-		if(isPlayer=true) {
+	private void setPlayer(boolean isPlayer) {
+		if(isPlayer) {
 			Entidade.player=this;
 			this.isPlayer = isPlayer;
 			}

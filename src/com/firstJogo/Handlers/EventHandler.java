@@ -2,6 +2,8 @@ package com.firstJogo.Handlers;
 
 import java.util.HashMap;
 
+import com.firstJogo.estrutura.NotFoundException;
+
 public class EventHandler<K, V> {
 	private final HashMap<K, FuncaoHandler<V>> funcoes=new HashMap<K, FuncaoHandler<V>>();
 	
@@ -11,17 +13,16 @@ public class EventHandler<K, V> {
 	public void remEvento(K chave) {
 		funcoes.remove(chave);
 	}
-	public FuncaoHandler<V> getEvento(K chave) {
-		return funcoes.get(chave);
+	public void runEvento(K chave,V valor) throws NotFoundException {
+		if(funcoes.get(chave)==null) 
+			throw new NotFoundException("Evento não encontrado!");
+		funcoes.get(chave).run(valor);
 	}
-//	public void throwEvento(K chave, V argumento) {
-//		if(funcoes.get(chave)!=null)
-//			funcoes.get(chave).run(argumento);
-//	}
-	public void throwEvento(K chave) {
-//		System.out.println(funcoes.size());
-		if(funcoes.get(chave)!=null)
-			funcoes.get(chave).run();
+
+	public void throwEvento(K chave) throws NotFoundException {
+		if(funcoes.get(chave)==null) 
+			throw new NotFoundException("Evento não encontrado!");
+		funcoes.get(chave).run();
 	}
 	
 	public int getsize() {

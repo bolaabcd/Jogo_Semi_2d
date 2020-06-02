@@ -1,8 +1,9 @@
 package com.firstJogo.estrutura;
 
+import java.util.function.Consumer;
+
 import com.firstJogo.Handlers.FuncaoHandler;
 import com.firstJogo.main.GeradorEventos;
-import com.firstJogo.utils.Funcao;
 import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.Textura;
 
@@ -12,15 +13,12 @@ public class TexturaAnimador {
 	private int[] texturas_alternativas;
 	private int texatual;
 	
-//	private static final Funcao<Object> funcao=((objeto)->{
-	private static final Funcao<TexturaAnimador> funcao=((animador)->{
-//		System.out.println(animador.texatual);
+	private static final Consumer<TexturaAnimador> funcao=((animador)->{
 		animador.marcadores[animador.texatual].desativar();
 		animador.texatual+=1;
  		if(animador.texatual==animador.texturas_alternativas.length)animador.texatual=0;
 		animador.textura_referencial.setId(animador.texturas_alternativas[animador.texatual]);
 		animador.marcadores[animador.texatual].ativar();
-		
 	});
 	
 	public TexturaAnimador(long[] intervalos,Textura[] texturas_alternativas, Textura textura_referencial) {
@@ -32,17 +30,13 @@ public class TexturaAnimador {
 		
 		for(int i=0;i<intervalos.length;i++) {
 			this.texturas_alternativas[i]=texturas_alternativas[i].getId();
-//			marcadores[i]=new TempoMarker(intervalos[i],funcao,this);
 			marcadores[i]=new TempoMarker(intervalos[i]);
-//			GeradorEventos.tempoHandler.put(marcadores[i], new EventHandler<>());
 		}
-//		if(GeradorEventos.texturaEventHandler.getEvento(marcadores[0])==null)
-//			GeradorEventos.texturaEventHandler.addEvento(marcadores[0], new FuncaoHandler<TexturaAnimador>(funcao,this));
 		for(TempoMarker marcador: marcadores)
-			GeradorEventos.texturaEventHandler.addEvento(marcador, new FuncaoHandler<TexturaAnimador>(funcao,this));
+			GeradorEventos.addTempoEvento(TexturaAnimador.class, new FuncaoHandler<TexturaAnimador>(funcao,this),marcador);
+		desativar();
 	}
 	public void ativar() {
-//		System.out.println(marcadores[0]);
 		marcadores[0].ativar();
 	}
 	public void desativar() {
@@ -53,7 +47,6 @@ public class TexturaAnimador {
 	}
 	public boolean isAtivado() {
 		for(TempoMarker marc:marcadores)
-//			if(GeradorEventos.tempopassado.contains(marc))return true;
 			if(GeradorEventos.isOn(marc))return true;
 		return false;
 		

@@ -5,15 +5,14 @@ import org.joml.Vector3f;
 
 //Câmera virtual que pode ser movida pelo mundo.
 public class Camera{
-	private static Camera main;//Câmera principal (do player)
+	private static Camera main;
 	
-	private Vector3f pos;//Posição da câmera no mundo
-	private Matrix4f projec;//Projeção da câmera
+	private Vector3f pos;
+	private Matrix4f projec;
 	private int width,height;//Tamanho e comprimento do que a câmera apresenta
 	//(o quanto do mundo ela apresenta, EM INTS!)
 	
 	
-	//Construtor da Câmera
 	public Camera(int width, int height) {
 		this.width=width;
 		this.height=height;
@@ -30,35 +29,32 @@ public class Camera{
 		if(main)
 		Camera.setMain(this);
 	}
-	//Setando posição da Câmera
+
 	public void setPos(Vector3f pos) {
 		this.pos=pos;
 	}
-	//Obtendo posição da Câmera
+
 	public Vector3f getPos() {
 		return this.pos;
 	}
 	//Obtendo projeção da câmera, já com a posição imbutida, para uso de renderização.
 	public Matrix4f getProjec() {
 		Matrix4f mat=new Matrix4f();
-		projec.mul(new Matrix4f().setTranslation(pos),mat);//Multiplica pela posição antes de retornar!!!
+		projec.mul(new Matrix4f().setTranslation(pos),mat);
 		return mat;
 	}
 	//Obtendo projeção "crua" da câmera, sem considerar a posição da câmera no mundo, só na tela
 	public Matrix4f getRawProjec() {
 		return projec;
 	}
-	//Setando tamanho da câmera (o quanto do mundo ela apresenta, EM INTS!)
 	public void setSize(int width, int height) {
 		this.width=width;
 		this.height=height;
 		projec=new Matrix4f().setOrtho2D(-width/2, width/2, -height/2, height/2);;
 	}
-	//Obter comprimento do quanto a câmera apresenta EM INTS!
 	public int getWidth() {
 		return width;
 	}
-	//Obter altura do quanto a câmera apresenta EM INTS!
 	public int getHeight() {
 		return height;
 	}
@@ -70,11 +66,9 @@ public class Camera{
 		
 		return res;
 	}
-	//Obter câmera principal (do player)
 	public static Camera getMain() {
 		return main;
 	}
-	//Setar câmera principal (do player)
 	public static void setMain(Camera main) {
 		Camera.main = main;
 	}

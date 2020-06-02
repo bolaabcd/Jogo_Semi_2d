@@ -1,16 +1,17 @@
 package com.firstJogo.visual;
 
+import java.util.function.Consumer;
+
 import org.joml.Vector2f;
 
 import com.firstJogo.Mundos.Entidade;
-import com.firstJogo.utils.Funcao;
 import com.firstJogo.utils.GlobalVariables;
 
 public class TipodeBloco {
 	private char id;
 	private String textura;
 	
-	private final Funcao<Object[]> funcaoColisiva;
+	private final Consumer<Object[]> funcaoColisiva;
 	private short tangibilidadePadrao=0;//Quanto mais tangível, mais ele causa colisão. 0 é o chão.
 	//Entidades tem fantasmabilidade. Só podem se mover por blocos com tang. menor que sua fanstamabilidade.
 	//10 é a fantasmabilidade padrão. Quem tentar se mover por algo mais tangível ou menos fantasmável, não
@@ -19,7 +20,7 @@ public class TipodeBloco {
 	private static char nextid=0;
 	
 	//Entidade e posição central do bloco!
-	private final Funcao<Object[]> colisaoPadrao=(entidadecentro)-> {
+	private final Consumer<Object[]> colisaoPadrao=(entidadecentro)-> {
 		Object[] ob=(Object[]) entidadecentro;
 		Entidade ent=(Entidade) ob[0];
 		Vector2f cent=(Vector2f)ob[1];
@@ -63,7 +64,7 @@ public class TipodeBloco {
 		azulejos[id]=this;
 		this.funcaoColisiva=colisaoPadrao;
 	}
-	public TipodeBloco(String textura,short tangibilidade,Funcao<Object[]> funcaoColisiva) {
+	public TipodeBloco(String textura,short tangibilidade,Consumer<Object[]> funcaoColisiva) {
 		this.id=nextid;
 		nextid+=1;
 		this.textura=textura;
@@ -91,7 +92,7 @@ public class TipodeBloco {
 	public void setTangibilidade(short tangibilidadePadrao) {
 		this.tangibilidadePadrao = tangibilidadePadrao;
 	}
-	public Funcao<Object[]> getFuncaoColisiva() {
+	public Consumer<Object[]> getFuncaoColisiva() {
 		return funcaoColisiva;
 	}
 }

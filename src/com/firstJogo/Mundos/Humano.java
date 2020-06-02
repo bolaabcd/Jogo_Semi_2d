@@ -102,16 +102,17 @@ public class Humano extends Entidade{
 		AGACHADO,
 		SPRINT
 	}
-	public Humano(Vector2f mundopos) {
-		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),mundopos);
+	public Humano(Vector2f mundopos,boolean isPlayer) {
+		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),mundopos,isPlayer);
 		if(!isPlayer()) 
-			GeradorEventos.entidadeTempoHandler.addEvento(remover, new FuncaoHandler<Entidade>((entidade)->{
-//				System.out.println("REMOVIDO2");
-				GeradorEventos.forcedRemMarker(entidade.remover);
-				GeradorEventos.forcedRemMarker(entidade.mover);
-				GeradorEventos.forcedRemMarker(impulso);
-				animado.desativar();
-			},this));
+//			GeradorEventos.entidadeTempoHandler.addEvento(remover, new FuncaoHandler<Entidade>((entidade)->{
+			GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((entidade)->{
+				Humano hum=(Humano)entidade;
+				GeradorEventos.forcedRemMarker(hum.remover);
+				GeradorEventos.forcedRemMarker(hum.mover);
+				GeradorEventos.forcedRemMarker(hum.impulso);
+				hum.animado.desativar();
+			},this),remover);
 			
 		
 		
@@ -124,9 +125,10 @@ public class Humano extends Entidade{
 //			((Humano) pessoa).setMovModo(modos.SPRINT);
 //		},this);
 		impulso=new TempoMarker(milisImpulso*1000000);
-		GeradorEventos.entidadeTempoHandler.addEvento(impulso, new FuncaoHandler<Entidade>((pessoa)->{
+//		GeradorEventos.entidadeTempoHandler.addEvento(impulso, new FuncaoHandler<Entidade>((pessoa)->{
+		GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((pessoa)->{
 			((Humano) pessoa).setMovModo(modos.SPRINT);
-		},this));
+		},this),impulso);
 	}
 	
 	public void modo_agachar() {
@@ -197,6 +199,7 @@ public class Humano extends Entidade{
 	
 	
 	private float getModVelocModifier() {
+//		if(!isPlayer())System.out.println(movModo);
 		switch(movModo) {
 		case CORRENDO:
 			return 1f;
@@ -215,19 +218,21 @@ public class Humano extends Entidade{
 	}
 	private void setMovModo(modos modo) {
 		boolean mesmomodo=movModo==modo;
-		
-		if(modo==modos.CORRENDO)impulso.ativar();
-		else if(modo!=modos.SPRINT){
+		if (modo == modos.CORRENDO)
+			impulso.ativar();
+		else if (modo != modos.SPRINT) {
 			impulso.desativar();
-			}
-		movModo=modo;
+		}
+		movModo = modo;
 		
 		if(!isParado&&!mesmomodo) 
 			updateAnimacao();
 	}
 	private void updateAnimacao() {
 		if(animado!=null)if(animado.isAtivado())pararAnimacoes();
-
+		
+//		System.out.println(animado.isAtivado());
+		
 		switch(movModo) {
 		case AGACHADO:
 			switch(this.getOlhar()) {
