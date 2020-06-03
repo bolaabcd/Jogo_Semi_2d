@@ -106,13 +106,13 @@ public class Humano extends Entidade{
 		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),mundopos,isPlayer);
 		if(!isPlayer()) 
 //			GeradorEventos.entidadeTempoHandler.addEvento(remover, new FuncaoHandler<Entidade>((entidade)->{
-			GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((entidade)->{
+			GeradorEventos.addTempoEvento(remover, new FuncaoHandler<Entidade>((entidade)->{
 				Humano hum=(Humano)entidade;
 				GeradorEventos.forcedRemMarker(hum.remover);
 				GeradorEventos.forcedRemMarker(hum.mover);
 				GeradorEventos.forcedRemMarker(hum.impulso);
 				hum.animado.desativar();
-			},this),remover);
+			},this));
 			
 		
 		
@@ -121,14 +121,11 @@ public class Humano extends Entidade{
 		movModo=modos.ANDANDO;
 		sprintModifier=2.4f;//TODO:Seria 1.2 (quando não tiver com a fome completa!)
 		
-//		impulso=new TempoMarker(milisImpulso*1000000,(pessoa)->{
-//			((Humano) pessoa).setMovModo(modos.SPRINT);
-//		},this);
 		impulso=new TempoMarker(milisImpulso*1000000);
-//		GeradorEventos.entidadeTempoHandler.addEvento(impulso, new FuncaoHandler<Entidade>((pessoa)->{
-		GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((pessoa)->{
-			((Humano) pessoa).setMovModo(modos.SPRINT);
-		},this),impulso);
+		GeradorEventos.addTempoEvento(impulso, new FuncaoHandler<Humano>((Humano pessoa)->{
+			pessoa.setMovModo(modos.SPRINT);
+			impulso.ignoreMarker();
+		},this));
 	}
 	
 	public void modo_agachar() {
@@ -140,7 +137,7 @@ public class Humano extends Entidade{
 	}
 	
 	public void modo_andar() {
-		if(!isPlayer())remover.ativar();
+		if(!isPlayer())remover.resetar();
 		setMovModo(Humano.modos.ANDANDO);
 	}
 	
@@ -168,7 +165,8 @@ public class Humano extends Entidade{
 	@Override
 	public boolean pararMovimento() {
 		if(super.pararMovimento()) {
-			impulso.desativar();
+//			impulso.desativar();
+			impulso.ignoreMarker();
 			animado.desativar();
 
 			if(this.isPlayer())PlayerRegras.resetMovModo(this);
@@ -180,7 +178,7 @@ public class Humano extends Entidade{
 	@Override
 	public boolean setAngulo(double angulo) {
 		if(super.setAngulo(angulo)) {
-			impulso.resetTemporegistrado();
+			impulso.resetar();
 			if(this.movModo==modos.SPRINT) {
 				if(this.isPlayer())
 					PlayerRegras.resetMovModo(this);
@@ -219,9 +217,10 @@ public class Humano extends Entidade{
 	private void setMovModo(modos modo) {
 		boolean mesmomodo=movModo==modo;
 		if (modo == modos.CORRENDO)
-			impulso.ativar();
+			impulso.resetar();
 		else if (modo != modos.SPRINT) {
-			impulso.desativar();
+//			impulso.desativar();
+			impulso.ignoreMarker();
 		}
 		movModo = modo;
 		
@@ -230,8 +229,6 @@ public class Humano extends Entidade{
 	}
 	private void updateAnimacao() {
 		if(animado!=null)if(animado.isAtivado())pararAnimacoes();
-		
-//		System.out.println(animado.isAtivado());
 		
 		switch(movModo) {
 		case AGACHADO:

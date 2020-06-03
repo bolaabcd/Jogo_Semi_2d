@@ -67,7 +67,7 @@ public class Entidade {
 		this.mundopos=mundopos;
 //		if(!isPlayer)GeradorEventos.entidadeTempoHandler.addEvento(mover, new FuncaoHandler<Entidade>((entidade)->{
 		if (!isPlayer) {
-			GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((entidade) -> {
+			GeradorEventos.addTempoEvento(mover, new FuncaoHandler<Entidade>((entidade) -> {
 
 //			Object[] ob=(Object[]) objetotal;
 				TempoMarker marcador = entidade.mover;
@@ -86,14 +86,13 @@ public class Entidade {
 				ent.setMundopos(new Vector2f(ent.getMundopos().x, ent.getMundopos().y + movy));
 //			System.out.println("X: "+ent.getBlocoCoords()[0]);
 //			System.out.println("Y: "+ent.getBlocoCoords()[1]);
-
-			}, this), mover);
+				mover.resetar();
+			}, this));
 //			GeradorEventos.entidadeTempoHandler.addEvento(remover, new FuncaoHandler<Entidade>((entidade)->{
-			GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((entidade) -> {
+			GeradorEventos.addTempoEvento(remover, new FuncaoHandler<Entidade>((entidade) -> {
 				GeradorEventos.forcedRemMarker(entidade.remover);
 				GeradorEventos.forcedRemMarker(entidade.mover);
-
-			}, this), remover);
+			}, this));
 //			mover.ativar();
 		}
 //		remover.ativar();
@@ -167,13 +166,15 @@ public class Entidade {
 	public boolean pararMovimento() {//True se foi, False se não.
 		if(isParado)return false;
 		isParado=true;
-		if(!this.isPlayer())mover.desativar();
+		if(!this.isPlayer())
+			mover.ignoreMarker();
+//			mover.desativar();
 		return true;
 	}
 	public boolean iniciarMovimento() {
 		if(!isParado)return false;
 		isParado=false;
-		if(!this.isPlayer())mover.ativar();
+		if(!this.isPlayer())mover.resetar();
 		return true;
 	}
 	

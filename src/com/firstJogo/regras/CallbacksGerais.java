@@ -72,14 +72,22 @@ public class CallbacksGerais implements ExternalCallback {
 			testado.modo_andar();
 
 			TempoMarker marc=new TempoMarker(1000000);
-			GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((perseguidor) -> {
+			GeradorEventos.addTempoEvento(marc, new FuncaoHandler<Entidade>((Entidade perseguidor) -> {
 				Entidade genti=perseguidor;
 				Vector2f playerpos = Entidade.getPlayer().getMundopos();
 				Vector2f gentipos = genti.getMundopos();
 				genti.setAngulo(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
 				genti.iniciarMovimento();
-			},testado), marc);
-			marc.ativar();
+				marc.resetar();
+			},testado));
+//			GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((perseguidor) -> {
+//				Entidade genti=perseguidor;
+//				Vector2f playerpos = Entidade.getPlayer().getMundopos();
+//				Vector2f gentipos = genti.getMundopos();
+//				genti.setAngulo(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
+//				genti.iniciarMovimento();
+//			},testado), marc);
+			marc.resetar();
 			
 			
 		},null));
@@ -155,7 +163,7 @@ public class CallbacksGerais implements ExternalCallback {
 
 	public static void prepararTempos() {
 		TempoMarker marctemp=new TempoMarker(1000000);
-		GeradorEventos.addTempoEvento(TempoMarker.class, new FuncaoHandler<>((Marcador) -> {// Move o Player, e cada milisegundo vai executar!
+		GeradorEventos.addTempoEvento(marctemp, new FuncaoHandler<>((Marcador) -> {// Move o Player, e cada milisegundo vai executar!
 
 			TempoMarker marcador = Marcador;
 
@@ -183,16 +191,19 @@ public class CallbacksGerais implements ExternalCallback {
 //					System.out.println("Xc: "+Math.floor((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)/16+0.5f));//Chunk Coords
 //					System.out.println("Yc: "+Math.floor((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)/16+0.5f));
 
-		},marctemp), marctemp);
-		marctemp.ativar();
+			
+			marcador.resetar();
+		},marctemp));
+		marctemp.resetar();
 
 		
 		TempoMarker marc=new TempoMarker(1000000000);
-		GeradorEventos.addTempoEvento(TempoMarker.class, new FuncaoHandler<TempoMarker>((Marcador) -> {
+		GeradorEventos.addTempoEvento(marc, new FuncaoHandler<TempoMarker>((Marcador) -> {
 			System.out.println("TPS: " + GlobalVariables.TicksPorSegundo);
 			GlobalVariables.TicksPorSegundo = 0;
-		}, marc),marc);
-		marc.ativar();
+			marc.resetar();
+		}, marc));
+		marc.resetar();
 		
 
 	}

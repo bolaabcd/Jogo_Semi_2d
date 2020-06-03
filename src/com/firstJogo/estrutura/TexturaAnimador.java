@@ -14,15 +14,16 @@ public class TexturaAnimador {
 	private int texatual;
 	
 	private static final Consumer<TexturaAnimador> funcao=((animador)->{
-		animador.marcadores[animador.texatual].desativar();
+		animador.marcadores[animador.texatual].ignoreMarker();
 		animador.texatual+=1;
  		if(animador.texatual==animador.texturas_alternativas.length)animador.texatual=0;
 		animador.textura_referencial.setId(animador.texturas_alternativas[animador.texatual]);
-		animador.marcadores[animador.texatual].ativar();
+		animador.marcadores[animador.texatual].resetar();
 	});
 	
 	public TexturaAnimador(long[] intervalos,Textura[] texturas_alternativas, Textura textura_referencial) {
-		if(intervalos.length!=texturas_alternativas.length)throw new IllegalStateException("É preciso ter o mesmo número de intervalos de tempo e de texturas!");
+		if(intervalos.length!=texturas_alternativas.length)
+			throw new IllegalStateException("É preciso ter o mesmo número de intervalos de tempo e de texturas!");
 		this.textura_referencial=textura_referencial;
 		this.texatual=0;
 		marcadores=new TempoMarker[intervalos.length];
@@ -33,21 +34,20 @@ public class TexturaAnimador {
 			marcadores[i]=new TempoMarker(intervalos[i]);
 		}
 		for(TempoMarker marcador: marcadores)
-			GeradorEventos.addTempoEvento(TexturaAnimador.class, new FuncaoHandler<TexturaAnimador>(funcao,this),marcador);
-		desativar();
+			GeradorEventos.addTempoEvento(marcador, new FuncaoHandler<TexturaAnimador>(funcao,this));
 	}
 	public void ativar() {
-		marcadores[0].ativar();
+		marcadores[0].resetar();
 	}
 	public void desativar() {
 		for(TempoMarker marc:marcadores) 
-			marc.desativar();
+			marc.ignoreMarker();
 		
 		this.textura_referencial.setId(this.texturas_alternativas[0]);
 	}
 	public boolean isAtivado() {
 		for(TempoMarker marc:marcadores)
-			if(GeradorEventos.isOn(marc))return true;
+			if(!marc.isIgnored())return true;
 		return false;
 		
 	}
