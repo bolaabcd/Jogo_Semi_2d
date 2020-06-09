@@ -59,7 +59,7 @@ public class Entidade {
 	
 	protected Entidade(Textura visu,Vector2f mundopos,boolean isPlayer) {
 		visual=visu;
-		modelo=visu.genModelo();
+		modelo=Textura.modeloPadrao;
 		hitboxPos=modelo.getVertices();
 //		this.isPlayer=isPlayer;
 		setPlayer(isPlayer);

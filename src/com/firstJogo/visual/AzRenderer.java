@@ -9,30 +9,6 @@ import com.firstJogo.utils.GlobalVariables;
 
 public class AzRenderer {
 	private HashMap<String, Textura> texturas;
-	private static final Modelo quadrado = new Modelo(new float[] {
-//			0, 0, 0, // índice 0
-//			1.1f, 1.1f, 0, // índice 1
-//			1.1f, 0, 0, // índice 2
-//			0, 1.1f, 0,// índice 3
-//			// 1.1f É MUITO MELHOR PRA EVITAR AS LINHAS VERMELHAS ENTRE QUADRADOS!
-			0, 0, 0, // índice 0
-			1f, 1f, 0, // índice 1
-			1f, 0, 0, // índice 2
-			0, 1f, 0,// índice 3
-	}, new int[] { // Pra só declarar os pontos uma vez!
-			0, 1, 2, 
-			0, 3, 1 
-	}).addtex(new float[] { // Parece q a origem aqui é o topo da esquerda...
-//			0,    1.1f, 
-//			1.1f, 0, 
-//			1.1f, 1.1f, 
-//			0,    0,// Dá pra fazer MUITA maluquice com esses números aqui...
-			0,    1f, 
-			1f, 0, 
-			1f, 1f, 
-			0,    0,
-	}
-			);
 
 	public AzRenderer() {
 		texturas = new HashMap<String, Textura>();
@@ -63,7 +39,7 @@ public class AzRenderer {
 																				
 		shad.setUniforme("projecao", mat);
 
-		quadrado.renderizar();
+		Textura.modeloPadrao.renderizar();
 	}
 
 }
