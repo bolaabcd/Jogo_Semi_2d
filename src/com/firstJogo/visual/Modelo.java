@@ -14,35 +14,6 @@ public class Modelo {
 	private int id_indices;
 	private float[][] vertices;
 	
-//	private float[][] ordenarPontos(float[][] pontos) {
-//		float[] Xizes=new float[pontos.length];
-//		float[] Yons=new float[pontos.length];
-//		int[] origorder=new int[pontos.length];
-//		float[] pontoCentral=new float[2];
-//		for(int i=0;i<pontos.length;i++) {
-//			if(pontos.length!=1)throw new IllegalStateException("Erro: pontos com mais de uma coordenada");
-//			Xizes[i]=pontos[i][0];
-//			Yons[i]=pontos[i][1];
-//			origorder[i]=i;
-//		}
-//		
-//		float menordist=Float.MAX_VALUE;
-//		int pontoInicial=0;
-//		for(int i=0;i<pontos.length;i++) {
-//			if(Math.sqrt(Math.pow(Xizes[i], 2)+Math.pow(Yons[i], 2))<menordist) {
-//				menordist=(float) Math.sqrt(Math.pow(Xizes[i], 2)+Math.pow(Yons[i], 2));
-//				pontoInicial=i;
-//			}
-//			pontoCentral[0]+=Xizes[i];
-//			pontoCentral[1]+=Yons[i];
-//		}
-//		pontoCentral[0]/=Xizes.length;
-//		pontoCentral[1]/=Yons.length;
-//		for(int i=0;i<pontos.length;i++) {
-//			
-//		}
-//		return null;
-//	}
 	public Modelo(float[] vertices,int[] indices) {
 		float[] ponto1=new float[] {vertices[0],vertices[1]};
 		float[] ponto2=new float[] {vertices[3],vertices[4]};
@@ -110,6 +81,9 @@ public class Modelo {
 		return this;
 		
 	}
+	public float[][] getVertices() {//Começa no baixo esquerda, sentido horário.
+		return vertices;
+	}
 	private FloatBuffer buf(float[] valores) {
 		FloatBuffer fb= BufferUtils.createFloatBuffer(valores.length);
 		fb.put(valores);
@@ -121,8 +95,5 @@ public class Modelo {
 		ib.put(valores);
 		ib.flip();
 		return ib;
-	}
-	public float[][] getVertices() {//Começa no baixo esquerda, sentido horário.
-		return vertices;
 	}
 }

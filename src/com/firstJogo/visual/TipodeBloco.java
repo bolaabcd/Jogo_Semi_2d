@@ -30,13 +30,13 @@ public class TipodeBloco {
 		float newx=0f;
 		float newy=0f;
 		if(result.x>=GlobalVariables.intperbloco)
-			newx=-(float) (ent.getDirecModifiers()[0]*ent.getVelocModified());
+			newx=-(float) (ent.getMovDirecModifiers()[0]*ent.getVelocModified());
 		else if(result.x<=-GlobalVariables.intperbloco)
-			newx=-(float) (ent.getDirecModifiers()[0]*ent.getVelocModified());
+			newx=-(float) (ent.getMovDirecModifiers()[0]*ent.getVelocModified());
 		if(result.y>=GlobalVariables.intperbloco)
-			newy=-(float) (ent.getDirecModifiers()[1]*ent.getVelocModified());
+			newy=-(float) (ent.getMovDirecModifiers()[1]*ent.getVelocModified());
 		else if(result.y<=-GlobalVariables.intperbloco)
-			newy=-(float) (ent.getDirecModifiers()[1]*ent.getVelocModified());
+			newy=-(float) (ent.getMovDirecModifiers()[1]*ent.getVelocModified());
 //		if(result.x)
 //		ent.addForcedVelocModifier("colisao", result);
 		ent.addForcedVelocModifier("colisao", new Vector2f(newx,newy));

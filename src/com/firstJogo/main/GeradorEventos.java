@@ -10,7 +10,7 @@ import com.firstJogo.utils.TempoMarker;
 public class GeradorEventos implements Runnable {
 	public static Thread main;
 
-	// CopyOnWrite porque as modificações podem vir de outras Threads.
+	@SuppressWarnings("rawtypes")
 	private static final ConcurrentHashMap<TempoMarker, FuncaoHandler> tempoHandlers = new ConcurrentHashMap<TempoMarker, FuncaoHandler>();
 
 	public static void addTempoEvento(TempoMarker marcador, FuncaoHandler<?> func) {

@@ -66,7 +66,7 @@ public class CallbacksGerais implements ExternalCallback {
 		botaopressionado.put(GLFW.GLFW_KEY_P, new FuncaoHandler<Boolean>((isSintetico) -> {
 			Humano testado = new Humano(new Vector2f(0, 0),false);
 			MundoCarregado.atual.getEntidades().add(testado);
-			testado.setAngulo(Math.atan2(Entidade.getPlayer().getMundopos().y - testado.getMundopos().y,
+			testado.setAnguloMovimento(Math.atan2(Entidade.getPlayer().getMundopos().y - testado.getMundopos().y,
 					Entidade.getPlayer().getMundopos().x - testado.getMundopos().x));
 			testado.iniciarMovimento();
 			testado.modo_andar();
@@ -76,7 +76,7 @@ public class CallbacksGerais implements ExternalCallback {
 				Entidade genti=perseguidor;
 				Vector2f playerpos = Entidade.getPlayer().getMundopos();
 				Vector2f gentipos = genti.getMundopos();
-				genti.setAngulo(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
+				genti.setAnguloMovimento(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
 				genti.iniciarMovimento();
 				marc.resetar();
 			},testado));
@@ -166,13 +166,13 @@ public class CallbacksGerais implements ExternalCallback {
 		GeradorEventos.addTempoEvento(marctemp, new FuncaoHandler<>((Marcador) -> {// Move o Player, e cada milisegundo vai executar!
 
 			TempoMarker marcador = Marcador;
-
+			if(!Entidade.getPlayer().isParado()) {
 			float newx = Camera.getMain().getPos().x + (float) ((-Entidade.getPlayer().getForcedVelocModified().x
-					- Entidade.getPlayer().getDirecModifiers()[0] * Entidade.getPlayer().getVelocModified())
+					- Entidade.getPlayer().getMovDirecModifiers()[0] * Entidade.getPlayer().getVelocModified())
 					* GlobalVariables.intperbloco * (double) (System.nanoTime() - marcador.getTemporegistrado())
 					/ 1000000000);
 			float newy = Camera.getMain().getPos().y + (float) ((-Entidade.getPlayer().getForcedVelocModified().y
-					- Entidade.getPlayer().getDirecModifiers()[1] * Entidade.getPlayer().getVelocModified())
+					- Entidade.getPlayer().getMovDirecModifiers()[1] * Entidade.getPlayer().getVelocModified())
 					* GlobalVariables.intperbloco * (double) (System.nanoTime() - marcador.getTemporegistrado())
 					/ 1000000000);
 
@@ -191,6 +191,7 @@ public class CallbacksGerais implements ExternalCallback {
 //					System.out.println("Xc: "+Math.floor((Entidade.getPlayer().getMundopos()[0]/GlobalVariables.intperbloco)/16+0.5f));//Chunk Coords
 //					System.out.println("Yc: "+Math.floor((Entidade.getPlayer().getMundopos()[1]/GlobalVariables.intperbloco)/16+0.5f));
 
+			}
 			
 			marcador.resetar();
 		},marctemp));

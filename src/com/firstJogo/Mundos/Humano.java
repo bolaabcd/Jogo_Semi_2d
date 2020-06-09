@@ -176,8 +176,8 @@ public class Humano extends Entidade{
 		return false;
 	}
 	@Override
-	public boolean setAngulo(double angulo) {
-		if(super.setAngulo(angulo)) {
+	public boolean setAnguloMovimento(double angulo) {
+		if(super.setAnguloMovimento(angulo)) {
 			impulso.resetar();
 			if(this.movModo==modos.SPRINT) {
 				if(this.isPlayer())
@@ -224,7 +224,7 @@ public class Humano extends Entidade{
 		}
 		movModo = modo;
 		
-		if(!isParado&&!mesmomodo) 
+		if(!isParado()&&!mesmomodo) 
 			updateAnimacao();
 	}
 	private void updateAnimacao() {
