@@ -16,9 +16,9 @@ import com.firstJogo.estrutura.NotFoundException;
 //Se há um botão está pressionado e seu oposto não, ele DEVE cumprir seu papel.
 //Este jogo utiliza eventos de "pressionar" e "soltar" botões para alterações de estado 
 //Este jogo utiliza apenas mudanças de estado para alterar qualquer coisa no mundo.
-public class KeyEventHandler {
-	private static final EventHandler<Integer,Boolean> botaoRemovidoHandler=new EventHandler<Integer,Boolean>();
-	private static final EventHandler<Integer,Boolean> botaoPressionadoHandler=new EventHandler<Integer,Boolean>();
+public class KeyCallbackHandler {
+	private static final CallbackHandler<Integer,Boolean> botaoRemovidoHandler=new CallbackHandler<Integer,Boolean>();
+	private static final CallbackHandler<Integer,Boolean> botaoPressionadoHandler=new CallbackHandler<Integer,Boolean>();
 
 	private static CopyOnWriteArraySet<Integer> keys = new CopyOnWriteArraySet<Integer>();//Chaves atualmente pressionadas
 
@@ -34,9 +34,9 @@ public class KeyEventHandler {
 	}
 	public static void addBotaoCallbacks(HashMap<Integer,FuncaoHandler<Boolean>> botaoremovidonovo,HashMap<Integer,FuncaoHandler<Boolean>> botaopressionadonovo) {
 		for(Integer i:botaoremovidonovo.keySet())
-			botaoRemovidoHandler.addEvento(i, botaoremovidonovo.get(i));
+			botaoRemovidoHandler.addCallback(i, botaoremovidonovo.get(i));
 		for(Integer i:botaopressionadonovo.keySet())
-			botaoPressionadoHandler.addEvento(i, botaopressionadonovo.get(i));
+			botaoPressionadoHandler.addCallback(i, botaopressionadonovo.get(i));
 	}
 	
 	//Evento de remoção de botão
@@ -44,12 +44,12 @@ public class KeyEventHandler {
 		if(!keys.contains(botao))throw new NotFoundException("Botão não encontrado!");;
 		
 		keys.remove(botao);
-		botaoRemovidoHandler.runEvento(botao, isSintetico);
+		botaoRemovidoHandler.runCallback(botao, isSintetico);
 		
 		if(!isSintetico)
 			if(opostos.get(botao)!=null)
 				if(keys.contains(opostos.get(botao))) 
-					botaoPressionadoHandler.runEvento(opostos.get(botao), true);
+					botaoPressionadoHandler.runCallback(opostos.get(botao), true);
 					
 		
 	}
@@ -60,19 +60,19 @@ public class KeyEventHandler {
 		if(!isSintetico)
 			if(opostos.get(botao)!=null)
 				if(keys.contains(opostos.get(botao))) 
-					botaoRemovidoHandler.runEvento(opostos.get(botao), true);
+					botaoRemovidoHandler.runCallback(opostos.get(botao), true);
 					
 				
 //					botaoRemovidoHandler.getEvento(opostos.get(botao)).run(true);
 		
 		keys.add(botao);
-		botaoPressionadoHandler.runEvento(botao, isSintetico);
+		botaoPressionadoHandler.runCallback(botao, isSintetico);
 //		if(botaoPressionadoHandler.getEvento(botao)!=null)
 //			botaoPressionadoHandler.getEvento(botao).run(isSintetico);
 
 	}
 	public static void ativarEvento(boolean isSintetico,int chave) throws NotFoundException {
-		botaoPressionadoHandler.runEvento(chave, isSintetico);
+		botaoPressionadoHandler.runCallback(chave, isSintetico);
 	}
 	public static boolean containsKey(int chave) {
 		return keys.contains(chave);

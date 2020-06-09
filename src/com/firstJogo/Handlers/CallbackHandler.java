@@ -4,22 +4,22 @@ import java.util.HashMap;
 
 import com.firstJogo.estrutura.NotFoundException;
 
-public class EventHandler<K, V> {
+public class CallbackHandler<K, V> {
 	private final HashMap<K, FuncaoHandler<V>> funcoes=new HashMap<K, FuncaoHandler<V>>();
 	
-	public void addEvento(K chave, FuncaoHandler<V> funcao) {
+	public void addCallback(K chave, FuncaoHandler<V> funcao) {
 		funcoes.put(chave, funcao);
 	}
-	public void remEvento(K chave) {
+	public void remCallback(K chave) {
 		funcoes.remove(chave);
 	}
-	public void runEvento(K chave,V valor) throws NotFoundException {
+	public void runCallback(K chave,V valor) throws NotFoundException {
 		if(funcoes.get(chave)==null) 
 			throw new NotFoundException("Evento não encontrado!");
 		funcoes.get(chave).run(valor);
 	}
 
-	public void throwEvento(K chave) throws NotFoundException {
+	public void throwCallback(K chave) throws NotFoundException {
 		if(funcoes.get(chave)==null) 
 			throw new NotFoundException("Evento não encontrado!");
 		funcoes.get(chave).run();

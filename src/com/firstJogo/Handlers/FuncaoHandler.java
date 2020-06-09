@@ -2,7 +2,7 @@ package com.firstJogo.Handlers;
 
 import java.util.function.Consumer;
 
-public class FuncaoHandler<V> {
+public class FuncaoHandler<V>{
 	private final Consumer<V> funcao;
 	private V argumento;
 

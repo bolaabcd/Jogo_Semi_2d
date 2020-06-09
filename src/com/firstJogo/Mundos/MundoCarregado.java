@@ -1,6 +1,9 @@
 package com.firstJogo.Mundos;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.joml.Vector2f;
 
@@ -11,13 +14,14 @@ public class MundoCarregado {
 	public static MundoCarregado atual;
 	public static ArrayList<MundoCarregado> mundos=new ArrayList<MundoCarregado>();
 	
-	private final ArrayList<Entidade> entidades=new ArrayList<Entidade>();
+	private final Set<Entidade> entidades=Collections.newSetFromMap(new ConcurrentHashMap<Entidade,Boolean>());
 	private long[] chunkloader;//X e Y do chunk central!
 	
 //	private Bloco[][][][] blocos=new Bloco[3][3][16][16];//3x3 chunks de 16x16
 	private char[][][][] blocos=new char[3][3][16][16];//3x3 chunks de 16x16
 	
 	public MundoCarregado() {
+		Entidade.setHolder(entidades);
 		mundos.add(this);
 //		float[] playerPos= Entidade.getPlayer().getMundopos();
 		long chunkLoaderX=Entidade.getPlayer().getChunkCoords()[0];
@@ -119,7 +123,7 @@ public class MundoCarregado {
 		return ans;
 	}
 
-	public ArrayList<Entidade> getEntidades() {
+	public Set<Entidade> getEntidades() {
 		return entidades;
 	}
 }

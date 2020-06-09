@@ -2,7 +2,7 @@ package com.firstJogo.regras;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.firstJogo.Handlers.KeyEventHandler;
+import com.firstJogo.Handlers.KeyCallbackHandler;
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.Humano;
 import com.firstJogo.estrutura.DirecoesPadrao;
@@ -34,12 +34,12 @@ public class PlayerRegras {
 	public static void resetMovModo(Humano e) {
 		Humano.modos modoAnterior=e.getMovModo();
 		if(modoAnterior==Humano.modos.SPRINT||modoAnterior==Humano.modos.CORRENDO)
-			if(KeyEventHandler.containsKey(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();
-			else if(KeyEventHandler.containsKey(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
+			if(KeyCallbackHandler.containsKey(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();
+			else if(KeyCallbackHandler.containsKey(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
 			else e.modo_andar();
 		else
-			if(KeyEventHandler.containsKey(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
-			else if(KeyEventHandler.containsKey(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();
+			if(KeyCallbackHandler.containsKey(GLFW.GLFW_KEY_LEFT_SHIFT)) e.modo_agachar();
+			else if(KeyCallbackHandler.containsKey(GLFW.GLFW_KEY_LEFT_CONTROL))e.modo_correr();
 			else e.modo_andar();
 	}
 	public static void newMoveDirection(Entidade e, DirecoesPadrao dir) {

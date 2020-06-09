@@ -1,9 +1,12 @@
 package com.firstJogo.main;
 
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
+import com.firstJogo.Handlers.KeyCallbackHandler;
 import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.Janela;
+import com.firstJogo.estrutura.NotFoundException;
 import com.firstJogo.regras.CallbacksGerais;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.visual.AzRenderer;
@@ -35,6 +38,7 @@ public class Renderer implements Runnable{
 		GL11.glClearColor(GlobalVariables.ClearColor[0], GlobalVariables.ClearColor[1], GlobalVariables.ClearColor[2], GlobalVariables.ClearColor[3]);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		
+		
 		Shaders shad=new Shaders("./shaders/sombra");
 		AzRenderer renderizator=new AzRenderer();
 		WorldRenderer mundo=new WorldRenderer();
@@ -46,10 +50,15 @@ public class Renderer implements Runnable{
 		long begtime=System.nanoTime() / (long) 1000000000;
 		int amt=0;
 		long begnano=System.nanoTime();
-		
-
-		
+				
 		while(!principal.ShouldClose() ) {
+//			if (amt == 1)
+//				try {
+//					KeyCallbackHandler.ativarEvento(true, GLFW.GLFW_KEY_P);
+//				} catch (NotFoundException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
 			
 			if (begtime == System.nanoTime() / (long) 1000000000) {
 				try {

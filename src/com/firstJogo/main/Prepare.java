@@ -15,7 +15,7 @@ import java.util.Properties;
 import org.apache.commons.io.IOUtils;
 import org.joml.Vector2f;
 
-import com.firstJogo.Handlers.KeyEventHandler;
+import com.firstJogo.Handlers.KeyCallbackHandler;
 import com.firstJogo.Mundos.Humano;
 import com.firstJogo.Mundos.MundoCarregado;
 import com.firstJogo.estrutura.Camera;
@@ -88,14 +88,14 @@ public class Prepare implements Runnable {
 			arq = new File(GlobalVariables.mundos_pastas[0] + "descricao_dos_blocos" + ".txt");
 			runIfNotExists(arq, this::tipospadrao);
 
-			KeyEventHandler.inicializar();
+			KeyCallbackHandler.inicializar();
 
 		} catch (IOException e) {
 			System.out.println("ERRO COM OS ARQUIVOS!");
 			throw new UncheckedIOException(e);
 		} 
 	}
-	
+
 	private void runIfNotExists (File arq,ConsumerCheckedException<File> c) throws IOException {
 		if(!arq.exists())
 			c.accept(arq);

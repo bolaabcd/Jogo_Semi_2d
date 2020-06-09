@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 
 import com.firstJogo.Handlers.FuncaoHandler;
 import com.firstJogo.estrutura.DirecoesPadrao;
+import com.firstJogo.estrutura.TempoEvento;
 import com.firstJogo.estrutura.TexturaAnimador;
 import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.regras.PlayerRegras;
@@ -16,6 +17,7 @@ public class Humano extends Entidade{
 	private long milisImpulso;
 	private float sprintModifier;
 	private TexturaAnimador animado;
+	private TempoEvento<Humano> impulsoE;
 	
 	private final static long mediandando=450000000;
 	private final static Textura[][] udlrTextura=new Textura[][] {
@@ -42,7 +44,7 @@ public class Humano extends Entidade{
 		}
 	};
 	
-	private final static long[][] aacsTempo=new long[][] {
+	private final static long[][] aacsTempo=new long[][] {//ANDANDO
 				new long[] {
 						0,
 						mediandando*3,
@@ -104,15 +106,7 @@ public class Humano extends Entidade{
 	}
 	public Humano(Vector2f mundopos,boolean isPlayer) {
 		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),mundopos,isPlayer);
-		if(!isPlayer()) 
-//			GeradorEventos.entidadeTempoHandler.addEvento(remover, new FuncaoHandler<Entidade>((entidade)->{
-			GeradorEventos.addTempoEvento(remover, new FuncaoHandler<Entidade>((entidade)->{
-				Humano hum=(Humano)entidade;
-				GeradorEventos.forcedRemMarker(hum.remover);
-				GeradorEventos.forcedRemMarker(hum.mover);
-				GeradorEventos.forcedRemMarker(hum.impulso);
-				hum.animado.desativar();
-			},this));
+
 			
 		
 		
@@ -122,10 +116,11 @@ public class Humano extends Entidade{
 		sprintModifier=2.4f;//TODO:Seria 1.2 (quando não tiver com a fome completa!)
 		
 		impulso=new TempoMarker(milisImpulso*1000000);
-		GeradorEventos.addTempoEvento(impulso, new FuncaoHandler<Humano>((Humano pessoa)->{
+		impulsoE=new TempoEvento<Humano>(impulso, new FuncaoHandler<Humano>((Humano pessoa)->{
 			pessoa.setMovModo(modos.SPRINT);
 			impulso.ignoreMarker();
 		},this));
+		GeradorEventos.addTempoEvento(impulsoE);
 	}
 	
 	public void modo_agachar() {
@@ -149,6 +144,14 @@ public class Humano extends Entidade{
 		for(TexturaAnimador[] an:animadosaacsDirec)
 			for(TexturaAnimador a:an)
 				a.desativar();
+	}
+	@Override
+	public void kill() {
+		super.kill();
+		GeradorEventos.remEvento(impulsoE);
+		for(TexturaAnimador[] tAnArr:animadosaacsDirec)
+			for(TexturaAnimador tAn:tAnArr)
+			tAn.kill();
 	}
 	@Override
 	public float getVelocModified() {
@@ -178,6 +181,8 @@ public class Humano extends Entidade{
 	@Override
 	public boolean setAnguloMovimento(double angulo) {
 		if(super.setAnguloMovimento(angulo)) {
+//			if(impulso!=null)//TODO Tirar
+//			System.out.println(impulso);
 			impulso.resetar();
 			if(this.movModo==modos.SPRINT) {
 				if(this.isPlayer())
@@ -229,7 +234,8 @@ public class Humano extends Entidade{
 	}
 	private void updateAnimacao() {
 		if(animado!=null)if(animado.isAtivado())pararAnimacoes();
-		
+//		if(movModo!=null)//TODO tirar
+//		System.out.println();
 		switch(movModo) {
 		case AGACHADO:
 			switch(this.getOlhar()) {

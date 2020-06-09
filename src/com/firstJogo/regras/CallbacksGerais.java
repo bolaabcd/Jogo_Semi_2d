@@ -7,7 +7,7 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 
 import com.firstJogo.Handlers.FuncaoHandler;
-import com.firstJogo.Handlers.KeyEventHandler;
+import com.firstJogo.Handlers.KeyCallbackHandler;
 import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.Humano;
 import com.firstJogo.Mundos.MundoCarregado;
@@ -15,6 +15,7 @@ import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.DirecoesPadrao;
 import com.firstJogo.estrutura.ExternalCallback;
 import com.firstJogo.estrutura.NotFoundException;
+import com.firstJogo.estrutura.TempoEvento;
 import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
@@ -24,6 +25,7 @@ public class CallbacksGerais implements ExternalCallback {
 
 	// ATIVADO NA THREAD RENDERIZADORA
 	public static void prepararBotoes() {
+		
 		HashMap<Integer, FuncaoHandler<Boolean>> botaoremovido = new HashMap<Integer, FuncaoHandler<Boolean>>();
 		HashMap<Integer, FuncaoHandler<Boolean>> botaopressionado = new HashMap<Integer, FuncaoHandler<Boolean>>();
 		botaopressionado.put(GLFW.GLFW_KEY_W, new FuncaoHandler<Boolean>((isSintetico) -> {
@@ -45,6 +47,10 @@ public class CallbacksGerais implements ExternalCallback {
 
 		},null));
 
+//		botaopressionado.put(GLFW.GLFW_KEY_Y, new FuncaoHandler<Boolean>((isSintetico)->{
+//			
+//		},));
+		
 		botaopressionado.put(GLFW.GLFW_KEY_LEFT_CONTROL, new FuncaoHandler<Boolean>((isSintetico) -> {
 			try {
 				Humano player = (Humano) Entidade.getPlayer();
@@ -71,15 +77,17 @@ public class CallbacksGerais implements ExternalCallback {
 			testado.iniciarMovimento();
 			testado.modo_andar();
 
-			TempoMarker marc=new TempoMarker(1000000);
-			GeradorEventos.addTempoEvento(marc, new FuncaoHandler<Entidade>((Entidade perseguidor) -> {
-				Entidade genti=perseguidor;
-				Vector2f playerpos = Entidade.getPlayer().getMundopos();
-				Vector2f gentipos = genti.getMundopos();
-				genti.setAnguloMovimento(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
-				genti.iniciarMovimento();
-				marc.resetar();
-			},testado));
+//			TempoMarker marc=new TempoMarker(1000000);
+//			GeradorEventos.addTempoEvento(new TempoEvento<Entidade>(marc, new FuncaoHandler<Entidade>((Entidade perseguidor) -> {
+//				Entidade genti=perseguidor;
+//				Vector2f playerpos = Entidade.getPlayer().getMundopos();
+//				Vector2f gentipos = genti.getMundopos();
+//				genti.setAnguloMovimento(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
+//				genti.iniciarMovimento();
+//				marc.resetar();
+//			},testado)));
+			
+			
 //			GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((perseguidor) -> {
 //				Entidade genti=perseguidor;
 //				Vector2f playerpos = Entidade.getPlayer().getMundopos();
@@ -87,7 +95,9 @@ public class CallbacksGerais implements ExternalCallback {
 //				genti.setAngulo(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
 //				genti.iniciarMovimento();
 //			},testado), marc);
-			marc.resetar();
+			
+			
+//			marc.resetar();
 			
 			
 		},null));
@@ -157,14 +167,15 @@ public class CallbacksGerais implements ExternalCallback {
 			PlayerRegras.remMoveDirection(Entidade.getPlayer(), DirecoesPadrao.DIREITA);
 		},null));
 
-		KeyEventHandler.addBotaoCallbacks(botaoremovido, botaopressionado);
+		KeyCallbackHandler.addBotaoCallbacks(botaoremovido, botaopressionado);
 
 	}
 
 	public static void prepararTempos() {
-		TempoMarker marctemp=new TempoMarker(1000000);
-		GeradorEventos.addTempoEvento(marctemp, new FuncaoHandler<>((Marcador) -> {// Move o Player, e cada milisegundo vai executar!
-
+		
+		
+		TempoMarker marctemp=new TempoMarker(1000000L);
+		GeradorEventos.addTempoEvento(new TempoEvento<TempoMarker>(marctemp, new FuncaoHandler<TempoMarker>((Marcador) -> {// Move o Player, e cada milisegundo vai executar!
 			TempoMarker marcador = Marcador;
 			if(!Entidade.getPlayer().isParado()) {
 			float newx = Camera.getMain().getPos().x + (float) ((-Entidade.getPlayer().getForcedVelocModified().x
@@ -194,16 +205,16 @@ public class CallbacksGerais implements ExternalCallback {
 			}
 			
 			marcador.resetar();
-		},marctemp));
+		},marctemp)));
 		marctemp.resetar();
 
 		
 		TempoMarker marc=new TempoMarker(1000000000);
-		GeradorEventos.addTempoEvento(marc, new FuncaoHandler<TempoMarker>((Marcador) -> {
+		GeradorEventos.addTempoEvento(new TempoEvento<TempoMarker>(marc, new FuncaoHandler<TempoMarker>((Marcador) -> {
 			System.out.println("TPS: " + GlobalVariables.TicksPorSegundo);
 			GlobalVariables.TicksPorSegundo = 0;
 			marc.resetar();
-		}, marc));
+		}, marc)));
 		marc.resetar();
 		
 
@@ -215,13 +226,13 @@ public class CallbacksGerais implements ExternalCallback {
 			GLFW.glfwSetWindowShouldClose(window, true);
 		else if (action == GLFW.GLFW_PRESS) {
 			try {
-				KeyEventHandler.botaoPressionado(key, false);
+				KeyCallbackHandler.botaoPressionado(key, false);
 			} catch (NotFoundException e) {
 				//TODO: Joga toda chave que chega, se tiver alguém querendo usar ele pega.
 			}
 		} else if (action == GLFW.GLFW_RELEASE) {
 			try {
-				KeyEventHandler.botaoRemovido(key, false);
+				KeyCallbackHandler.botaoRemovido(key, false);
 			} catch (NotFoundException e) {
 				//TODO: Joga toda chave que chega, se tiver alguém querendo usar ele pega.
 			}

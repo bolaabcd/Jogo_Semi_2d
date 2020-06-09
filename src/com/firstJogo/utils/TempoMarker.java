@@ -1,7 +1,5 @@
 package com.firstJogo.utils;
 
-import com.firstJogo.main.GeradorEventos;
-
 public class TempoMarker {
 	
 	private long tempolimite;
@@ -10,10 +8,6 @@ public class TempoMarker {
 	public TempoMarker(long tempolimite) {
 		this.tempolimite=tempolimite;
 		this.temporegistrado=Long.MAX_VALUE;
-	}
-	public void remover() {
-		while(GeradorEventos.isOn(this))
-			GeradorEventos.forcedRemMarker(this);
 	}
 	public void ignoreMarker() {
 		this.temporegistrado=Long.MAX_VALUE;

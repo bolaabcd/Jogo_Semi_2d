@@ -1,12 +1,14 @@
 package com.firstJogo.Mundos;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import org.joml.Vector2f;
 
 import com.firstJogo.Handlers.FuncaoHandler;
 import com.firstJogo.estrutura.DirecoesPadrao;
+import com.firstJogo.estrutura.TempoEvento;
 import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
@@ -18,9 +20,38 @@ public class Entidade {
 	private static final long segundosRemover=30;
 	private static Entidade player;
 	private static final String paradoModifier="paradoModifier";
-	
+	private static Collection<Entidade> entidadesHolder;
 	protected final TempoMarker mover=new TempoMarker(1000000L);
 	protected final TempoMarker remover=new TempoMarker(segundosRemover*1000000000L);
+	
+	protected final TempoEvento<Entidade> moverE=new TempoEvento<Entidade>(mover, new FuncaoHandler<Entidade>((entidade) -> {
+
+		TempoMarker marcador = entidade.getMover();
+		Entidade ent = entidade;
+		
+		Vector2f playerpos = Entidade.getPlayer().getMundopos();
+		Vector2f gentipos = entidade.getMundopos();
+		entidade.setAnguloMovimento(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
+		
+		if(!ent.isParado()) {
+			float movx = (float) ((ent.getForcedVelocModified().x
+					+ ent.getMovDirecModifiers()[0] * ent.getVelocModified()) * GlobalVariables.intperbloco
+					* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
+			float movy = (float) ((ent.getForcedVelocModified().y
+					+ ent.getMovDirecModifiers()[1] * ent.getVelocModified()) * GlobalVariables.intperbloco
+					* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
+
+			ent.setMundopos(new Vector2f(ent.getMundopos().x + movx, ent.getMundopos().y));
+
+			ent.setMundopos(new Vector2f(ent.getMundopos().x, ent.getMundopos().y + movy));
+		}
+		marcador.resetar();
+	}, this));
+	
+	protected final TempoEvento<Entidade> removerE=new TempoEvento<Entidade>(remover, new FuncaoHandler<Entidade>((entidade) -> {
+		entidade.kill();
+	}, this));
+			
 	private Double anguloMovimento=null;
 	private Vector2f mundopos;//A coordenada 0,0 é a quina inferior direita do bloco 0,0 (centro do chunk 0,0).
 	private float[][] hitboxPos;//Começa no baixo esquerda, sentido horário. 00 é a superior esquerda!
@@ -32,7 +63,9 @@ public class Entidade {
 	
 	protected short fantasmabilidade=10;
 	protected char veloc=0;
-	
+	public static void setHolder(Collection<Entidade> colEnt) {
+		entidadesHolder=colEnt;
+	}
 	protected Entidade(Textura visu,Vector2f mundopos,boolean isPlayer) {
 		visual=visu;
 		modelo=Textura.modeloPadrao;
@@ -41,30 +74,19 @@ public class Entidade {
 		this.mundopos=mundopos;
 		velocModifiers.put(paradoModifier, 0f);
 		if (!isPlayer) {
-			GeradorEventos.addTempoEvento(mover, new FuncaoHandler<Entidade>((entidade) -> {
-
-				TempoMarker marcador = entidade.mover;
-				Entidade ent = entidade;
-
-				float movx = (float) ((ent.getForcedVelocModified().x
-						+ ent.getMovDirecModifiers()[0] * ent.getVelocModified()) * GlobalVariables.intperbloco
-						* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
-				float movy = (float) ((ent.getForcedVelocModified().y
-						+ ent.getMovDirecModifiers()[1] * ent.getVelocModified()) * GlobalVariables.intperbloco
-						* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
-
-				ent.setMundopos(new Vector2f(ent.getMundopos().x + movx, ent.getMundopos().y));
-
-				ent.setMundopos(new Vector2f(ent.getMundopos().x, ent.getMundopos().y + movy));
-				mover.resetar();
-			}, this));
-			GeradorEventos.addTempoEvento(remover, new FuncaoHandler<Entidade>((entidade) -> {
-				GeradorEventos.forcedRemMarker(entidade.remover);
-				GeradorEventos.forcedRemMarker(entidade.mover);
-			}, this));
+			GeradorEventos.addTempoEvento(moverE);
+			GeradorEventos.addTempoEvento(removerE);
 			
-			mover.resetar();
+//			mover.resetar();
 		}
+	}
+	public TempoMarker getMover() {
+		return mover;
+	}
+	public void kill() {
+		entidadesHolder.remove(this);
+		GeradorEventos.remEvento(removerE);
+		GeradorEventos.remEvento(moverE);
 	}
 	public boolean isParado() {
 		return velocModifiers.get(paradoModifier)==0;
@@ -122,14 +144,14 @@ public class Entidade {
 	public boolean pararMovimento() {//True se foi, False se não.
 		if(isParado())return false;
 		velocModifiers.put(paradoModifier, 0f);
-//		if(!this.isPlayer())
-//			mover.ignoreMarker();
+		if(!this.isPlayer())
+			mover.ignoreMarker();
 		return true;
 	}
 	public boolean iniciarMovimento() {
 		if(!isParado())return false;
 		velocModifiers.put(paradoModifier, 1f);
-//		if(!this.isPlayer())mover.resetar();
+		if(!this.isPlayer())mover.resetar();
 		return true;
 	}
 	
