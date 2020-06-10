@@ -70,7 +70,7 @@ public class CallbacksGerais implements ExternalCallback {
 
 		// TODO: aprimorar o spawnar humano
 		botaopressionado.put(GLFW.GLFW_KEY_P, new FuncaoHandler<Boolean>((isSintetico) -> {
-			Humano testado = new Humano(new Vector2f(0, 0),false);
+			Humano testado = new Humano(new Vector2f(0, 0));
 			MundoCarregado.atual.getEntidades().add(testado);
 			testado.setAnguloMovimento(Math.atan2(Entidade.getPlayer().getMundopos().y - testado.getMundopos().y,
 					Entidade.getPlayer().getMundopos().x - testado.getMundopos().x));
@@ -175,7 +175,7 @@ public class CallbacksGerais implements ExternalCallback {
 		
 		
 		TempoMarker marctemp=new TempoMarker(1000000L);
-		GeradorEventos.addTempoEvento(new TempoEvento<TempoMarker>(marctemp, new FuncaoHandler<TempoMarker>((Marcador) -> {// Move o Player, e cada milisegundo vai executar!
+		GeradorEventos.addTempoEvento("Mover Player",new TempoEvento<TempoMarker>(marctemp, new FuncaoHandler<TempoMarker>((Marcador) -> {// Move o Player, e cada milisegundo vai executar!
 			TempoMarker marcador = Marcador;
 			if(!Entidade.getPlayer().isParado()) {
 			float newx = Camera.getMain().getPos().x + (float) ((-Entidade.getPlayer().getForcedVelocModified().x
@@ -210,7 +210,7 @@ public class CallbacksGerais implements ExternalCallback {
 
 		
 		TempoMarker marc=new TempoMarker(1000000000);
-		GeradorEventos.addTempoEvento(new TempoEvento<TempoMarker>(marc, new FuncaoHandler<TempoMarker>((Marcador) -> {
+		GeradorEventos.addTempoEvento("Imprimir TPS",new TempoEvento<TempoMarker>(marc, new FuncaoHandler<TempoMarker>((Marcador) -> {
 			System.out.println("TPS: " + GlobalVariables.TicksPorSegundo);
 			GlobalVariables.TicksPorSegundo = 0;
 			marc.resetar();

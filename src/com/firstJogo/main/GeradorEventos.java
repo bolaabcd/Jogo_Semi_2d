@@ -1,7 +1,5 @@
 package com.firstJogo.main;
 
-import java.util.Collections;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.firstJogo.estrutura.Evento;
@@ -12,18 +10,28 @@ import com.firstJogo.utils.GlobalVariables;
 public class GeradorEventos implements Runnable {
 	public static Thread main;
 
-	//Fazendo ficar Concurrent
-	private static final Set<Evento<?>> eventos=Collections.newSetFromMap(new ConcurrentHashMap<Evento<?>,Boolean>());
-//	private static final Set<WeakReference<? extends Evento<?>>> eventos=Collections.newSetFromMap(new ConcurrentHashMap<WeakReference<? extends Evento<?>>,Boolean>());
+	private static final ConcurrentHashMap<Object,Evento<?>> eventos=new ConcurrentHashMap<Object,Evento<?>>();
+	//trocar pra lista de eventos...
+	public static void addTempoEvento(Object chave,TempoEvento<?> tEv) {
+		eventos.put(chave,tEv);
+	}
 	
-	public static void addTempoEvento(TempoEvento<?> tEv) {
-		eventos.add(tEv);
+	@SuppressWarnings("unchecked")
+	public static <T extends Evento<?>> T getEvento(Object chave) {
+		try {
+			return (T) eventos.get(chave);
+		} catch (ClassCastException ce) {
+			throw new IllegalArgumentException(ce);
+		}
 	}
 	
 	public static void remEvento(Evento<?> ev) {
 //		System.out.println(eventos.size());
 		eventos.remove(ev);
 //		System.out.println(eventos.size());
+	}
+	public static void remEvento(Object chave) {
+		eventos.remove(chave);
 	}
 
 	// Objeto da Janela do Jogo
@@ -36,12 +44,13 @@ public class GeradorEventos implements Runnable {
 		System.out.println("Iniciando Loop de eventos");
 		
 		while (!principal.ShouldClose()) {
-			for(Evento<?> e:eventos)
-					if(e.podeExecutar())
-						e.executar();
+			for(Object chave:eventos.keySet())
+				if(eventos.get(chave)!=null)
+					if(eventos.get(chave).podeExecutar())
+						eventos.get(chave).executar();
 			
-//			if(GlobalVariables.TicksPorSegundo==2)
-//			System.out.println(eventos.size());
+			if(GlobalVariables.TicksPorSegundo==2)
+			System.out.println(eventos.size());
 			GlobalVariables.TicksPorSegundo += 1;
 		}
 	}

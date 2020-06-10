@@ -1,6 +1,5 @@
 package com.firstJogo.estrutura;
 
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import com.firstJogo.Handlers.FuncaoHandler;
@@ -10,7 +9,7 @@ import com.firstJogo.visual.Textura;
 
 public class TexturaAnimador {
 	public TempoMarker[] marcadores;// Marca o tempo DEPOIS de a textura ser colocada!
-	private ArrayList<TempoEvento<TexturaAnimador>> eventos=new ArrayList<TempoEvento<TexturaAnimador>>();
+//	private ArrayList<TempoEvento<TexturaAnimador>> eventos=new ArrayList<TempoEvento<TexturaAnimador>>();
 	private Textura textura_referencial;
 	private int[] texturas_alternativas;
 	private int texatual;
@@ -39,14 +38,13 @@ public class TexturaAnimador {
 //		for (TempoMarker marcador : marcadores)
 		for (int i = 0; i < marcadores.length; i++) {
 			TempoEvento<TexturaAnimador> ev=new TempoEvento<TexturaAnimador>(marcadores[i], new FuncaoHandler<TexturaAnimador>(funcao, this));
-			 eventos.add(ev);
-			GeradorEventos.addTempoEvento(ev);
+			GeradorEventos.addTempoEvento(marcadores[i],ev);
 		}
 	}
 
 	public void kill() {
-		for(Evento<TexturaAnimador> ev:eventos) {
-			GeradorEventos.remEvento(ev);
+		for(TempoMarker chave:marcadores) {
+			GeradorEventos.remEvento(chave);
 		}
 	}
 	

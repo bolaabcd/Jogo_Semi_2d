@@ -21,9 +21,9 @@ public class Renderer implements Runnable{
 	public void run() {
 		//PRECISA ser feito aqui porque o WINDOWS não deixa mexer com Janelas criadas em outras Threads).
 		Prepare.prepararJanela();
+		Prepare.prepararMundo();
 		Prepare.prepararPlayer();
 		Prepare.prepararCamera();
-		Prepare.prepararMundo();
 		CallbacksGerais.prepararBotoes();
 		CallbacksGerais.prepararTempos();
 		

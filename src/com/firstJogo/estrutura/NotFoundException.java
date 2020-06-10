@@ -10,4 +10,7 @@ public class NotFoundException extends Exception{
 	public NotFoundException(String msg) {
 		super(msg);
 	} 
+	public NotFoundException(RuntimeException rEx) {
+		super(rEx);
+	} 
 }

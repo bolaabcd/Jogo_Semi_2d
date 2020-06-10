@@ -1,95 +1,72 @@
 package com.firstJogo.Mundos;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 import org.joml.Vector2f;
 
-import com.firstJogo.Handlers.FuncaoHandler;
 import com.firstJogo.estrutura.DirecoesPadrao;
+import com.firstJogo.estrutura.ElementoDuplo;
+import com.firstJogo.estrutura.EventoPadrao;
+import com.firstJogo.estrutura.ForcedVelocModifier;
 import com.firstJogo.estrutura.TempoEvento;
+import com.firstJogo.estrutura.VelocModifier;
 import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.utils.GlobalVariables;
-import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.Modelo;
 import com.firstJogo.visual.Textura;
 import com.firstJogo.visual.TipodeBloco;
 
 public class Entidade {
-	private static final long segundosRemover=30;
-	private static Entidade player;
-	private static final String paradoModifier="paradoModifier";
-	private static Collection<Entidade> entidadesHolder;
-	protected final TempoMarker mover=new TempoMarker(1000000L);
-	protected final TempoMarker remover=new TempoMarker(segundosRemover*1000000000L);
-	
-	protected final TempoEvento<Entidade> moverE=new TempoEvento<Entidade>(mover, new FuncaoHandler<Entidade>((entidade) -> {
-
-		TempoMarker marcador = entidade.getMover();
-		Entidade ent = entidade;
-		
-		Vector2f playerpos = Entidade.getPlayer().getMundopos();
-		Vector2f gentipos = entidade.getMundopos();
-		entidade.setAnguloMovimento(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
-		
-		if(!ent.isParado()) {
-			float movx = (float) ((ent.getForcedVelocModified().x
-					+ ent.getMovDirecModifiers()[0] * ent.getVelocModified()) * GlobalVariables.intperbloco
-					* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
-			float movy = (float) ((ent.getForcedVelocModified().y
-					+ ent.getMovDirecModifiers()[1] * ent.getVelocModified()) * GlobalVariables.intperbloco
-					* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
-
-			ent.setMundopos(new Vector2f(ent.getMundopos().x + movx, ent.getMundopos().y));
-
-			ent.setMundopos(new Vector2f(ent.getMundopos().x, ent.getMundopos().y + movy));
-		}
-		marcador.resetar();
-	}, this));
-	
-	protected final TempoEvento<Entidade> removerE=new TempoEvento<Entidade>(remover, new FuncaoHandler<Entidade>((entidade) -> {
-		entidade.kill();
-	}, this));
+	public enum EventosEntidades{
+		MOVER,
+		REMOVER
+	}
+	private static Entidade player;//TODO REMOVER
 			
 	private Double anguloMovimento=null;
-	private Vector2f mundopos;//A coordenada 0,0 é a quina inferior direita do bloco 0,0 (centro do chunk 0,0).
+	private Vector2f mundoPos;//A coordenada 0,0 é a quina inferior direita do bloco 0,0 (centro do chunk 0,0).
+	private MundoCarregado mundo;
 	private float[][] hitboxPos;//Começa no baixo esquerda, sentido horário. 00 é a superior esquerda!
 	private Textura visual;
 	private Modelo modelo;
 	private DirecoesPadrao olharDir=DirecoesPadrao.CIMA;
-	private HashMap<String,Float> velocModifiers=new HashMap<String,Float>();
-	private HashMap<String,Vector2f> forcedVelocModifiers=new HashMap<String,Vector2f>();
+	private HashMap<VelocModifier,Float> velocModifiers=new HashMap<VelocModifier,Float>();
+	private HashMap<ForcedVelocModifier,Vector2f> forcedVelocModifiers=new HashMap<ForcedVelocModifier,Vector2f>();
 	
 	protected short fantasmabilidade=10;
 	protected char veloc=0;
-	public static void setHolder(Collection<Entidade> colEnt) {
-		entidadesHolder=colEnt;
-	}
-	protected Entidade(Textura visu,Vector2f mundopos,boolean isPlayer) {
-		visual=visu;
-		modelo=Textura.modeloPadrao;
+	protected Entidade(Textura visu,Vector2f mundoPos,boolean isPlayer,MundoCarregado mundo,Modelo model) {
+		this.visual=visu;
+		this.mundoPos=mundoPos;
+		this.mundo=mundo;
+		this.modelo=model;
 		hitboxPos=modelo.getVertices();
+		velocModifiers.put(VelocModifier.PARADO, 0f);
 		setPlayer(isPlayer);
-		this.mundopos=mundopos;
-		velocModifiers.put(paradoModifier, 0f);
 		if (!isPlayer) {
-			GeradorEventos.addTempoEvento(moverE);
-			GeradorEventos.addTempoEvento(removerE);
-			
-//			mover.resetar();
+			GeradorEventos.addTempoEvento(new ElementoDuplo<Entidade, EventosEntidades>(this, EventosEntidades.MOVER,false),
+					EventoPadrao.moverEntidadeEvento(1, this));
+			GeradorEventos.addTempoEvento(new ElementoDuplo<Entidade, EventosEntidades>(this, EventosEntidades.REMOVER,false),
+					EventoPadrao.removerEntidadeEvento(3, this));
 		}
 	}
-	public TempoMarker getMover() {
-		return mover;
+	protected Entidade(Textura visu,Vector2f mundoPos,boolean isPlayer) {
+		this(visu,mundoPos,isPlayer,Entidade.player.mundo,Textura.modeloPadrao);
+	}
+	public void setMundo(MundoCarregado mundo) {
+		this.mundo=mundo;
 	}
 	public void kill() {
-		entidadesHolder.remove(this);
-		GeradorEventos.remEvento(removerE);
-		GeradorEventos.remEvento(moverE);
+		mundo.getEntidades().remove(this);
+		GeradorEventos.remEvento(new ElementoDuplo<Entidade, EventosEntidades>(this, EventosEntidades.MOVER, false));
+		GeradorEventos.remEvento(new ElementoDuplo<Entidade, EventosEntidades>(this, EventosEntidades.REMOVER, false));
 	}
 	public boolean isParado() {
-		return velocModifiers.get(paradoModifier)==0;
+		return velocModifiers.get(VelocModifier.PARADO)==0;
+	}
+	public MundoCarregado getMundo() {
+		return mundo;
 	}
 	private boolean checkColisao(Vector2f mundopos) {
 		boolean res=false;
@@ -100,8 +77,6 @@ public class Entidade {
 				res=true;
 			}
 		}
-//		System.out.println("Xb: "+this.getBlocoCoords()[0]);
-//		System.out.println("Yb: "+this.getBlocoCoords()[1]);
 		return res;
 	}
 	private ArrayList<long[]> getColidCoords(Vector2f mundopos) {//Obter os blocos que ele pode estar colidindo
@@ -142,16 +117,21 @@ public class Entidade {
 		return false;
 	}
 	public boolean pararMovimento() {//True se foi, False se não.
-		if(isParado())return false;
-		velocModifiers.put(paradoModifier, 0f);
-		if(!this.isPlayer())
-			mover.ignoreMarker();
+		if (isParado())
+			return false;
+		velocModifiers.put(VelocModifier.PARADO, 0f);
 		return true;
 	}
 	public boolean iniciarMovimento() {
-		if(!isParado())return false;
-		velocModifiers.put(paradoModifier, 1f);
-		if(!this.isPlayer())mover.resetar();
+		if (!isParado())
+			return false;
+		velocModifiers.put(VelocModifier.PARADO, 1f);
+		if (!this.isPlayer()) {
+			GeradorEventos.<TempoEvento<?>>getEvento(new ElementoDuplo<>(this, EventosEntidades.MOVER, false))
+					.resetar();
+			GeradorEventos.<TempoEvento<?>>getEvento(new ElementoDuplo<>(this, EventosEntidades.REMOVER, false))
+			.resetar();	
+		}
 		return true;
 	}
 	
@@ -208,18 +188,16 @@ public class Entidade {
 	public float getVelocModified() {
 		if(isParado()) return 0;
 		float velocModFinal=1f;
-		for(String modifchave:velocModifiers.keySet())
+		for(VelocModifier modifchave:velocModifiers.keySet())
 			velocModFinal*=velocModifiers.get(modifchave);
-//		for(String modiforchave:forcedVelocModifiers.keySet())
-//			velocModFinal*=forcedVelocModifiers.get(modiforchave);
 		return velocModFinal*veloc;
 	}
-	public boolean addVelocModifier(String chave,float valor) {
+	public boolean addVelocModifier(VelocModifier chave,float valor) {
 		if(velocModifiers.put(chave,valor)==null)
 			return false;
 		return true;
 	}
-	public boolean remVelocModifier(String chave) {
+	public boolean remVelocModifier(VelocModifier chave) {
 		if(velocModifiers.remove(chave)==null)
 			return false;
 		return true;
@@ -245,11 +223,9 @@ public class Entidade {
 	private void setPlayer(boolean isPlayer) {
 		if(isPlayer) {
 			Entidade.player=this;
-//			this.isPlayer = isPlayer;
 			}
 		else {
 			if(isPlayer())Entidade.player=null;
-//			this.isPlayer=false;
 		}
 		
 	}
@@ -259,18 +235,18 @@ public class Entidade {
 	}
 
 	public Vector2f getMundopos() {
-		return mundopos;
+		return mundoPos;
 	}
 
 	public boolean setMundopos(Vector2f mundopos) {
-		if(mundopos.x==this.mundopos.x&&mundopos.y==this.mundopos.y) return false;
+		if(mundopos.x==this.mundoPos.x&&mundopos.y==this.mundoPos.y) return false;
 		if(!checkColisao(mundopos)) {
-			forcedVelocModifiers.remove("colisao");
+			forcedVelocModifiers.remove(ForcedVelocModifier.COLISAO);
 			
 		}else {
 			return false;
 		}
-		this.mundopos = mundopos;
+		this.mundoPos = mundopos;
 		if(GlobalVariables.debugue&&!this.isPlayer())System.out.println("MundoPlayerPos x: "+this.getMundopos().x);
 		if(GlobalVariables.debugue&&!this.isPlayer())System.out.println("MundoPlayerPos y: "+this.getMundopos().y);
 		return true;
@@ -281,15 +257,15 @@ public class Entidade {
 	}
 	public Vector2f getForcedVelocModified() {
 		Vector2f forcedVelocModFinal=new Vector2f(0,0);
-		for(String chave:forcedVelocModifiers.keySet())
+		for(ForcedVelocModifier chave:forcedVelocModifiers.keySet())
 			forcedVelocModFinal.add(forcedVelocModifiers.get(chave));
 		return forcedVelocModFinal;
 	}
-	public boolean addForcedVelocModifier(String chave, Vector2f valor) {
+	public boolean addForcedVelocModifier(ForcedVelocModifier chave, Vector2f valor) {
 		if(forcedVelocModifiers.put(chave, valor)==null)return false;
 		return true;
 	}
-	public boolean remForcedVelocModifier(String chave) {
+	public boolean remForcedVelocModifier(ForcedVelocModifier chave) {
 		if(forcedVelocModifiers.remove(chave)==null)return false;
 		return true;
 	}

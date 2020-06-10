@@ -13,5 +13,10 @@ public class TempoEvento<T> extends Evento<T>{
 	public boolean podeExecutar() {
 		return marc.passouTempolimite();
 	}
-	
+	public void resetar() {
+		marc.resetar();
+	}
+	public void parar() {
+		marc.ignoreMarker();
+	}
 }

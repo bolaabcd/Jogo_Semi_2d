@@ -4,6 +4,7 @@ import org.joml.Vector2f;
 
 import com.firstJogo.Handlers.FuncaoHandler;
 import com.firstJogo.estrutura.DirecoesPadrao;
+import com.firstJogo.estrutura.ElementoDuplo;
 import com.firstJogo.estrutura.TempoEvento;
 import com.firstJogo.estrutura.TexturaAnimador;
 import com.firstJogo.main.GeradorEventos;
@@ -13,6 +14,9 @@ import com.firstJogo.utils.TempoMarker;
 import com.firstJogo.visual.Textura;
 
 public class Humano extends Entidade{
+	public enum EventosHumanos{
+		IMPULSO
+	}
 	private modos movModo;
 	private long milisImpulso;
 	private float sprintModifier;
@@ -104,23 +108,23 @@ public class Humano extends Entidade{
 		AGACHADO,
 		SPRINT
 	}
-	public Humano(Vector2f mundopos,boolean isPlayer) {
-		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),mundopos,isPlayer);
-
-			
-		
-		
+	public Humano(Vector2f mundoPos) {
+		this(mundoPos,false,Entidade.getPlayer().getMundo());
+	}
+	public Humano(Vector2f mundoPos,boolean isPlayer,MundoCarregado mundo) {
+		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),mundoPos,isPlayer,mundo,Textura.modeloPadrao);
 		this.veloc=5;
 		milisImpulso=2000;//2000
 		movModo=modos.ANDANDO;
 		sprintModifier=2.4f;//TODO:Seria 1.2 (quando não tiver com a fome completa!)
-		
 		impulso=new TempoMarker(milisImpulso*1000000);
 		impulsoE=new TempoEvento<Humano>(impulso, new FuncaoHandler<Humano>((Humano pessoa)->{
 			pessoa.setMovModo(modos.SPRINT);
 			impulso.ignoreMarker();
 		},this));
-		GeradorEventos.addTempoEvento(impulsoE);
+		
+
+		GeradorEventos.addTempoEvento(new ElementoDuplo<>(this, EventosHumanos.IMPULSO, false),impulsoE);
 	}
 	
 	public void modo_agachar() {
@@ -132,7 +136,7 @@ public class Humano extends Entidade{
 	}
 	
 	public void modo_andar() {
-		if(!isPlayer())remover.resetar();
+//		if(!isPlayer())remover.resetar();
 		setMovModo(Humano.modos.ANDANDO);
 	}
 	
@@ -148,7 +152,7 @@ public class Humano extends Entidade{
 	@Override
 	public void kill() {
 		super.kill();
-		GeradorEventos.remEvento(impulsoE);
+		GeradorEventos.remEvento(new ElementoDuplo<>(this, EventosHumanos.IMPULSO, false));
 		for(TexturaAnimador[] tAnArr:animadosaacsDirec)
 			for(TexturaAnimador tAn:tAnArr)
 			tAn.kill();

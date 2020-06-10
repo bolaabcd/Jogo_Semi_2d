@@ -8,12 +8,10 @@ public class GlobalVariables {
 	
 	public static String[] imagem_pastas;//Pasta de imagens
 	public static String[] mundos_pastas;//Pasta de mundos
-//	public static String[] mundos;//Lista dos nomes de mundos
 	public static String[] plugins_pastas;//Pasta de plugins
-//	public static String[] plugins;//Lista dos nomes de plugins
 	public static float[] ClearColor = new float[] { 1f, 0f, 0f, 0f };//Cor de limpeza da tela
 	public static boolean vSync;
-	
+	public static long segundosRemover=30;
 	
 	public static int TicksPorSegundo;//Quantidade de Ticks Por Segundo realizados
 

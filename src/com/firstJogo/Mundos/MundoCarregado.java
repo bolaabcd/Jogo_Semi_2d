@@ -21,11 +21,13 @@ public class MundoCarregado {
 	private char[][][][] blocos=new char[3][3][16][16];//3x3 chunks de 16x16
 	
 	public MundoCarregado() {
-		Entidade.setHolder(entidades);
 		mundos.add(this);
 //		float[] playerPos= Entidade.getPlayer().getMundopos();
-		long chunkLoaderX=Entidade.getPlayer().getChunkCoords()[0];
-		long chunkLoaderY=Entidade.getPlayer().getChunkCoords()[1];
+		
+//		long chunkLoaderX=Entidade.getPlayer().getChunkCoords()[0];
+//		long chunkLoaderY=Elntidade.getPlayer().getChunkCoords()[1];
+		long chunkLoaderX=0;
+		long chunkLoaderY=0L;
 		
 		chunkloader=new long[] {chunkLoaderX, chunkLoaderY};
 		for(int x=0;x<3;x++)

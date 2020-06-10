@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import org.joml.Vector2f;
 
 import com.firstJogo.Mundos.Entidade;
+import com.firstJogo.estrutura.ForcedVelocModifier;
 import com.firstJogo.utils.GlobalVariables;
 
 public class TipodeBloco {
@@ -39,7 +40,7 @@ public class TipodeBloco {
 			newy=-(float) (ent.getMovDirecModifiers()[1]*ent.getVelocModified());
 //		if(result.x)
 //		ent.addForcedVelocModifier("colisao", result);
-		ent.addForcedVelocModifier("colisao", new Vector2f(newx,newy));
+		ent.addForcedVelocModifier(ForcedVelocModifier.COLISAO, new Vector2f(newx,newy));
 //		ent.setColidido(new Vector2f(newx,newy));
 	};
 	
