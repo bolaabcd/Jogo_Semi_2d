@@ -1,10 +1,8 @@
 package com.firstJogo.Mundos;
 
-import org.joml.Vector2f;
-
 import com.firstJogo.Handlers.FuncaoHandler;
-import com.firstJogo.estrutura.DirecoesPadrao;
 import com.firstJogo.estrutura.ElementoDuplo;
+import com.firstJogo.estrutura.Player;
 import com.firstJogo.estrutura.TempoEvento;
 import com.firstJogo.estrutura.TexturaAnimador;
 import com.firstJogo.main.GeradorEventos;
@@ -108,9 +106,7 @@ public class Humano extends Entidade{
 		AGACHADO,
 		SPRINT
 	}
-//	public Humano(Vector2f mundoPos) {
-//		this(mundoPos,false,MundoCarregado.atual);
-//	}
+
 	public Humano() {
 		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),Textura.modeloPadrao);
 		
@@ -136,7 +132,6 @@ public class Humano extends Entidade{
 	}
 	
 	public void modo_andar() {
-//		if(!isPlayer())remover.resetar();
 		setMovModo(Humano.modos.ANDANDO);
 	}
 	
@@ -172,11 +167,10 @@ public class Humano extends Entidade{
 	@Override
 	public boolean pararMovimento() {
 		if(super.pararMovimento()) {
-//			impulso.desativar();
 			impulso.ignoreMarker();
 			animado.desativar();
 
-			if(this.isPlayer())PlayerRegras.resetMovModo(this);
+			if(this.equals(Player.mainPlayer.ent))PlayerRegras.resetMovModo(this);
 			
 			return true;
 		}
@@ -185,11 +179,9 @@ public class Humano extends Entidade{
 	@Override
 	public boolean setAnguloMovimento(double angulo) {
 		if(super.setAnguloMovimento(angulo)) {
-//			if(impulso!=null)//TODO Tirar
-//			System.out.println(impulso);
 			impulso.resetar();
 			if(this.movModo==modos.SPRINT) {
-				if(this.isPlayer())
+				if(this.equals(Player.mainPlayer.ent))
 					PlayerRegras.resetMovModo(this);
 				else
 					this.modo_correr();
@@ -206,7 +198,6 @@ public class Humano extends Entidade{
 	
 	
 	private float getModVelocModifier() {
-//		if(!isPlayer())System.out.println(movModo);
 		switch(movModo) {
 		case CORRENDO:
 			return 1f;
@@ -228,7 +219,6 @@ public class Humano extends Entidade{
 		if (modo == modos.CORRENDO)
 			impulso.resetar();
 		else if (modo != modos.SPRINT) {
-//			impulso.desativar();
 			impulso.ignoreMarker();
 		}
 		movModo = modo;
@@ -238,8 +228,6 @@ public class Humano extends Entidade{
 	}
 	private void updateAnimacao() {
 		if(animado!=null)if(animado.isAtivado())pararAnimacoes();
-//		if(movModo!=null)//TODO tirar
-//		System.out.println();
 		switch(movModo) {
 		case AGACHADO:
 			switch(this.getOlhar()) {

@@ -8,13 +8,13 @@ import org.lwjgl.glfw.GLFW;
 
 import com.firstJogo.Handlers.FuncaoHandler;
 import com.firstJogo.Handlers.KeyCallbackHandler;
-import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.Humano;
 import com.firstJogo.Mundos.MundoCarregado;
 import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.DirecoesPadrao;
 import com.firstJogo.estrutura.ExternalCallback;
 import com.firstJogo.estrutura.NotFoundException;
+import com.firstJogo.estrutura.Player;
 import com.firstJogo.estrutura.TempoEvento;
 import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.utils.GlobalVariables;
@@ -29,31 +29,28 @@ public class CallbacksGerais implements ExternalCallback {
 		HashMap<Integer, FuncaoHandler<Boolean>> botaoremovido = new HashMap<Integer, FuncaoHandler<Boolean>>();
 		HashMap<Integer, FuncaoHandler<Boolean>> botaopressionado = new HashMap<Integer, FuncaoHandler<Boolean>>();
 		botaopressionado.put(GLFW.GLFW_KEY_W, new FuncaoHandler<Boolean>((isSintetico) -> {
-			PlayerRegras.newMoveDirection(MundoCarregado.mainPlayer, DirecoesPadrao.CIMA);
-			MundoCarregado.mainPlayer.iniciarMovimento();
+			PlayerRegras.newMoveDirection(Player.mainPlayer.ent, DirecoesPadrao.CIMA);
+			Player.mainPlayer.ent.iniciarMovimento();
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_A, new FuncaoHandler<Boolean>((isSintetico) -> {
-			PlayerRegras.newMoveDirection(MundoCarregado.mainPlayer, DirecoesPadrao.ESQUERDA);
-			MundoCarregado.mainPlayer.iniciarMovimento();
+			PlayerRegras.newMoveDirection(Player.mainPlayer.ent, DirecoesPadrao.ESQUERDA);
+			Player.mainPlayer.ent.iniciarMovimento();
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_S, new FuncaoHandler<Boolean>((isSintetico) -> {
-			PlayerRegras.newMoveDirection(MundoCarregado.mainPlayer, DirecoesPadrao.BAIXO);
-			MundoCarregado.mainPlayer.iniciarMovimento();
+			PlayerRegras.newMoveDirection(Player.mainPlayer.ent, DirecoesPadrao.BAIXO);
+			Player.mainPlayer.ent.iniciarMovimento();
 
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_D, new FuncaoHandler<Boolean>((isSintetico) -> {
-			PlayerRegras.newMoveDirection(MundoCarregado.mainPlayer, DirecoesPadrao.DIREITA);
-			MundoCarregado.mainPlayer.iniciarMovimento();
+			PlayerRegras.newMoveDirection(Player.mainPlayer.ent, DirecoesPadrao.DIREITA);
+			Player.mainPlayer.ent.iniciarMovimento();
 
 		},null));
 
-//		botaopressionado.put(GLFW.GLFW_KEY_Y, new FuncaoHandler<Boolean>((isSintetico)->{
-//			
-//		},));
 		
 		botaopressionado.put(GLFW.GLFW_KEY_LEFT_CONTROL, new FuncaoHandler<Boolean>((isSintetico) -> {
 			try {
-				Humano player = (Humano) MundoCarregado.mainPlayer;
+				Humano player = (Humano) Player.mainPlayer.ent;
 				player.modo_correr();
 			} catch (ClassCastException c) {
 
@@ -61,7 +58,7 @@ public class CallbacksGerais implements ExternalCallback {
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_LEFT_SHIFT, new FuncaoHandler<Boolean>((isSintetico) -> {
 			try {
-				Humano player = (Humano) MundoCarregado.mainPlayer;
+				Humano player = (Humano) Player.mainPlayer.ent;
 				player.modo_agachar();
 			} catch (ClassCastException c) {
 
@@ -73,75 +70,61 @@ public class CallbacksGerais implements ExternalCallback {
 			Humano testado = new Humano();
 			testado.spawnar(new Vector2f(0, 0), MundoCarregado.atual, false);
 			MundoCarregado.atual.getEntidades().add(testado);
-			testado.setAnguloMovimento(Math.atan2(MundoCarregado.mainPlayer.getMundopos().y - testado.getMundopos().y,
-					MundoCarregado.mainPlayer.getMundopos().x - testado.getMundopos().x));
+			testado.setAnguloMovimento(Math.atan2(Player.mainPlayer.ent.getMundopos().y - testado.getMundopos().y,
+					Player.mainPlayer.ent.getMundopos().x - testado.getMundopos().x));
 			testado.iniciarMovimento();
-			testado.modo_andar();
-
-//			TempoMarker marc=new TempoMarker(1000000);
-//			GeradorEventos.addTempoEvento(new TempoEvento<Entidade>(marc, new FuncaoHandler<Entidade>((Entidade perseguidor) -> {
-//				Entidade genti=perseguidor;
-//				Vector2f playerpos = MundoCarregado.mainPlayer.getMundopos();
-//				Vector2f gentipos = genti.getMundopos();
-//				genti.setAnguloMovimento(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
-//				genti.iniciarMovimento();
-//				marc.resetar();
-//			},testado)));
-			
-			
-//			GeradorEventos.addTempoEvento(Entidade.class, new FuncaoHandler<Entidade>((perseguidor) -> {
-//				Entidade genti=perseguidor;
-//				Vector2f playerpos = MundoCarregado.mainPlayer.getMundopos();
-//				Vector2f gentipos = genti.getMundopos();
-//				genti.setAngulo(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
-//				genti.iniciarMovimento();
-//			},testado), marc);
-			
-			
-//			marc.resetar();
-			
+			testado.modo_andar();			
 			
 		},null));
 
 		// Alteradores de visão da câmera do player
 		botaopressionado.put(GLFW.GLFW_KEY_PAGE_DOWN, new FuncaoHandler<Boolean>((isSintetico) -> {
-			Camera.getMain().setSize(Camera.getMain().getWidth() - GlobalVariables.intperbloco,
-					Camera.getMain().getHeight() - GlobalVariables.intperbloco);
+			Camera mainCamera=Player.mainPlayer.camera;
+			mainCamera.setSize(mainCamera.getWidth() - GlobalVariables.intperbloco,
+					mainCamera.getHeight() - GlobalVariables.intperbloco);
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_PAGE_UP, new FuncaoHandler<Boolean>((isSintetico) -> {
-			Camera.getMain().setSize(Camera.getMain().getWidth() + GlobalVariables.intperbloco,
-					Camera.getMain().getHeight() + GlobalVariables.intperbloco);
+			Camera mainCamera=Player.mainPlayer.camera;
+			mainCamera.setSize(mainCamera.getWidth() + GlobalVariables.intperbloco,
+					mainCamera.getHeight() + GlobalVariables.intperbloco);
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_UP, new FuncaoHandler<Boolean>((isSintetico) -> {
-			Camera.getMain().setSize(Camera.getMain().getWidth(),
-					Camera.getMain().getHeight() + GlobalVariables.intperbloco);
+			Camera mainCamera=Player.mainPlayer.camera;
+			mainCamera.setSize(mainCamera.getWidth(),
+					mainCamera.getHeight() + GlobalVariables.intperbloco);
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_DOWN, new FuncaoHandler<Boolean>((isSintetico) -> {
-			Camera.getMain().setSize(Camera.getMain().getWidth(),
-					Camera.getMain().getHeight() - GlobalVariables.intperbloco);
+			Camera mainCamera=Player.mainPlayer.camera;
+			mainCamera.setSize(mainCamera.getWidth(),
+					mainCamera.getHeight() - GlobalVariables.intperbloco);
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_LEFT, new FuncaoHandler<Boolean>((isSintetico) -> {
-			Camera.getMain().setSize(Camera.getMain().getWidth() - GlobalVariables.intperbloco,
-					Camera.getMain().getHeight());
+			Camera mainCamera=Player.mainPlayer.camera;
+			mainCamera.setSize(mainCamera.getWidth() - GlobalVariables.intperbloco,
+					mainCamera.getHeight());
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_RIGHT, new FuncaoHandler<Boolean>((isSintetico) -> {
-			Camera.getMain().setSize(Camera.getMain().getWidth() + GlobalVariables.intperbloco,
-					Camera.getMain().getHeight());
+			Camera mainCamera=Player.mainPlayer.camera;
+			mainCamera.setSize(mainCamera.getWidth() + GlobalVariables.intperbloco,
+					mainCamera.getHeight());
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_R, new FuncaoHandler<Boolean>((isSintetico) -> {
-			Camera.getMain().setSize(480, 480);
+			Camera mainCamera=Player.mainPlayer.camera;
+			mainCamera.setSize(480, 480);
 //			GlobalVariables.contador=1;
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_J, new FuncaoHandler<Boolean>((isSintetico) -> {
-			Camera.getMain().setPos(Camera.getMain().getPos().add(1, 0, 0));
+			Camera mainCamera=Player.mainPlayer.camera;
+			mainCamera.setPos(mainCamera.getPos().add(1, 0, 0));
 		},null));
 		botaopressionado.put(GLFW.GLFW_KEY_K, new FuncaoHandler<Boolean>((isSintetico) -> {
-			Camera.getMain().setPos(Camera.getMain().getPos().add(-1, 0, 0));
+			Camera mainCamera=Player.mainPlayer.camera;
+			mainCamera.setPos(mainCamera.getPos().add(-1, 0, 0));
 		},null));
 
 		botaoremovido.put(GLFW.GLFW_KEY_LEFT_CONTROL, new FuncaoHandler<Boolean>((isSintetico) -> {
 			try {
-				Humano player = (Humano) MundoCarregado.mainPlayer;
+				Humano player = (Humano) Player.mainPlayer.ent;
 				PlayerRegras.resetMovModo(player);
 			} catch (ClassCastException c) {
 
@@ -149,23 +132,23 @@ public class CallbacksGerais implements ExternalCallback {
 		},null));
 		botaoremovido.put(GLFW.GLFW_KEY_LEFT_SHIFT, new FuncaoHandler<Boolean>((isSintetico) -> {
 			try {
-				Humano player = (Humano) MundoCarregado.mainPlayer;
+				Humano player = (Humano) Player.mainPlayer.ent;
 				PlayerRegras.resetMovModo(player);
 			} catch (ClassCastException c) {
 
 			}
 		},null));
 		botaoremovido.put(GLFW.GLFW_KEY_W, new FuncaoHandler<Boolean>((isSintetico) -> {
-			PlayerRegras.remMoveDirection(MundoCarregado.mainPlayer, DirecoesPadrao.CIMA);
+			PlayerRegras.remMoveDirection(Player.mainPlayer.ent, DirecoesPadrao.CIMA);
 		},null));
 		botaoremovido.put(GLFW.GLFW_KEY_A, new FuncaoHandler<Boolean>((isSintetico) -> {
-			PlayerRegras.remMoveDirection(MundoCarregado.mainPlayer, DirecoesPadrao.ESQUERDA);
+			PlayerRegras.remMoveDirection(Player.mainPlayer.ent, DirecoesPadrao.ESQUERDA);
 		},null));
 		botaoremovido.put(GLFW.GLFW_KEY_S, new FuncaoHandler<Boolean>((isSintetico) -> {
-			PlayerRegras.remMoveDirection(MundoCarregado.mainPlayer, DirecoesPadrao.BAIXO);
+			PlayerRegras.remMoveDirection(Player.mainPlayer.ent, DirecoesPadrao.BAIXO);
 		},null));
 		botaoremovido.put(GLFW.GLFW_KEY_D, new FuncaoHandler<Boolean>((isSintetico) -> {
-			PlayerRegras.remMoveDirection(MundoCarregado.mainPlayer, DirecoesPadrao.DIREITA);
+			PlayerRegras.remMoveDirection(Player.mainPlayer.ent, DirecoesPadrao.DIREITA);
 		},null));
 
 		KeyCallbackHandler.addBotaoCallbacks(botaoremovido, botaopressionado);
@@ -178,35 +161,41 @@ public class CallbacksGerais implements ExternalCallback {
 		TempoMarker marctemp=new TempoMarker(1000000L);
 		GeradorEventos.addTempoEvento("Mover Player",new TempoEvento<TempoMarker>(marctemp, new FuncaoHandler<TempoMarker>((Marcador) -> {// Move o Player, e cada milisegundo vai executar!
 			TempoMarker marcador = Marcador;
-			if(!MundoCarregado.mainPlayer.isParado()) {
-			float newx = Camera.getMain().getPos().x + (float) ((-MundoCarregado.mainPlayer.getForcedVelocModified().x
-					- MundoCarregado.mainPlayer.getMovDirecModifiers()[0] * MundoCarregado.mainPlayer.getVelocModified())
-					* GlobalVariables.intperbloco * (double) (System.nanoTime() - marcador.getTemporegistrado())
-					/ 1000000000);
-			float newy = Camera.getMain().getPos().y + (float) ((-MundoCarregado.mainPlayer.getForcedVelocModified().y
-					- MundoCarregado.mainPlayer.getMovDirecModifiers()[1] * MundoCarregado.mainPlayer.getVelocModified())
-					* GlobalVariables.intperbloco * (double) (System.nanoTime() - marcador.getTemporegistrado())
-					/ 1000000000);
+					if (!Player.mainPlayer.ent.isParado()) {
+						Camera mainCamera=Player.mainPlayer.camera;
+						float newx = mainCamera.getPos().x
+								+ (float) ((-Player.mainPlayer.ent.getForcedVelocModified().x
+										- Player.mainPlayer.ent.getMovDirecModifiers()[0]
+												* Player.mainPlayer.ent.getVelocModified())
+										* GlobalVariables.intperbloco
+										* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
+						float newy = mainCamera.getPos().y
+								+ (float) ((-Player.mainPlayer.ent.getForcedVelocModified().y
+										- Player.mainPlayer.ent.getMovDirecModifiers()[1]
+												* Player.mainPlayer.ent.getVelocModified())
+										* GlobalVariables.intperbloco
+										* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
 
-			if (MundoCarregado.mainPlayer.setMundopos(new Vector2f(-newx, MundoCarregado.mainPlayer.getMundopos().y))			)
-				Camera.getMain().setPos(new Vector3f(newx, Camera.getMain().getPos().y, 0));
-			
-			if (MundoCarregado.mainPlayer.setMundopos(new Vector2f(MundoCarregado.mainPlayer.getMundopos().x, -newy)))
+						if (Player.mainPlayer.ent
+								.setMundopos(new Vector2f(-newx, Player.mainPlayer.ent.getMundopos().y)))
+							mainCamera.setPos(new Vector3f(newx, mainCamera.getPos().y, 0));
 
-				Camera.getMain().setPos(new Vector3f(Camera.getMain().getPos().x, newy, 0));
+						if (Player.mainPlayer.ent
+								.setMundopos(new Vector2f(Player.mainPlayer.ent.getMundopos().x, -newy)))
 
+							mainCamera.setPos(new Vector3f(mainCamera.getPos().x, newy, 0));
 
-//					System.out.println("X: "+MundoCarregado.mainPlayer.getMundopos().x);
-//					System.out.println("Y: "+MundoCarregado.mainPlayer.getMundopos().y);
-//					System.out.println("Xb: "+(long)Math.floor((MundoCarregado.mainPlayer.getMundopos().x/GlobalVariables.intperbloco)));//Bloco Coords
-//					System.out.println("Yb: "+(long)Math.floor((MundoCarregado.mainPlayer.getMundopos().x/GlobalVariables.intperbloco)));
-//					System.out.println("Xc: "+Math.floor((MundoCarregado.mainPlayer.getMundopos()[0]/GlobalVariables.intperbloco)/16+0.5f));//Chunk Coords
-//					System.out.println("Yc: "+Math.floor((MundoCarregado.mainPlayer.getMundopos()[1]/GlobalVariables.intperbloco)/16+0.5f));
+//					System.out.println("X: "+Player.mainPlayer.ent.getMundopos().x);
+//					System.out.println("Y: "+Player.mainPlayer.ent.getMundopos().y);
+//					System.out.println("Xb: "+(long)Math.floor((Player.mainPlayer.ent.getMundopos().x/GlobalVariables.intperbloco)));//Bloco Coords
+//					System.out.println("Yb: "+(long)Math.floor((Player.mainPlayer.ent.getMundopos().x/GlobalVariables.intperbloco)));
+//					System.out.println("Xc: "+Math.floor((Player.mainPlayer.ent.getMundopos()[0]/GlobalVariables.intperbloco)/16+0.5f));//Chunk Coords
+//					System.out.println("Yc: "+Math.floor((Player.mainPlayer.ent.getMundopos()[1]/GlobalVariables.intperbloco)/16+0.5f));
 
-			}
-			
-			marcador.resetar();
-		},marctemp)));
+					}
+
+					marcador.resetar();
+				}, marctemp)));
 		marctemp.resetar();
 
 		

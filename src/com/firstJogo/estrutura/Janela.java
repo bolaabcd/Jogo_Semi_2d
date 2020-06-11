@@ -136,10 +136,8 @@ public class Janela {
 		height = hei.get();//Salva o novo tamanho desejado no objeto Janela
 		if (width >= height) {//Se o novo comprimento for maior, posiciona a viewPort na metade do comprimento total.
 			GL11.glViewport(width / 2 - height / 2, 0, height, height);
-//			width = height;
 		} else {//Se a nova altura for maior, coloca a viewPort na metade da altura total.
 			GL11.glViewport(0, height / 2 - width / 2, width, width);
-//			height = width;
 		}
 	}
 	

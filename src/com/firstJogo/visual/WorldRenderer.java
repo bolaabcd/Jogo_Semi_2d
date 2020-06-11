@@ -7,6 +7,7 @@ import com.firstJogo.Mundos.Entidade;
 import com.firstJogo.Mundos.MundoCarregado;
 import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.Janela;
+import com.firstJogo.estrutura.Player;
 import com.firstJogo.utils.GlobalVariables;
 
 public class WorldRenderer {
@@ -28,23 +29,19 @@ public class WorldRenderer {
 //		azulejos=new char[18][18];
 		
 //		criaturas=new ArrayList<Entidade>();
-		MundoCarregado.atual.getEntidades().add(MundoCarregado.mainPlayer);
+		MundoCarregado.atual.getEntidades().add(Player.mainPlayer.ent);
 		
 		mundo=new Matrix4f().setTranslation(0,0,0);//BOTTON-RIGHT do mundo no centro da tela é o 0,0,0!
 		mundo.setTranslation(-Janela.getPrincipal().getWidth()/2-2*escala, -Janela.getPrincipal().getHeight()/2-2*escala, 0);
 		mundo.scale(escala);
 
 	}
-	
-//	public ArrayList<Entidade> getCriaturas() {
-//		return criaturas;
-//	}
 
 	public void renderizar(AzRenderer rend,Shaders shad,Camera cam) {
 		cam=cam.getCopia();//Para não alterar nada enquanto renderiza!
 		
-		long xplayer=MundoCarregado.mainPlayer.getBlocoCoords()[0];
-		long yplayer=MundoCarregado.mainPlayer.getBlocoCoords()[1];
+		long xplayer=Player.mainPlayer.ent.getBlocoCoords()[0];
+		long yplayer=Player.mainPlayer.ent.getBlocoCoords()[1];
 		long[][] acarregar=new long[18*18][2];//X e Y pra cada elemento da lista
 		short temp=0;
 		for(short ypos=0;ypos<18;ypos++) 
@@ -76,7 +73,8 @@ public class WorldRenderer {
 		shad.bindar();
 		ent.getTextura().bind(1);//Bindou ao sampler número 1 ¯\_(ツ)_/¯
 		Matrix4f mat=new Matrix4f();
-		if(ent.isPlayer()) {
+//		if(ent.isPlayer()) {
+		if(ent.equals(Player.mainPlayer.ent)) {
 			Matrix4f pos=new Matrix4f().translate(2*8.5f,2*8.5f,0);//O modelo tem a origem no centro, e ele escala pros dois lados!
 			cam.getRawProjec().mul(mundo, mat);
 			mat.mul(pos);

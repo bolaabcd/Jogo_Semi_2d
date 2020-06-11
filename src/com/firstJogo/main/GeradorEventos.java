@@ -26,9 +26,7 @@ public class GeradorEventos implements Runnable {
 	}
 	
 	public static void remEvento(Evento<?> ev) {
-//		System.out.println(eventos.size());
 		eventos.remove(ev);
-//		System.out.println(eventos.size());
 	}
 	public static void remEvento(Object chave) {
 		eventos.remove(chave);
@@ -44,13 +42,12 @@ public class GeradorEventos implements Runnable {
 		System.out.println("Iniciando Loop de eventos");
 		
 		while (!principal.ShouldClose()) {
-			for(Object chave:eventos.keySet())
-				if(eventos.get(chave)!=null)
-					if(eventos.get(chave).podeExecutar())
+			for (Object chave : eventos.keySet())
+				if (eventos.get(chave) != null)
+					if (eventos.get(chave).podeExecutar())
 						eventos.get(chave).executar();
-			
-			if(GlobalVariables.TicksPorSegundo==2)
-			System.out.println(eventos.size());
+//			if(GlobalVariables.TicksPorSegundo==2)
+//				System.out.println(eventos.size());
 			GlobalVariables.TicksPorSegundo += 1;
 		}
 	}

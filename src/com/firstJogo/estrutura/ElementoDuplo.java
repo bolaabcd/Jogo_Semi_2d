@@ -17,7 +17,6 @@ public class ElementoDuplo <T1,T2>{
 	@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof ElementoDuplo))return false;
-//		try {
 		@SuppressWarnings( "rawtypes" )
 		ElementoDuplo el=(ElementoDuplo) obj;
 		if(temOrdem)
@@ -25,8 +24,5 @@ public class ElementoDuplo <T1,T2>{
 		else
 				return (el.primeiro.equals(primeiro) && el.segundo.equals(segundo))
 						|| (el.primeiro.equals(segundo) && el.segundo.equals(primeiro));
-//		}catch(ClassCastException cce) {
-//			return false;
-//		}
 	}
 }

@@ -20,22 +20,17 @@ import com.firstJogo.Mundos.Humano;
 import com.firstJogo.Mundos.MundoCarregado;
 import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.Janela;
+import com.firstJogo.estrutura.Player;
 import com.firstJogo.utils.ConsumerCheckedException;
 import com.firstJogo.utils.GlobalVariables;
 
 //Thread responsável por preparar as variáveis iniciais do programa e ler as configurações.
 public class Prepare implements Runnable {
-	
-	public static void prepararCamera() {
-		Camera camera = new Camera(Janela.getPrincipal().getWidth(), Janela.getPrincipal().getHeight());
-		Camera.setMain(camera);
-	}
 
 	public static void prepararPlayer() {
-//		Humano player = new Humano(new Vector2f(0, 0),true,MundoCarregado.atual);
-		MundoCarregado.mainPlayer=new Humano();
-		MundoCarregado.mainPlayer.spawnar(new Vector2f(0, 0), MundoCarregado.atual, true);
-//		player.setPlayer(true);
+		Player.mainPlayer = new Player(new Humano(), "Steve",
+				new Camera(Janela.getPrincipal().getWidth(), Janela.getPrincipal().getHeight()));
+		Player.mainPlayer.ent.spawnar(new Vector2f(0, 0), MundoCarregado.atual, true);
 	}
 
 	public static void prepararJanela() {

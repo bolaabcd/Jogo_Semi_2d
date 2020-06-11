@@ -1,14 +1,15 @@
 package com.firstJogo.visual;
 
 
+import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-
-import com.firstJogo.utils.ArquivosGerais;
 
 public class Shaders {
 	private int programa;
@@ -19,9 +20,9 @@ public class Shaders {
 		programa=GL20.glCreateProgram();
 		
 		//Arquivo termina com .vs (ou .fs)
-		
+		try {
 		vertex_shader=GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
-		GL20.glShaderSource(vertex_shader, ArquivosGerais.lertudo(arquivosemestencao+".vs"));
+		GL20.glShaderSource(vertex_shader, new String(Files.readAllBytes(Paths.get(arquivosemestencao+".vs"))));
 		GL20.glCompileShader(vertex_shader);
 		if(GL20.glGetShaderi(vertex_shader, GL20.GL_COMPILE_STATUS)!=1) {
 			System.err.println(GL20.glGetShaderInfoLog(vertex_shader));
@@ -29,11 +30,16 @@ public class Shaders {
 		}
 		
 		fragment_shader=GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
-		GL20.glShaderSource(fragment_shader, ArquivosGerais.lertudo(arquivosemestencao+".fs"));
+		GL20.glShaderSource(fragment_shader, new String(Files.readAllBytes(Paths.get(arquivosemestencao+".fs"))));
 		GL20.glCompileShader(fragment_shader);
 		if(GL20.glGetShaderi(fragment_shader, GL20.GL_COMPILE_STATUS)==0) {
 			System.err.println(GL20.glGetShaderInfoLog(fragment_shader));
 			System.exit(1);
+		}
+		}catch(IOException ioe) {
+			System.out.println("Não foi possível acessar os Shaders!");
+			ioe.printStackTrace();
+			System.exit(0);
 		}
 		
 		GL20.glAttachShader(programa, vertex_shader);

@@ -1,12 +1,9 @@
 package com.firstJogo.main;
 
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-import com.firstJogo.Handlers.KeyCallbackHandler;
-import com.firstJogo.estrutura.Camera;
 import com.firstJogo.estrutura.Janela;
-import com.firstJogo.estrutura.NotFoundException;
+import com.firstJogo.estrutura.Player;
 import com.firstJogo.regras.CallbacksGerais;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.visual.AzRenderer;
@@ -23,7 +20,6 @@ public class Renderer implements Runnable{
 		Prepare.prepararJanela();
 		Prepare.prepararMundo();
 		Prepare.prepararPlayer();
-		Prepare.prepararCamera();
 		CallbacksGerais.prepararBotoes();
 		CallbacksGerais.prepararTempos();
 		
@@ -86,7 +82,7 @@ public class Renderer implements Runnable{
 			Janela.PollEvents();
 			//Se não der o Poll Events aqui buga no Windows...
 
-			mundo.renderizar(renderizator, shad, Camera.getMain());
+			mundo.renderizar(renderizator, shad, Player.mainPlayer.camera);
 			principal.apresente();
 			amt++;//FPS
 		}

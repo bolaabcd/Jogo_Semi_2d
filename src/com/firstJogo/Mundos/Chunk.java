@@ -12,8 +12,5 @@ public class Chunk {
 	public Bloco[][] getBlocos() {
 		return blocos;
 	}
-//	public void setBloco(Bloco b,short x, short y) {
-//		blocos[x][y]=b;
-//	}
 	
 }

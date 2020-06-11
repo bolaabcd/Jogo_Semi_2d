@@ -12,7 +12,6 @@ public class Bloco {
 	}
 	
 	private char idTipo;
-//	protected HashMap<String,String> dadosAdicionais=new HashMap<String,String>();
 	
 	public Bloco(char idTipo) {
 		this.idTipo=idTipo;

@@ -19,15 +19,12 @@ public class PlayerRegras {
 			res[0] = DirecoesPadrao.DIREITA;
 		else if (mods[0] < 0)
 			res[0] = DirecoesPadrao.ESQUERDA;
-//		else
-//			res[0]=null;
+
 		if(mods[1]==null)res[1]=null;
 		else if (mods[1] > 0)
 			res[1] = DirecoesPadrao.CIMA;
 		else if (mods[1] < 0)
 			res[1] = DirecoesPadrao.BAIXO;
-//		else
-//			res[1]=null;
 		
 		return res;
 	}
@@ -95,10 +92,7 @@ public class PlayerRegras {
 			else if (horizontal == DirecoesPadrao.ESQUERDA)
 				e.setAnguloMovimento(Math.PI);//Só esquerda
 			else if (horizontal == DirecoesPadrao.DIREITA)
-				e.setAnguloMovimento(0);//Só direita
-//			else 
-//				throw new IllegalStateException("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
-			
+				e.setAnguloMovimento(0);//Só direita			
 			
 		} else if (dir == DirecoesPadrao.CIMA) {
 			if(vertical==DirecoesPadrao.BAIXO)return;//Ignorando se estiver na direção oposta
@@ -107,9 +101,6 @@ public class PlayerRegras {
 				e.setAnguloMovimento(Math.PI);//Só esquerda
 			else if (horizontal == DirecoesPadrao.DIREITA)
 				e.setAnguloMovimento(0);//Só direita
-//			else {
-//				throw new IllegalStateException("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
-//			}
 		} else if (dir == DirecoesPadrao.ESQUERDA) {
 			if(horizontal==DirecoesPadrao.DIREITA)return;//Ignorando se estiver na direção oposta
 			else if(horizontal==DirecoesPadrao.ESQUERDA&&vertical==null)e.pararMovimento();//Se era apenas esquerda, parar.
@@ -117,9 +108,6 @@ public class PlayerRegras {
 				e.setAnguloMovimento(Math.PI/2);//Só cima
 			else if (vertical == DirecoesPadrao.BAIXO)
 				e.setAnguloMovimento(-Math.PI/2);//Só baixo
-//			else {
-//				throw new IllegalStateException("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
-//			}
 		} else if (dir == DirecoesPadrao.DIREITA) {
 			if(horizontal==DirecoesPadrao.ESQUERDA)return;//Ignorando se estiver na direção oposta
 			else if(horizontal==DirecoesPadrao.DIREITA&&vertical==null)e.pararMovimento();//Se era apenas direita, parar.
@@ -127,9 +115,6 @@ public class PlayerRegras {
 				e.setAnguloMovimento(Math.PI/2);//Só cima
 			else if (vertical == DirecoesPadrao.BAIXO)
 				e.setAnguloMovimento(-Math.PI/2);//Só baixo
-//			else {
-//				throw new IllegalStateException("ERRO NA ALTERAÇÃO DA DIREÇÃO DE MOVIMENTO DO PLAYER!");
-//			}
 		}
 	}
 

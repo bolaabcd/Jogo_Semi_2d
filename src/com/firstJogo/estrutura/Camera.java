@@ -5,7 +5,6 @@ import org.joml.Vector3f;
 
 //Câmera virtual que pode ser movida pelo mundo.
 public class Camera{
-	private static Camera main;
 	
 	private Vector3f pos;
 	private Matrix4f projec;
@@ -19,15 +18,6 @@ public class Camera{
 		pos=new Vector3f(0,0,0);
 		projec=new Matrix4f().setOrtho2D(-width/2, width/2, -height/2, height/2);
 		//Setando origem da câmera pro centro da tela...
-		Camera.setMain(this);
-	}
-	public Camera(int width, int height,boolean main) {
-		this.width=width;
-		this.height=height;
-		pos=new Vector3f(0,0,0);
-		projec=new Matrix4f().setOrtho2D(-width/2, width/2, -height/2, height/2);
-		if(main)
-		Camera.setMain(this);
 	}
 
 	public void setPos(Vector3f pos) {
@@ -59,17 +49,11 @@ public class Camera{
 		return height;
 	}
 	public Camera getCopia() {
-		Camera res=new Camera(width,height,false);
+		Camera res=new Camera(width,height);
 		float x=pos.x,y=pos.y,z=pos.z;
 		res.setPos(new Vector3f(x,y,z));
 		
 		
 		return res;
-	}
-	public static Camera getMain() {
-		return main;
-	}
-	public static void setMain(Camera main) {
-		Camera.main = main;
 	}
 }

@@ -31,17 +31,14 @@ public class TipodeBloco {
 		float newx=0f;
 		float newy=0f;
 		if(result.x>=GlobalVariables.intperbloco)
-			newx=-(float) (ent.getMovDirecModifiers()[0]*ent.getVelocModified());
-		else if(result.x<=-GlobalVariables.intperbloco)
-			newx=-(float) (ent.getMovDirecModifiers()[0]*ent.getVelocModified());
-		if(result.y>=GlobalVariables.intperbloco)
-			newy=-(float) (ent.getMovDirecModifiers()[1]*ent.getVelocModified());
-		else if(result.y<=-GlobalVariables.intperbloco)
-			newy=-(float) (ent.getMovDirecModifiers()[1]*ent.getVelocModified());
-//		if(result.x)
-//		ent.addForcedVelocModifier("colisao", result);
-		ent.addForcedVelocModifier(ForcedVelocModifier.COLISAO, new Vector2f(newx,newy));
-//		ent.setColidido(new Vector2f(newx,newy));
+			newx = -(float) (ent.getMovDirecModifiers()[0] * ent.getVelocModified());
+		else if (result.x <= -GlobalVariables.intperbloco)
+			newx = -(float) (ent.getMovDirecModifiers()[0] * ent.getVelocModified());
+		if (result.y >= GlobalVariables.intperbloco)
+			newy = -(float) (ent.getMovDirecModifiers()[1] * ent.getVelocModified());
+		else if (result.y <= -GlobalVariables.intperbloco)
+			newy = -(float) (ent.getMovDirecModifiers()[1] * ent.getVelocModified());
+		ent.addForcedVelocModifier(ForcedVelocModifier.COLISAO, new Vector2f(newx, newy));
 	};
 	
 	public static TipodeBloco[] azulejos=new TipodeBloco[256*256];//Todos os azulejos existentes!

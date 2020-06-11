@@ -8,25 +8,20 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.joml.Vector2f;
 
 import com.firstJogo.estrutura.DirecoesPadrao;
+import com.firstJogo.estrutura.Player;
 import com.firstJogo.utils.GlobalVariables;
 
 public class MundoCarregado {
-	public static Entidade mainPlayer;
 	public static MundoCarregado atual;
 	public static ArrayList<MundoCarregado> mundos=new ArrayList<MundoCarregado>();
 	
 	private final Set<Entidade> entidades=Collections.newSetFromMap(new ConcurrentHashMap<Entidade,Boolean>());
 	private long[] chunkloader;//X e Y do chunk central!
 	
-//	private Bloco[][][][] blocos=new Bloco[3][3][16][16];//3x3 chunks de 16x16
 	private char[][][][] blocos=new char[3][3][16][16];//3x3 chunks de 16x16
 	
 	public MundoCarregado() {
 		mundos.add(this);
-//		float[] playerPos= Entidade.getPlayer().getMundopos();
-		
-//		long chunkLoaderX=Entidade.getPlayer().getChunkCoords()[0];
-//		long chunkLoaderY=Elntidade.getPlayer().getChunkCoords()[1];
 		long chunkLoaderX=0;
 		long chunkLoaderY=0L;
 		
@@ -42,11 +37,8 @@ public class MundoCarregado {
 		int i=0;
 		for(long[] coords:coordenadas) {
 			ans[i]=getbloco(coords[0],coords[1]);
-//			if(GlobalVariables.contador==1)System.out.println("X: "+coords[0]+"  Y: "+coords[1]);
-			
 			i++;
 		}
-//		GlobalVariables.contador=0;
 		return ans;
 	}
 	
@@ -55,7 +47,7 @@ public class MundoCarregado {
 	}
 	
 	public void updateChunks(DirecoesPadrao lado) {
-		Vector2f playerPos= mainPlayer.getMundopos();
+		Vector2f playerPos= Player.mainPlayer.ent.getMundopos();
 		float chunkLoaderX=(playerPos.x/GlobalVariables.intperbloco)/16;
 		float chunkLoaderY=(playerPos.y/GlobalVariables.intperbloco)/16;
 		ArrayList<int[]> quais=new ArrayList<int[]>();
@@ -117,12 +109,10 @@ public class MundoCarregado {
 	private char[][] loadChunkBlocos(float[] coordenadas) {
 		if(coordenadas.length!=2)throw new IllegalStateException("Coordenadas inválidas!");
 		//TODO: Código para carregar da memória os chunks
-//		Bloco[][] ans=new Bloco[16][16];
 		char[][] ans=new char[16][16];
 		for(short ia=0;ia<ans.length;ia++)
 			for(short i=0;i<ans[ia].length;i++)
 				ans[ia][i]=(char)0;
-//				ans[ia][i]=new Bloco((char)0);
 		return ans;
 	}
 

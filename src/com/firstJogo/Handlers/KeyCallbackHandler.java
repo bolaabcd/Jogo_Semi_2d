@@ -60,15 +60,9 @@ public class KeyCallbackHandler {
 		if(!isSintetico)
 			if(opostos.get(botao)!=null)
 				if(keys.contains(opostos.get(botao))) 
-					botaoRemovidoHandler.runCallback(opostos.get(botao), true);
-					
-				
-//					botaoRemovidoHandler.getEvento(opostos.get(botao)).run(true);
-		
+					botaoRemovidoHandler.runCallback(opostos.get(botao), true);		
 		keys.add(botao);
 		botaoPressionadoHandler.runCallback(botao, isSintetico);
-//		if(botaoPressionadoHandler.getEvento(botao)!=null)
-//			botaoPressionadoHandler.getEvento(botao).run(isSintetico);
 
 	}
 	public static void ativarEvento(boolean isSintetico,int chave) throws NotFoundException {
@@ -78,12 +72,4 @@ public class KeyCallbackHandler {
 		return keys.contains(chave);
 	}
 	
-//	public static void ativarMantidos() {
-//		for(int k:keys)
-//			try {
-//				GeradorEventos.botaomantidoHandler.throwEvento(k);
-//			} catch (NotFoundException e) {
-//				//Joga pra ver se tem algum evento de apertar esse botão.
-//			}
-//	}
 }

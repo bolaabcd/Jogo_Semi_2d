@@ -16,9 +16,8 @@ import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.visual.Modelo;
 import com.firstJogo.visual.Textura;
 import com.firstJogo.visual.TipodeBloco;
-
-//TODO: aprimorar sistema de quem é o player, e remover TODAS as dependências do player possíveis.
-//TODO: alterar ENUMs pra tornar possível adicionar novas chaves.
+//TODO: alterar ENUMs pra tornar possível adicionar novas chaves
+//TODO: Aprimorar colisão.
 //TODO menor: aprimorar conversão pra ChunkCoords e BlocoCoords...
 //TODO FUTURO: tornar independente a direção do olhar e a direção de movimento, com penalidade!
 //TODO BEM FUTURO: colocar sistema de iluminação com o olhar no futuro!
@@ -38,7 +37,6 @@ public abstract class Entidade {
 	private double olharDir=Math.PI/2;
 	private Vector2f mundoPos;//A coordenada 0,0 é a quina inferior direita do bloco 0,0 (centro do chunk 0,0).
 	private MundoCarregado mundo;
-	private boolean isPlayer;
 	
 	private HashMap<VelocModifier,Float> velocModifiers=new HashMap<VelocModifier,Float>();
 	private HashMap<ForcedVelocModifier,Vector2f> forcedVelocModifiers=new HashMap<ForcedVelocModifier,Vector2f>();
@@ -58,7 +56,6 @@ public abstract class Entidade {
 	public void spawnar(Vector2f mundoPos,MundoCarregado mundo,boolean isPlayer) {
 		this.mundoPos=mundoPos;
 		this.mundo=mundo;
-		this.isPlayer=isPlayer;
 		if (!isPlayer) {
 			TempoEvento<?> eventoEntidade=EventoPadrao.moverEntidadeEvento(1, this);
 			eventoEntidade.resetar();
@@ -228,12 +225,6 @@ public abstract class Entidade {
 		return modelo;
 	}
 	
-	
-
-	
-	public boolean isPlayer() {
-		return isPlayer;
-	}
 	
 	public Vector2f getMundopos() {
 		return mundoPos;

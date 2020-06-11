@@ -4,7 +4,6 @@ import org.joml.Vector2f;
 
 import com.firstJogo.Handlers.FuncaoHandler;
 import com.firstJogo.Mundos.Entidade;
-import com.firstJogo.Mundos.MundoCarregado;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.utils.TempoMarker;
 
@@ -25,7 +24,7 @@ public class EventoPadrao {
 		TempoMarker marcador = marEnt.marc;
 		Entidade entidade = marEnt.ent;
 		
-		Vector2f playerpos = MundoCarregado.mainPlayer.getMundopos();
+		Vector2f playerpos = Player.mainPlayer.ent.getMundopos();
 		Vector2f gentipos = entidade.getMundopos();
 		entidade.setAnguloMovimento(Math.atan2(playerpos.y - gentipos.y, playerpos.x - gentipos.x));
 		
