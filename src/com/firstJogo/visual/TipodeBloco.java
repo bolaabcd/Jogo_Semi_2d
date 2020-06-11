@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import org.joml.Vector2f;
 
 import com.firstJogo.Mundos.Entidade;
-import com.firstJogo.estrutura.ForcedVelocModifier;
+import com.firstJogo.estrutura.VelocModifiersPadrao;
 import com.firstJogo.utils.GlobalVariables;
 
 public class TipodeBloco {
@@ -38,7 +38,7 @@ public class TipodeBloco {
 			newy = -(float) (ent.getMovDirecModifiers()[1] * ent.getVelocModified());
 		else if (result.y <= -GlobalVariables.intperbloco)
 			newy = -(float) (ent.getMovDirecModifiers()[1] * ent.getVelocModified());
-		ent.addForcedVelocModifier(ForcedVelocModifier.COLISAO, new Vector2f(newx, newy));
+		ent.addForcedVelocModifier(VelocModifiersPadrao.ColisaoForcedModifier, new Vector2f(newx, newy));
 	};
 	
 	public static TipodeBloco[] azulejos=new TipodeBloco[256*256];//Todos os azulejos existentes!

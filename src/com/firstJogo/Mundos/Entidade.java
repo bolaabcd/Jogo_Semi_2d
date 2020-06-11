@@ -6,28 +6,20 @@ import java.util.HashMap;
 import org.joml.Vector2f;
 
 import com.firstJogo.estrutura.DirecoesPadrao;
-import com.firstJogo.estrutura.ElementoDuplo;
 import com.firstJogo.estrutura.EventoPadrao;
-import com.firstJogo.estrutura.ForcedVelocModifier;
 import com.firstJogo.estrutura.TempoEvento;
-import com.firstJogo.estrutura.VelocModifier;
+import com.firstJogo.estrutura.VelocModifiersPadrao;
 import com.firstJogo.main.GeradorEventos;
 import com.firstJogo.utils.GlobalVariables;
 import com.firstJogo.visual.Modelo;
 import com.firstJogo.visual.Textura;
 import com.firstJogo.visual.TipodeBloco;
-//TODO: alterar ENUMs pra tornar possível adicionar novas chaves
 //TODO: Aprimorar colisão.
 //TODO menor: aprimorar conversão pra ChunkCoords e BlocoCoords...
 //TODO FUTURO: tornar independente a direção do olhar e a direção de movimento, com penalidade!
 //TODO BEM FUTURO: colocar sistema de iluminação com o olhar no futuro!
 
 public abstract class Entidade {
-	public enum EventosEntidades{
-		MOVER,
-		REMOVER,
-		TESTE
-	}
 	
 	private final float[][] hitboxPos;//Começa no baixo esquerda, sentido horário. 00 é a superior esquerda!
 	private final Textura visual;
@@ -38,8 +30,8 @@ public abstract class Entidade {
 	private Vector2f mundoPos;//A coordenada 0,0 é a quina inferior direita do bloco 0,0 (centro do chunk 0,0).
 	private MundoCarregado mundo;
 	
-	private HashMap<VelocModifier,Float> velocModifiers=new HashMap<VelocModifier,Float>();
-	private HashMap<ForcedVelocModifier,Vector2f> forcedVelocModifiers=new HashMap<ForcedVelocModifier,Vector2f>();
+	private HashMap<String,Float> velocModifiers=new HashMap<String,Float>();
+	private HashMap<String,Vector2f> forcedVelocModifiers=new HashMap<String,Vector2f>();
 	
 	private int fantasmabilidade=getFantasmabilidadePadrao();
 	
@@ -50,32 +42,33 @@ public abstract class Entidade {
 		this.visual=visu;
 		this.modelo=model;
 		hitboxPos=modelo.getVertices();
-		velocModifiers.put(VelocModifier.PARADO, 0f);
+		velocModifiers.put(VelocModifiersPadrao.ParadoModifier, 0f);
 	}
 	
 	public void spawnar(Vector2f mundoPos,MundoCarregado mundo,boolean isPlayer) {
 		this.mundoPos=mundoPos;
 		this.mundo=mundo;
 		if (!isPlayer) {
-			TempoEvento<?> eventoEntidade=EventoPadrao.moverEntidadeEvento(1, this);
-			eventoEntidade.resetar();
-			GeradorEventos.addTempoEvento(new ElementoDuplo<Entidade, EventosEntidades>(this, EventosEntidades.MOVER,false),
-					eventoEntidade);
-			eventoEntidade=EventoPadrao.removerEntidadeEvento(30, this);
-			eventoEntidade.resetar();
-			GeradorEventos.addTempoEvento(new ElementoDuplo<Entidade, EventosEntidades>(this, EventosEntidades.REMOVER,false),
-					eventoEntidade);
+			TempoEvento<?> seguirPlayer=EventoPadrao.seguirPlayerEvento(1, this);
+			seguirPlayer.resetar();
+			GeradorEventos.addTempoEvento(EventoPadrao.seguirPlayerEventoChave(this),
+					seguirPlayer);
+			TempoEvento<?> removerEntidade=EventoPadrao.removerEntidadeEvento(30, this);
+			removerEntidade.resetar();
+			GeradorEventos.addTempoEvento(EventoPadrao.removerEntidadeEventoChave(this),
+					removerEntidade);
 		}
 	}
 
 	public void kill() {
 		mundo.getEntidades().remove(this);
-		GeradorEventos.remEvento(new ElementoDuplo<Entidade, EventosEntidades>(this, EventosEntidades.MOVER, false));
-		GeradorEventos.remEvento(new ElementoDuplo<Entidade, EventosEntidades>(this, EventosEntidades.REMOVER, false));
+//		GeradorEventos.remEvento(new ElementoDuplo<Entidade, String>(this, EventoPadrao.SeguirPlayer, false));
+		GeradorEventos.remEvento(EventoPadrao.seguirPlayerEventoChave(this));
+		GeradorEventos.remEvento(EventoPadrao.removerEntidadeEventoChave(this));
 	}
 	
 	public boolean isParado() {
-		return velocModifiers.get(VelocModifier.PARADO)==0;
+		return velocModifiers.get(VelocModifiersPadrao.ParadoModifier)==0;
 	}
 	
 	
@@ -129,11 +122,11 @@ public abstract class Entidade {
 		if(x>xi&&x<xf&&y>yi&&y<yf)return true;
 		return false;
 	}
-	public boolean addForcedVelocModifier(ForcedVelocModifier chave, Vector2f valor) {
+	public boolean addForcedVelocModifier(String chave, Vector2f valor) {
 		if(forcedVelocModifiers.put(chave, valor)==null)return false;
 		return true;
 	}
-	public boolean remForcedVelocModifier(ForcedVelocModifier chave) {
+	public boolean remForcedVelocModifier(String chave) {
 		if(forcedVelocModifiers.remove(chave)==null)return false;
 		return true;
 	}
@@ -144,14 +137,14 @@ public abstract class Entidade {
 	public boolean pararMovimento() {//True se foi, False se não.
 		if (isParado())
 			return false;
-		velocModifiers.put(VelocModifier.PARADO, 0f);
+		velocModifiers.put(VelocModifiersPadrao.ParadoModifier, 0f);
 		return true;
 	}
 	
 	public boolean iniciarMovimento() {
 		if (!isParado())
 			return false;
-		velocModifiers.put(VelocModifier.PARADO, 1f);
+		velocModifiers.put(VelocModifiersPadrao.ParadoModifier, 1f);
 		return true;
 	}
 	
@@ -199,18 +192,18 @@ public abstract class Entidade {
 		if (isParado())
 			return 0;
 		float velocModFinal = 1f;
-		for (VelocModifier modifchave : velocModifiers.keySet())
+		for (String modifchave : velocModifiers.keySet())
 			velocModFinal *= velocModifiers.get(modifchave);
 		return velocModFinal * getVelocPadrao();
 	}
 	
-	public boolean addVelocModifier(VelocModifier chave,float valor) {
+	public boolean addVelocModifier(String chave,float valor) {
 		if(velocModifiers.put(chave,valor)==null)
 			return false;
 		return true;
 	}
 	
-	public boolean remVelocModifier(VelocModifier chave) {
+	public boolean remVelocModifier(String chave) {
 		if(velocModifiers.remove(chave)==null)
 			return false;
 		return true;
@@ -234,7 +227,7 @@ public abstract class Entidade {
 		if (mundopos.x == this.mundoPos.x && mundopos.y == this.mundoPos.y)
 			return false;
 		if (!checkColisao(mundopos)) {
-			forcedVelocModifiers.remove(ForcedVelocModifier.COLISAO);
+			forcedVelocModifiers.remove(VelocModifiersPadrao.ColisaoForcedModifier);
 		} else {
 			return false;
 		}
@@ -244,7 +237,7 @@ public abstract class Entidade {
 	
 	public Vector2f getForcedVelocModified() {
 		Vector2f forcedVelocModFinal=new Vector2f(0,0);
-		for(ForcedVelocModifier chave:forcedVelocModifiers.keySet())
+		for(String chave:forcedVelocModifiers.keySet())
 			forcedVelocModFinal.add(forcedVelocModifiers.get(chave));
 		return forcedVelocModFinal;
 	}
