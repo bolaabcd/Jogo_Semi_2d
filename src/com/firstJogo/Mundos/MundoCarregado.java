@@ -11,6 +11,7 @@ import com.firstJogo.estrutura.DirecoesPadrao;
 import com.firstJogo.utils.GlobalVariables;
 
 public class MundoCarregado {
+	public static Entidade mainPlayer;
 	public static MundoCarregado atual;
 	public static ArrayList<MundoCarregado> mundos=new ArrayList<MundoCarregado>();
 	
@@ -54,7 +55,7 @@ public class MundoCarregado {
 	}
 	
 	public void updateChunks(DirecoesPadrao lado) {
-		Vector2f playerPos= Entidade.getPlayer().getMundopos();
+		Vector2f playerPos= mainPlayer.getMundopos();
 		float chunkLoaderX=(playerPos.x/GlobalVariables.intperbloco)/16;
 		float chunkLoaderY=(playerPos.y/GlobalVariables.intperbloco)/16;
 		ArrayList<int[]> quais=new ArrayList<int[]>();

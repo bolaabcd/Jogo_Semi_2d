@@ -108,12 +108,12 @@ public class Humano extends Entidade{
 		AGACHADO,
 		SPRINT
 	}
-	public Humano(Vector2f mundoPos) {
-		this(mundoPos,false,Entidade.getPlayer().getMundo());
-	}
-	public Humano(Vector2f mundoPos,boolean isPlayer,MundoCarregado mundo) {
-		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),mundoPos,isPlayer,mundo,Textura.modeloPadrao);
-		this.veloc=5;
+//	public Humano(Vector2f mundoPos) {
+//		this(mundoPos,false,MundoCarregado.atual);
+//	}
+	public Humano() {
+		super(new Textura(GlobalVariables.imagem_path+"HumanoUp1"+GlobalVariables.imagem_formato),Textura.modeloPadrao);
+		
 		milisImpulso=2000;//2000
 		movModo=modos.ANDANDO;
 		sprintModifier=2.4f;//TODO:Seria 1.2 (quando não tiver com a fome completa!)
@@ -199,7 +199,7 @@ public class Humano extends Entidade{
 		return false;
 	}
 	@Override
-	public void setOlhar(DirecoesPadrao olhar) {
+	public void setOlhar(double olhar) {
 		super.setOlhar(olhar);
 		updateAnimacao();
 	}
@@ -319,6 +319,14 @@ public class Humano extends Entidade{
 				animado.ativar();
 			}
 		}
+	}
+	@Override
+	protected int getVelocPadrao() {
+		return 5;
+	}
+	@Override
+	protected int getFantasmabilidadePadrao() {
+		return 10;
 	}
 
 

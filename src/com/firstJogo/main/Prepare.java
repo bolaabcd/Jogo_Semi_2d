@@ -32,7 +32,9 @@ public class Prepare implements Runnable {
 	}
 
 	public static void prepararPlayer() {
-		Humano player = new Humano(new Vector2f(0, 0),true,MundoCarregado.atual);
+//		Humano player = new Humano(new Vector2f(0, 0),true,MundoCarregado.atual);
+		MundoCarregado.mainPlayer=new Humano();
+		MundoCarregado.mainPlayer.spawnar(new Vector2f(0, 0), MundoCarregado.atual, true);
 //		player.setPlayer(true);
 	}
 

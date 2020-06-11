@@ -28,7 +28,7 @@ public class WorldRenderer {
 //		azulejos=new char[18][18];
 		
 //		criaturas=new ArrayList<Entidade>();
-		MundoCarregado.atual.getEntidades().add(Entidade.getPlayer());
+		MundoCarregado.atual.getEntidades().add(MundoCarregado.mainPlayer);
 		
 		mundo=new Matrix4f().setTranslation(0,0,0);//BOTTON-RIGHT do mundo no centro da tela é o 0,0,0!
 		mundo.setTranslation(-Janela.getPrincipal().getWidth()/2-2*escala, -Janela.getPrincipal().getHeight()/2-2*escala, 0);
@@ -43,8 +43,8 @@ public class WorldRenderer {
 	public void renderizar(AzRenderer rend,Shaders shad,Camera cam) {
 		cam=cam.getCopia();//Para não alterar nada enquanto renderiza!
 		
-		long xplayer=Entidade.getPlayer().getBlocoCoords()[0];
-		long yplayer=Entidade.getPlayer().getBlocoCoords()[1];
+		long xplayer=MundoCarregado.mainPlayer.getBlocoCoords()[0];
+		long yplayer=MundoCarregado.mainPlayer.getBlocoCoords()[1];
 		long[][] acarregar=new long[18*18][2];//X e Y pra cada elemento da lista
 		short temp=0;
 		for(short ypos=0;ypos<18;ypos++) 
