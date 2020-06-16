@@ -17,19 +17,36 @@ public class Textura {
 			0,0,0,//índice 0
             1,1,0,//índice 1
             1,0,0,//índice 2
-            0, 1,0,//índice 3
-            
+            0,1,0,//índice 3
+//		  0,0,0,//índice 0
+//          0.5f,0,0,//índice 1
+//          (float) (1+Math.cos(60*Math.PI/180))/2,(float)Math.sin(60*Math.PI/180)/2,0,//índice 2
+//          0.5f, (float)Math.sin(60*Math.PI/180),0,//índice 3
+//		  0, (float)Math.sin(60*Math.PI/180),0,//índice 4
+//          -(float) (Math.cos(60*Math.PI/180))/2,(float)Math.sin(60*Math.PI/180)/2,0,//índice 5
 	},
 	new int[] {//Pra só declarar os pontos uma vez!
 			0,1,2,
 			0,3,1
+//			0,1,2,
+//			2,3,4,
+//			4,5,0,
+//			0,2,4,
 	}
 	).addtex(
 			new float[] {//Parece q a origem aqui é o topo da esquerda...
-					0,1,//Mas isso da origem não pode ser...
+					0,1,
 					1,0,
 					1,1,
 					0,0,//Dá pra fazer MUITA maluquice com esses números aqui...
+//					(float)(Math.cos(60*Math.PI/180))/2,(float)Math.sin(60*Math.PI/180),
+//					(float)(Math.cos(60*Math.PI/180)+1)/2,(float)Math.sin(60*Math.PI/180),
+//					(float)(2*Math.cos(60*Math.PI/180)+1)/2,(float)Math.sin(60*Math.PI/180)/2,
+//					(float)(Math.cos(60*Math.PI/180)+1)/2,0,
+//					(float)(Math.cos(60*Math.PI/180))/2,0,
+//					0,(float)Math.sin(60*Math.PI/180)/2,
+
+					
 			}
 			);
 

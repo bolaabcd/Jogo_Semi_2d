@@ -14,13 +14,13 @@ public class PlayerRegras {
 	private static DirecoesPadrao[] getMoveDirection(Entidade e) {
 		DirecoesPadrao[] res = new DirecoesPadrao[2];
 		Double[] mods = e.getMovDirecModifiers();
-		if(mods[0]==null)res[0]=null;
+		if(mods==null)res[0]=null;
 		else if (mods[0] > 0)
 			res[0] = DirecoesPadrao.DIREITA;
 		else if (mods[0] < 0)
 			res[0] = DirecoesPadrao.ESQUERDA;
 
-		if(mods[1]==null)res[1]=null;
+		if(mods==null)res[1]=null;
 		else if (mods[1] > 0)
 			res[1] = DirecoesPadrao.CIMA;
 		else if (mods[1] < 0)

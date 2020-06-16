@@ -1,8 +1,11 @@
 package com.firstJogo.main;
 
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
+import com.firstJogo.Handlers.KeyCallbackHandler;
 import com.firstJogo.estrutura.Janela;
+import com.firstJogo.estrutura.NotFoundException;
 import com.firstJogo.estrutura.Player;
 import com.firstJogo.regras.CallbacksGerais;
 import com.firstJogo.utils.GlobalVariables;

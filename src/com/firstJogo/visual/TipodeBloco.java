@@ -2,12 +2,6 @@ package com.firstJogo.visual;
 
 import java.util.function.Consumer;
 
-import org.joml.Vector2f;
-
-import com.firstJogo.Mundos.Entidade;
-import com.firstJogo.estrutura.VelocModifiersPadrao;
-import com.firstJogo.utils.GlobalVariables;
-
 public class TipodeBloco {
 	private char id;
 	private String textura;
@@ -21,25 +15,30 @@ public class TipodeBloco {
 	private static char nextid=0;
 	
 	//Entidade e posição central do bloco!
-	private final Consumer<Object[]> colisaoPadrao=(entidadecentro)-> {
-		Object[] ob=(Object[]) entidadecentro;
-		Entidade ent=(Entidade) ob[0];
-		Vector2f cent=(Vector2f)ob[1];
-		Vector2f result=new Vector2f();
-		Vector2f.add(cent.mul(-1f),ent.getMundopos(),result);//Ajustar velocidade aqui!
-//		System.out.println(result);
-		float newx=0f;
-		float newy=0f;
-		if(result.x>=GlobalVariables.intperbloco)
-			newx = -(float) (ent.getMovDirecModifiers()[0] * ent.getVelocModified());
-		else if (result.x <= -GlobalVariables.intperbloco)
-			newx = -(float) (ent.getMovDirecModifiers()[0] * ent.getVelocModified());
-		if (result.y >= GlobalVariables.intperbloco)
-			newy = -(float) (ent.getMovDirecModifiers()[1] * ent.getVelocModified());
-		else if (result.y <= -GlobalVariables.intperbloco)
-			newy = -(float) (ent.getMovDirecModifiers()[1] * ent.getVelocModified());
-		ent.addForcedVelocModifier(VelocModifiersPadrao.ColisaoForcedModifier, new Vector2f(newx, newy));
-	};
+//	private final Consumer<Object[]> funcaoColisivaPadrao = (entidadecentro) -> {
+//		Object[] ob = (Object[]) entidadecentro;
+//		Entidade ent = (Entidade) ob[0];
+//		Vector2f cent = (Vector2f) ob[1];
+//		Vector2f result = new Vector2f();
+//		Vector2f.add(cent.mul(-1f), ent.getMundopos(), result);// Ajustar velocidade aqui!
+//		System.out.println("X:" + result.x);
+//		System.out.println("Y:" + result.y);
+//		float newx = 0f;
+//		float newy = 0f;
+//		if (result.x >= GlobalVariables.intperbloco)
+//			newx = -(float) (ent.getMovDirecModifiers()[0] * ent.getVelocModified());
+//		else if (result.x <= -GlobalVariables.intperbloco)
+//			newx = -(float) (ent.getMovDirecModifiers()[0] * ent.getVelocModified());
+//		if (result.y >= GlobalVariables.intperbloco)
+//			newy = -(float) (ent.getMovDirecModifiers()[1] * ent.getVelocModified());
+//		else if (result.y <= -GlobalVariables.intperbloco)
+//			newy = -(float) (ent.getMovDirecModifiers()[1] * ent.getVelocModified());
+////		if (GlobalVariables.debugInt++ < 2 && newx!=0f && newy!=0f) {
+////			System.out.println("X:" + newx);
+////			System.out.println("Y:" + newy);
+////		}
+//		ent.addForcedVelocModifier(VelocModifiersPadrao.ColisaoForcedModifier, new Vector2f(newx, newy));
+//	};
 	
 	public static TipodeBloco[] azulejos=new TipodeBloco[256*256];//Todos os azulejos existentes!
 	
@@ -51,7 +50,7 @@ public class TipodeBloco {
 		this.textura=textura;
 		if(azulejos[id]!=null)throw new IllegalStateException("Azulejo de id "+id+" já salvo!");
 		azulejos[id]=this;
-		this.funcaoColisiva=colisaoPadrao;
+		this.funcaoColisiva=null;
 	}
 	public TipodeBloco(String textura,short tangibilidade) {
 		this.id=nextid;
@@ -60,7 +59,7 @@ public class TipodeBloco {
 		this.tangibilidadePadrao=tangibilidade;
 		if(azulejos[id]!=null)throw new IllegalStateException("Azulejo de id "+id+" já salvo!");
 		azulejos[id]=this;
-		this.funcaoColisiva=colisaoPadrao;
+		this.funcaoColisiva=null;
 	}
 	public TipodeBloco(String textura,short tangibilidade,Consumer<Object[]> funcaoColisiva) {
 		this.id=nextid;

@@ -18,7 +18,8 @@ public class GlobalVariables {
 	public static int contador = 0;//Contador global para fins de desenvolvimento
 
 	public static boolean debugue = false;//Modo "debug" para fins de desenvolvimento e análise
-
-	public static final short intperbloco = 30;//Constante de ints por bloco (cada +30 na câmera ou na posição de alguma entidade é +1 bloco).
-
+	public static int debugInt = 0;
+	
+	public static final int intperbloco = 30;//Constante de ints por bloco (cada +30 na câmera ou na posição de alguma entidade é +1 bloco).
+	
 }

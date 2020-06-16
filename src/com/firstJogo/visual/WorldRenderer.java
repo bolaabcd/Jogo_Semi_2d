@@ -39,20 +39,23 @@ public class WorldRenderer {
 
 	public void renderizar(AzRenderer rend,Shaders shad,Camera cam) {
 		cam=cam.getCopia();//Para não alterar nada enquanto renderiza!
+//		System.out.println(cam.getProjec());
 		
-		long xplayer=Player.mainPlayer.ent.getBlocoCoords()[0];
-		long yplayer=Player.mainPlayer.ent.getBlocoCoords()[1];
+//		long xplayer=Player.mainPlayer.ent.getBlocoCoords()[0];
+//		long yplayer=Player.mainPlayer.ent.getBlocoCoords()[1];
+		long xplayer=MundoCarregado.getBlocoCoords(Player.mainPlayer.ent.getMundopos()).x;
+		long yplayer=MundoCarregado.getBlocoCoords(Player.mainPlayer.ent.getMundopos()).y;
 		long[][] acarregar=new long[18*18][2];//X e Y pra cada elemento da lista
-		short temp=0;
-		for(short ypos=0;ypos<18;ypos++) 
-			for(short xpos=0;xpos<18;xpos++) {
+		int temp=0;
+		for(int ypos=0;ypos<18;ypos++) 
+			for(int xpos=0;xpos<18;xpos++) {
 				acarregar[temp][0]=xplayer-9+xpos;
 				acarregar[temp][1]=yplayer-9+ypos;
 				temp++;
 			}
 		char[] blocos=MundoCarregado.atual.getBlocos(acarregar);
-		for(short posx=0;posx<18;posx++) {
-			for(short posy=0;posy<18;posy++)
+		for(int posx=0;posx<18;posx++) {
+			for(int posy=0;posy<18;posy++)
 			rend.Renderizar(blocos[posx*18+posy], acarregar[posx*18+posy][0]+9, acarregar[posx*18+posy][1]+9, shad, mundo, cam);
 		}
 		

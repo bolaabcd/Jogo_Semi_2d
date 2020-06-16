@@ -150,6 +150,11 @@ public class CallbacksGerais implements ExternalCallback {
 		botaoremovido.put(GLFW.GLFW_KEY_D, new FuncaoHandler<Boolean>((isSintetico) -> {
 			PlayerRegras.remMoveDirection(Player.mainPlayer.ent, DirecoesPadrao.DIREITA);
 		},null));
+		
+		botaoremovido.put(GLFW.GLFW_KEY_O, new FuncaoHandler<Boolean>((isSintetico)->{//O erro é algo nesse estilo
+			Player.mainPlayer.ent.setMundopos(new Vector2f(Player.mainPlayer.ent.getMundopos().x+30f,Player.mainPlayer.ent.getMundopos().y+30f));
+			Player.mainPlayer.camera.setPos(new Vector3f(-Player.mainPlayer.ent.getMundopos().x,-Player.mainPlayer.ent.getMundopos().y,0));
+		},null));
 
 		KeyCallbackHandler.addBotaoCallbacks(botaoremovido, botaopressionado);
 
@@ -158,23 +163,28 @@ public class CallbacksGerais implements ExternalCallback {
 	public static void prepararTempos() {
 		
 		
-		TempoMarker marctemp=new TempoMarker(1000000L);
-		GeradorEventos.addTempoEvento("Mover Player",new TempoEvento<TempoMarker>(marctemp, new FuncaoHandler<TempoMarker>((Marcador) -> {// Move o Player, e cada milisegundo vai executar!
-			TempoMarker marcador = Marcador;
-					if (!Player.mainPlayer.ent.isParado()) {
-						Camera mainCamera=Player.mainPlayer.camera;
-						float newx = mainCamera.getPos().x
-								+ (float) ((-Player.mainPlayer.ent.getForcedVelocModified().x
-										- Player.mainPlayer.ent.getMovDirecModifiers()[0]
-												* Player.mainPlayer.ent.getVelocModified())
-										* GlobalVariables.intperbloco
-										* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
-						float newy = mainCamera.getPos().y
-								+ (float) ((-Player.mainPlayer.ent.getForcedVelocModified().y
-										- Player.mainPlayer.ent.getMovDirecModifiers()[1]
-												* Player.mainPlayer.ent.getVelocModified())
-										* GlobalVariables.intperbloco
-										* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
+		TempoMarker marctemp = new TempoMarker(1000000L);
+		GeradorEventos.addTempoEvento("Mover Player",
+				new TempoEvento<TempoMarker>(marctemp, new FuncaoHandler<TempoMarker>((Marcador) -> {// Move o Player, e
+																										// cada
+																										// milisegundo
+																										// vai executar!
+					TempoMarker marcador = Marcador;
+//				synchronized (Player.mainPlayer.ent) {
+					Camera mainCamera = Player.mainPlayer.camera;
+					Double[] movDirecModifiers=Player.mainPlayer.ent.getMovDirecModifiers();
+					
+					if (movDirecModifiers!=null) {
+						float newx = mainCamera.getPos().x + (float) ((-Player.mainPlayer.ent.getForcedVelocModified().x
+								- movDirecModifiers[0]
+										* Player.mainPlayer.ent.getVelocModified())
+								* GlobalVariables.intperbloco
+								* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
+						float newy = mainCamera.getPos().y + (float) ((-Player.mainPlayer.ent.getForcedVelocModified().y
+								- movDirecModifiers[1]
+										* Player.mainPlayer.ent.getVelocModified())
+								* GlobalVariables.intperbloco
+								* (double) (System.nanoTime() - marcador.getTemporegistrado()) / 1000000000);
 
 						if (Player.mainPlayer.ent
 								.setMundopos(new Vector2f(-newx, Player.mainPlayer.ent.getMundopos().y)))
@@ -191,13 +201,12 @@ public class CallbacksGerais implements ExternalCallback {
 //					System.out.println("Yb: "+(long)Math.floor((Player.mainPlayer.ent.getMundopos().x/GlobalVariables.intperbloco)));
 //					System.out.println("Xc: "+Math.floor((Player.mainPlayer.ent.getMundopos()[0]/GlobalVariables.intperbloco)/16+0.5f));//Chunk Coords
 //					System.out.println("Yc: "+Math.floor((Player.mainPlayer.ent.getMundopos()[1]/GlobalVariables.intperbloco)/16+0.5f));
-
 					}
+//				}
 
 					marcador.resetar();
 				}, marctemp)));
 		marctemp.resetar();
-
 		
 		TempoMarker marc=new TempoMarker(1000000000);
 		GeradorEventos.addTempoEvento("Imprimir TPS",new TempoEvento<TempoMarker>(marc, new FuncaoHandler<TempoMarker>((Marcador) -> {

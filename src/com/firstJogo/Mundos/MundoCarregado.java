@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 
 import com.firstJogo.estrutura.DirecoesPadrao;
 import com.firstJogo.estrutura.Player;
@@ -14,6 +15,15 @@ import com.firstJogo.utils.GlobalVariables;
 public class MundoCarregado {
 	public static MundoCarregado atual;
 	public static ArrayList<MundoCarregado> mundos=new ArrayList<MundoCarregado>();
+	public static Vector2i getBlocoCoords(Vector2f mundoPos) {
+		return new Vector2i (
+				(int)Math.floor(mundoPos.x/GlobalVariables.intperbloco),
+				(int)Math.floor(mundoPos.y/GlobalVariables.intperbloco)
+		);
+	}
+	
+	
+	
 	
 	private final Set<Entidade> entidades=Collections.newSetFromMap(new ConcurrentHashMap<Entidade,Boolean>());
 	private long[] chunkloader;//X e Y do chunk central!

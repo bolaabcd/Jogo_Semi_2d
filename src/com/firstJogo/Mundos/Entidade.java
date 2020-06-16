@@ -1,10 +1,11 @@
 package com.firstJogo.Mundos;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.joml.Vector2f;
+import org.joml.Vector2i;
 
+import com.firstJogo.estrutura.CollisionDetector;
 import com.firstJogo.estrutura.DirecoesPadrao;
 import com.firstJogo.estrutura.EventoPadrao;
 import com.firstJogo.estrutura.TempoEvento;
@@ -15,23 +16,25 @@ import com.firstJogo.visual.Modelo;
 import com.firstJogo.visual.Textura;
 import com.firstJogo.visual.TipodeBloco;
 //TODO: Aprimorar colisão.
+//TODO: Aprimorar criação de texturas (nas subclasses) e subclassificar os eventos.
+//TODO menor: Organizar Packages.
 //TODO menor: aprimorar conversão pra ChunkCoords e BlocoCoords...
 //TODO FUTURO: tornar independente a direção do olhar e a direção de movimento, com penalidade!
 //TODO BEM FUTURO: colocar sistema de iluminação com o olhar no futuro!
 
 public abstract class Entidade {
 	
-	private final float[][] hitboxPos;//Começa no baixo esquerda, sentido horário. 00 é a superior esquerda!
+	private final Vector2f[] hitboxPos;//Começa no baixo esquerda, sentido horário. 00 é a superior esquerda!
 	private final Textura visual;
 	private final Modelo modelo;
+	private final HashMap<String,Float> velocModifiers=new HashMap<String,Float>();
+	private final HashMap<String,Vector2f> forcedVelocModifiers=new HashMap<String,Vector2f>();
 
 	private Double anguloMovimento=null;
 	private double olharDir=Math.PI/2;
 	private Vector2f mundoPos;//A coordenada 0,0 é a quina inferior direita do bloco 0,0 (centro do chunk 0,0).
 	private MundoCarregado mundo;
 	
-	private HashMap<String,Float> velocModifiers=new HashMap<String,Float>();
-	private HashMap<String,Vector2f> forcedVelocModifiers=new HashMap<String,Vector2f>();
 	
 	private int fantasmabilidade=getFantasmabilidadePadrao();
 	
@@ -62,7 +65,6 @@ public abstract class Entidade {
 
 	public void kill() {
 		mundo.getEntidades().remove(this);
-//		GeradorEventos.remEvento(new ElementoDuplo<Entidade, String>(this, EventoPadrao.SeguirPlayer, false));
 		GeradorEventos.remEvento(EventoPadrao.seguirPlayerEventoChave(this));
 		GeradorEventos.remEvento(EventoPadrao.removerEntidadeEventoChave(this));
 	}
@@ -74,58 +76,67 @@ public abstract class Entidade {
 	
 	
 	
-	private boolean checkColisao(Vector2f mundopos) {
+	private boolean checkBlocoColisao(Vector2f newMundopos) {
 		boolean res=false;
-		for(long[] bloco:getColidCoords(mundopos)) {
-			TipodeBloco tipo=TipodeBloco.azulejos[MundoCarregado.atual.getbloco(bloco[0], bloco[1])];
-			if(tipo.getTangibilidade()>this.fantasmabilidade) {
-				tipo.getFuncaoColisiva().accept(new Object[] {this,Bloco.toCentroBloco(bloco[0], bloco[1])});
+		for(Vector2i bloco:CollisionDetector.getColidBlocos(newMundopos, mundo, hitboxPos)) {
+			TipodeBloco tipo=TipodeBloco.azulejos[MundoCarregado.atual.getbloco(bloco.x, bloco.y)];
+			if(tipo.getTangibilidade()>this.fantasmabilidade) 
 				res=true;
-			}
+			else 
+				if(tipo.getFuncaoColisiva()!=null)
+					tipo.getFuncaoColisiva().accept(new Object[] {this,Bloco.toCentroBloco(bloco.x, bloco.y)});
 		}
 		return res;
 	}
-	private ArrayList<long[]> getColidCoords(Vector2f mundopos) {//Obter os blocos que ele pode estar colidindo
-		float deslocx=GlobalVariables.intperbloco*(hitboxPos[2][0]-hitboxPos[0][0])/2;
-		float deslocy=GlobalVariables.intperbloco*(hitboxPos[2][1]-hitboxPos[0][1])/2;
-		float xi=(mundopos.x-deslocx)/GlobalVariables.intperbloco;
-		float yi=(mundopos.y-deslocy)/GlobalVariables.intperbloco;
-		float xf=(mundopos.x+deslocx)/GlobalVariables.intperbloco;
-		float yf=(mundopos.y+deslocy)/GlobalVariables.intperbloco;
-		int xmax=(int) Math.floor(Math.abs(2*deslocx/GlobalVariables.intperbloco)+1);//Arredondando pra cima quantos blocos a entidade ocupa.
-		int ymax=(int) Math.floor(Math.abs(2*deslocy/GlobalVariables.intperbloco)+1);
-		ArrayList<long[]> coords=new ArrayList<long[]>();
-		for(int ix=-1-xmax/2;ix<xmax/2+1;ix++)
-			for(int iy=-1-ymax/2;iy<ymax/2+1;iy++)
-				if(
-						colide(xi, yi, xf, yf, getBlocoCoords()[0]+ix, getBlocoCoords()[1]+iy,getBlocoCoords()[0]+ix+1, getBlocoCoords()[1]+iy+1)
-						)
-					coords.add(new long[] {
-							getBlocoCoords()[0]+ix,
-							getBlocoCoords()[1]+iy
-				});
-		return coords;
-	}
-	private boolean colide(float xi,float yi,float xf,float yf,float xi2,float yi2,float xf2,float yf2) {
-		if(
-				dentrode(xi,yi,xf,yf,xi2,yi2)||dentrode(xi,yi,xf,yf,xf2,yf2)
-				||
-				dentrode(xi,yi,xf,yf,xi2,yf2)||dentrode(xi,yi,xf,yf,xf2,yi2)
-				||
-				dentrode(xi2,yi2,xf2,yf2,xi,yi)||dentrode(xi2,yi2,xf2,yf2,xf,yf)
-				||
-				dentrode(xi2,yi2,xf2,yf2,xf,yi)||dentrode(xi2,yi2,xf2,yf2,xi,yf)
-				)return true;
+	private boolean checkEntidadeColisao(Vector2f newMundopos) {
 		return false;
 	}
-	private boolean dentrode(float xi,float yi,float xf,float yf,float x, float y) {
-		if(x>xi&&x<xf&&y>yi&&y<yf)return true;
-		return false;
+	private boolean checkColisao(Vector2f newMundopos) {
+		return checkEntidadeColisao(newMundopos)||checkBlocoColisao(newMundopos);
 	}
+//	private ArrayList<long[]> getColidCoords(Vector2f mundopos) {//Obter os blocos que ele pode estar colidindo
+//		float deslocx=GlobalVariables.intperbloco*(hitboxPos[2][0]-hitboxPos[0][0])/2;
+//		float deslocy=GlobalVariables.intperbloco*(hitboxPos[2][1]-hitboxPos[0][1])/2;
+//		float xi=(mundopos.x-deslocx)/GlobalVariables.intperbloco;
+//		float yi=(mundopos.y-deslocy)/GlobalVariables.intperbloco;
+//		float xf=(mundopos.x+deslocx)/GlobalVariables.intperbloco;
+//		float yf=(mundopos.y+deslocy)/GlobalVariables.intperbloco;
+//		int xmax=(int) Math.floor(Math.abs(2*deslocx/GlobalVariables.intperbloco)+1);//Arredondando pra cima quantos blocos a entidade ocupa.
+//		int ymax=(int) Math.floor(Math.abs(2*deslocy/GlobalVariables.intperbloco)+1);
+//		ArrayList<long[]> coords=new ArrayList<long[]>();
+//		for(int ix=-1-xmax/2;ix<xmax/2+1;ix++)
+//			for(int iy=-1-ymax/2;iy<ymax/2+1;iy++)
+//				if(
+//						colide(xi, yi, xf, yf, getBlocoCoords()[0]+ix, getBlocoCoords()[1]+iy,getBlocoCoords()[0]+ix+1, getBlocoCoords()[1]+iy+1)
+//						)
+//					coords.add(new long[] {
+//							getBlocoCoords()[0]+ix,
+//							getBlocoCoords()[1]+iy
+//				});
+//		return coords;
+//	}
+//	private boolean colide(float xi,float yi,float xf,float yf,float xi2,float yi2,float xf2,float yf2) {
+//		if(
+//				dentrode(xi,yi,xf,yf,xi2,yi2)||dentrode(xi,yi,xf,yf,xf2,yf2)
+//				||
+//				dentrode(xi,yi,xf,yf,xi2,yf2)||dentrode(xi,yi,xf,yf,xf2,yi2)
+//				||
+//				dentrode(xi2,yi2,xf2,yf2,xi,yi)||dentrode(xi2,yi2,xf2,yf2,xf,yf)
+//				||
+//				dentrode(xi2,yi2,xf2,yf2,xf,yi)||dentrode(xi2,yi2,xf2,yf2,xi,yf)
+//				)return true;
+//		return false;
+//	}
+//	private boolean dentrode(float xi,float yi,float xf,float yf,float x, float y) {
+//		if(x>xi&&x<xf&&y>yi&&y<yf)return true;
+//		return false;
+//	}
+	
 	public boolean addForcedVelocModifier(String chave, Vector2f valor) {
 		if(forcedVelocModifiers.put(chave, valor)==null)return false;
 		return true;
 	}
+	
 	public boolean remForcedVelocModifier(String chave) {
 		if(forcedVelocModifiers.remove(chave)==null)return false;
 		return true;
@@ -166,13 +177,6 @@ public abstract class Entidade {
 				(long)Math.floor((this.getMundopos().y/GlobalVariables.intperbloco)/16+0.5f)
 		};
 	}
-	
-	public long[] getBlocoCoords() {
-		return new long[] {
-				(long)Math.floor(this.getMundopos().x/GlobalVariables.intperbloco),
-				(long)Math.floor(this.getMundopos().y/GlobalVariables.intperbloco),
-		};
-	}
 
 	public boolean setAnguloMovimento(double angulo) {
 		if(this.anguloMovimento!=null)
@@ -210,7 +214,7 @@ public abstract class Entidade {
 	}
 
 	public Double[] getMovDirecModifiers() {
-		if(this.isParado())return new Double[] {null,null};
+		if(this.isParado())return null;
 		return new Double[] {(double)Math.round(Math.cos(anguloMovimento)*100000d)/100000d,(double)Math.round(Math.sin(anguloMovimento)*100000d)/100000d};
 	}
 
@@ -241,8 +245,5 @@ public abstract class Entidade {
 			forcedVelocModFinal.add(forcedVelocModifiers.get(chave));
 		return forcedVelocModFinal;
 	}
-	
-
-	
 
 }

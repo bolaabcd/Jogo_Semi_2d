@@ -3,6 +3,7 @@ package com.firstJogo.visual;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
@@ -12,14 +13,14 @@ public class Modelo {
 	private int id_vertices;
 	private int id_texturas;
 	private int id_indices;
-	private float[][] vertices;
+	private Vector2f[] vertices;
 	
 	public Modelo(float[] vertices,int[] indices) {
-		float[] ponto1=new float[] {vertices[0],vertices[1]};
-		float[] ponto2=new float[] {vertices[3],vertices[4]};
-		float[] ponto3=new float[] {vertices[6],vertices[7]};
-		float[] ponto4=new float[] {vertices[9],vertices[10]};
-		this.vertices=new float[][]{//Esse é o padrão, pra simplificar.
+		Vector2f ponto1=new Vector2f (vertices[0],vertices[1]);
+		Vector2f ponto2=new Vector2f (vertices[3],vertices[4]);
+		Vector2f ponto3=new Vector2f (vertices[6],vertices[7]);
+		Vector2f ponto4=new Vector2f (vertices[9],vertices[10]);
+		this.vertices=new Vector2f[]{//Esse é o padrão, pra simplificar.
 			ponto1,//00
 			ponto4,//01
 			ponto2,//11
@@ -81,7 +82,7 @@ public class Modelo {
 		return this;
 		
 	}
-	public float[][] getVertices() {//Começa no baixo esquerda, sentido horário.
+	public Vector2f[] getVertices() {//Começa no baixo esquerda, sentido horário.
 		return vertices;
 	}
 	private FloatBuffer buf(float[] valores) {
