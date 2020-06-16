@@ -1,6 +1,6 @@
 package com.firstJogo.main;
 
-import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.padroes.GlobalVariables;
 
 public class Main {
 	public static void main(String[] args) {

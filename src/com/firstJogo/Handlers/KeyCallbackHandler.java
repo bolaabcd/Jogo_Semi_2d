@@ -5,7 +5,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.lwjgl.glfw.GLFW;
 
-import com.firstJogo.estrutura.NotFoundException;
+import com.firstJogo.elementosJogo.NotFoundException;
 
 //Atua como filtro para lidar com botões opostos pressionados ao mesmo tempo da seguinte forma:
 //1) Se um botão é solto e seu oposto está pressionado, considera como se o oposto tivesse sido apertado 

@@ -2,7 +2,7 @@ package com.firstJogo.Handlers;
 
 import java.util.HashMap;
 
-import com.firstJogo.estrutura.NotFoundException;
+import com.firstJogo.elementosJogo.NotFoundException;
 
 public class CallbackHandler<K, V> {
 	private final HashMap<K, FuncaoHandler<V>> funcoes=new HashMap<K, FuncaoHandler<V>>();

@@ -4,8 +4,9 @@ import java.util.HashMap;
 
 import org.joml.Matrix4f;
 
-import com.firstJogo.estrutura.Camera;
-import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.elementosJogo.Camera;
+import com.firstJogo.elementosMundo.TipodeBloco;
+import com.firstJogo.padroes.GlobalVariables;
 
 public class AzRenderer {
 	private HashMap<String, Textura> texturas;

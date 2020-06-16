@@ -2,10 +2,10 @@ package com.firstJogo.main;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.firstJogo.estrutura.Evento;
-import com.firstJogo.estrutura.Janela;
-import com.firstJogo.estrutura.TempoEvento;
-import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.elementosJogo.Evento;
+import com.firstJogo.elementosJogo.Janela;
+import com.firstJogo.elementosJogo.TempoEvento;
+import com.firstJogo.padroes.GlobalVariables;
 
 public class GeradorEventos implements Runnable {
 	public static Thread main;

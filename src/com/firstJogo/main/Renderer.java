@@ -1,14 +1,11 @@
 package com.firstJogo.main;
 
-import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
-import com.firstJogo.Handlers.KeyCallbackHandler;
-import com.firstJogo.estrutura.Janela;
-import com.firstJogo.estrutura.NotFoundException;
-import com.firstJogo.estrutura.Player;
-import com.firstJogo.regras.CallbacksGerais;
-import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.elementosJogo.Janela;
+import com.firstJogo.elementosJogo.Player;
+import com.firstJogo.padroes.CallbacksGerais;
+import com.firstJogo.padroes.GlobalVariables;
 import com.firstJogo.visual.AzRenderer;
 import com.firstJogo.visual.Shaders;
 import com.firstJogo.visual.WorldRenderer;
@@ -55,7 +52,6 @@ public class Renderer implements Runnable{
 //				try {
 //					KeyCallbackHandler.ativarEvento(true, GLFW.GLFW_KEY_P);
 //				} catch (NotFoundException e1) {
-//					// TODO Auto-generated catch block
 //					e1.printStackTrace();
 //				}
 			

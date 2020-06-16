@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL13;
 
-import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.padroes.GlobalVariables;
 
 public class Textura {
 	public static final Modelo modeloPadrao=new Modelo(new float[] {

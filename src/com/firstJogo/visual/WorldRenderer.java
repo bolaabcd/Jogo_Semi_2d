@@ -3,12 +3,12 @@ package com.firstJogo.visual;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
-import com.firstJogo.Mundos.Entidade;
-import com.firstJogo.Mundos.MundoCarregado;
-import com.firstJogo.estrutura.Camera;
-import com.firstJogo.estrutura.Janela;
-import com.firstJogo.estrutura.Player;
-import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.elementosJogo.Camera;
+import com.firstJogo.elementosJogo.Janela;
+import com.firstJogo.elementosJogo.Player;
+import com.firstJogo.elementosMundo.Entidade;
+import com.firstJogo.elementosMundo.MundoCarregado;
+import com.firstJogo.padroes.GlobalVariables;
 
 public class WorldRenderer {
 	public static WorldRenderer main;
@@ -39,10 +39,7 @@ public class WorldRenderer {
 
 	public void renderizar(AzRenderer rend,Shaders shad,Camera cam) {
 		cam=cam.getCopia();//Para não alterar nada enquanto renderiza!
-//		System.out.println(cam.getProjec());
-		
-//		long xplayer=Player.mainPlayer.ent.getBlocoCoords()[0];
-//		long yplayer=Player.mainPlayer.ent.getBlocoCoords()[1];
+
 		long xplayer=MundoCarregado.getBlocoCoords(Player.mainPlayer.ent.getMundopos()).x;
 		long yplayer=MundoCarregado.getBlocoCoords(Player.mainPlayer.ent.getMundopos()).y;
 		long[][] acarregar=new long[18*18][2];//X e Y pra cada elemento da lista
@@ -60,23 +57,15 @@ public class WorldRenderer {
 		}
 		
 		
-		
-				
-//		for(char i=0;i<height;i++)
-//			for(char j=0;j<width;j++){
-//				rend.Renderizar((char)0, j, i, shad, mundo, cam);
-//			}
+
 		for(Entidade cr:MundoCarregado.atual.getEntidades())
 			RenderizarEntidade(cr, shad, mundo,cam);//Esse 8.5f é a posição no mundo que aparece.
 	}
-//	public void setbloco(short x, short y, char tipo) {
-//		this.azulejos[x][y]=tipo;
-//	}
+
 	private void RenderizarEntidade(Entidade ent, Shaders shad, Matrix4f mundo, Camera cam) {
 		shad.bindar();
 		ent.getTextura().bind(1);//Bindou ao sampler número 1 ¯\_(ツ)_/¯
 		Matrix4f mat=new Matrix4f();
-//		if(ent.isPlayer()) {
 		if(ent.equals(Player.mainPlayer.ent)) {
 			Matrix4f pos=new Matrix4f().translate(2*8.5f,2*8.5f,0);//O modelo tem a origem no centro, e ele escala pros dois lados!
 			cam.getRawProjec().mul(mundo, mat);

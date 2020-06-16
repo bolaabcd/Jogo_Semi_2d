@@ -16,13 +16,13 @@ import org.apache.commons.io.IOUtils;
 import org.joml.Vector2f;
 
 import com.firstJogo.Handlers.KeyCallbackHandler;
-import com.firstJogo.Mundos.Humano;
-import com.firstJogo.Mundos.MundoCarregado;
-import com.firstJogo.estrutura.Camera;
-import com.firstJogo.estrutura.Janela;
-import com.firstJogo.estrutura.Player;
-import com.firstJogo.utils.ConsumerCheckedException;
-import com.firstJogo.utils.GlobalVariables;
+import com.firstJogo.elementosJogo.Camera;
+import com.firstJogo.elementosJogo.Janela;
+import com.firstJogo.elementosJogo.Player;
+import com.firstJogo.elementosMundo.Humano;
+import com.firstJogo.elementosMundo.MundoCarregado;
+import com.firstJogo.padroes.ConsumerCheckedException;
+import com.firstJogo.padroes.GlobalVariables;
 
 //Thread responsável por preparar as variáveis iniciais do programa e ler as configurações.
 public class Prepare implements Runnable {
